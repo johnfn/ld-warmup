@@ -1,0 +1,2 @@
+type Mode = "Game"
+          | "Pause"

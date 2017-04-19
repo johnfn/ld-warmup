@@ -1,0 +1,25 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "0.1.0",
+  "tasks": [
+    {
+      "taskName": "TypeScript Watcher Thing",
+      "command": "tsc",
+      "isShellCommand": true,
+      "args": ["-w", "-p", "."],
+      "showOutput": "silent",
+      "isBackground": true,
+      "problemMatcher": "$tsc-watch"
+    },
+
+    {
+      "taskName": "Run Python Thing",
+      "command": "python",
+      "args": ["-m", "SimpleHTTPServer"],
+      "isShellCommand": true,
+      "showOutput": "silent",
+      "isBackground": true
+    }
+  ]
+}

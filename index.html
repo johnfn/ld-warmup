@@ -3,10 +3,51 @@
   <head>
     <meta charset="utf-8">
     <title>Warm up!</title>
+
+    <style>
+      body {
+        margin: 0;
+      }
+
+      @font-face {
+        font-family: FreePixel;
+        src: url('./assets/FreePixel.ttf');
+      }
+    </style>
+     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+      WebFont.load({
+        custom: {
+          families: ['FreePixel']
+        }
+      });
+    </script>
   </head>
 
   <body>
     <script src="./node_modules/pixi.js/dist/pixi.js"></script>
+    <script src="./lib/pixi-multistyle-text.js"></script>
+
+    <script src="./engine/point.js"></script>
+    <script src="./engine/rect.js"></script>
+    <script src="./engine/base.js"></script>
+    <script src="./engine/entity.js"></script>
+    <script src="./engine/textentity.js"></script>
+    <script src="./engine/keyboard.js"></script>
+    <script src="./engine/tiledtilemap.js"></script>
+    <script src="./engine/camera.js"></script>
+    <script src="./engine/physics.js"></script>
+
+    <script src="./player.js"></script>
+    <script src="./pausescreen.js"></script>
+    <script src="./modes.js"></script>
+    <script src="./enemy.js"></script>
+    <script src="./spritedenemy.js"></script>
+
     <script src="./main.js"></script>
+
+    <script>
+      (function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
+    </script>
   </body>
 </html>
