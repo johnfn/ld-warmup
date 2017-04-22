@@ -1,22 +1,18 @@
 // Things to potentially add
 
-// - text abstraction
 // - screenshake ?
 // - better styled text ? ? ?
 // - proper depth sorting of entities.
 // - particles?
 // - fixed FPS
-// - custom tiled objects?
-// - good font for text?
-// - colored text?
 // - glow?
 // - other funky shader fx?
 
 type CoroutineResult = "next" | { frames: number };
 
 class StateClass {
-  readonly width = 800;
-  readonly height = 600;
+  readonly width = 600;
+  readonly height = 400;
   readonly tilewidth = 32;
   readonly tileheight = 32;
 
@@ -33,12 +29,14 @@ class StateClass {
     ObjLayer: true,
   }>;
 
-  renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+  rendererBig: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+  rendererTiny: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   player: Player;
 
   keyboard: Keyboard;
   physics: Physics;
-  camera: Camera;
+  cameraBig: Camera;
+  cameraTiny: Camera;
 
   entities: Base[];
 
@@ -60,12 +58,19 @@ class StateClass {
   drawCallText: TextEntity;
 
   constructor(data: TiledJSON) {
-    this.renderer = PIXI.autoDetectRenderer(this.width, this.height, {
+    this.rendererBig = PIXI.autoDetectRenderer(this.width, this.height, {
       antialias: false,
       transparent: false,
       resolution: 1
     });
-    document.body.appendChild(this.renderer.view);
+    document.body.appendChild(this.rendererBig.view);
+
+    this.rendererTiny = PIXI.autoDetectRenderer(this.width, this.height, {
+      antialias: false,
+      transparent: false,
+      resolution: 1
+    });
+    document.body.appendChild(this.rendererTiny.view);
 
     this.entities = [];
 
@@ -82,12 +87,14 @@ class StateClass {
     this.drawCallText.x = this.width - 100;
     this.drawCallText.y = 0;
 
+    this.cameraBig = new Camera(this);
+    this.cameraTiny = new Camera(this);
+
     this.tilemap = new TiledTilemap(data) as any;
     this.player = new Player(this);
 
     this.keyboard = new Keyboard();
     this.physics = new Physics();
-    this.camera = new Camera(this);
 
     const se = new SpritedEnemy(this);
     se.x = 400;
@@ -110,8 +117,11 @@ class StateClass {
     });
 
     this.tilemap.load().then(() => {
-      this.tilemap.changeSection(this, this.player);
-      this.tilemap.displayMap(state);
+      this.tilemap.changeSection(this, this.player, this.cameraBig);
+      this.tilemap.changeSection(this, this.player, this.cameraTiny);
+
+      this.tilemap.displayMap(state, this.cameraBig);
+      this.tilemap.displayMap(state, this.cameraTiny);
 
       this.tilemap.checkRegionValidity(state);
 
@@ -177,7 +187,7 @@ class StateClass {
   }
 
   update(): void {
-    const { renderer, keyboard, camera, entities, root, currentMode } = state;
+    const { rendererBig, rendererTiny, keyboard, cameraBig, cameraTiny, entities, root, currentMode } = state;
 
     keyboard.update();
 
@@ -189,16 +199,18 @@ class StateClass {
 
     this.updateCoroutines();
 
+    this.drawCallText.text = String(this.countEntitiesUnder(this.stage));
+
     // It's actually important that camera is updated last, so it can be in sync
     // with the rest of the entities in the game. If the player has a screen
     // transition and camera didn't see it, we'd have a frame where the camera
     // was way out of sync.
 
-    camera.update(state);
+    cameraBig.update(state);
+    rendererBig.render(root);
 
-    this.drawCallText.text = String(this.countEntitiesUnder(this.stage));
-
-    renderer.render(root);
+    cameraTiny.update(state);
+    rendererTiny.render(root);
   }
 }
 

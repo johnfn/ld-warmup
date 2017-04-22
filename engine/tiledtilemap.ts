@@ -123,7 +123,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   private tilesets: Tileset[];
   private tiles: (Tile | undefined)[][];
 
-  private currentRegion?: Rect;
+  private currentRegion: { [key: number]: Rect } = {};
 
   spriteLayers: { [key in keyof SpriteLayers]: PIXI.Container } = {} as any;
   regionLayers: { [key in keyof RegionLayers]: RegionLayer } = {} as any;
@@ -171,21 +171,20 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     return newRegionCandidates[0];
   }
 
-  changeSection(state: StateClass, who: Entity): void {
-    const { camera } = state;
+  changeSection(state: StateClass, who: Entity, cam: Camera): void {
     const newRegion = this.getRegionFor(who);
 
-    if (newRegion === this.currentRegion) { return; }
+    if (newRegion === this.currentRegion[cam.id]) { return; }
 
-    this.currentRegion = newRegion;
+    this.currentRegion[cam.id] = newRegion;
 
-    this.removeAllSprites(state);
-    this.addTileSprites(state);
+    this.removeAllSprites(state, cam);
+    this.addTileSprites(state, cam);
 
-    camera.bounds = new Rect({ x: newRegion.x, y: newRegion.y, w: newRegion.w, h: newRegion.h, });
+    cam.bounds = new Rect({ x: newRegion.x, y: newRegion.y, w: newRegion.w, h: newRegion.h, });
   }
 
-  private removeAllSprites(state: StateClass): void {
+  private removeAllSprites(state: StateClass, cam: Camera): void {
     const { stage } = state;
 
     for (const key of Object.keys(this.spriteLayers)) {
@@ -274,7 +273,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.tiles = tiles;
   }
 
-  private addTileSprites(state: StateClass): void {
+  private addTileSprites(state: StateClass, cam: Camera): void {
     const { stage } = state;
 
     for (const layer of this.data.layers) {
@@ -284,13 +283,15 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
       stage.addChild(container);
     }
 
-    if (!this.currentRegion) { throw new Error("tried to add tile sprites w/o current region"); }
+    const region = this.currentRegion[cam.id];
+
+    if (!region) { throw new Error("tried to add tile sprites w/o current region"); }
 
     const tw = this.data.tilewidth;
     const th = this.data.tileheight;
 
-    for (let i = this.currentRegion.x / tw; i <= this.currentRegion.right / tw; i++) {
-      for (let j = this.currentRegion.y / th; j <= this.currentRegion.bottom / th; j++) {
+    for (let i = region.x / tw; i <= region.right / tw; i++) {
+      for (let j = region.y / th; j <= region.bottom / th; j++) {
         const tile = this.tiles[i][j];
 
         if (!tile) { continue; }
@@ -372,8 +373,8 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.loadObjects();
   }
 
-  displayMap(state: StateClass): void {
-    this.addTileSprites(state);
+  displayMap(state: StateClass, cam: Camera): void {
+    this.addTileSprites(state, cam);
   }
 
   checkRegionValidity(state: StateClass): void {
@@ -396,12 +397,14 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     return this.tiles[tileX][tileY];
   }
 
-  contains(e: Entity): boolean {
-    if (!this.currentRegion) { return false; }
+  contains(e: Entity, cam: Camera): boolean {
+    const region = this.currentRegion[cam.id];
 
-    return e.x > this.currentRegion.x &&
-           e.y > this.currentRegion.y &&
-           e.x + e.width  < this.currentRegion.right &&
-           e.y + e.height < this.currentRegion.bottom;
+    if (!region) { return false; }
+
+    return e.x > region.x &&
+           e.y > region.y &&
+           e.x + e.width  < region.right &&
+           e.y + e.height < region.bottom;
   }
 }

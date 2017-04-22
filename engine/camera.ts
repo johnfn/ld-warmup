@@ -8,6 +8,10 @@ class Camera {
 
   bounds: Rect;
 
+  id: number;
+
+  static cameras = 0;
+
   setX(value: number) {
     if (value < this.bounds.x) { value = this.bounds.x; }
     if (value >= this.bounds.right - this.width) { value = this.bounds.right - this.width; }
@@ -41,6 +45,8 @@ class Camera {
     this.height = height;
 
     this.stage = stage;
+
+    this.id = ++Camera.cameras;
   }
 
   update(state: StateClass) {
