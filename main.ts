@@ -41,6 +41,8 @@ class StateClass {
 
   entities: Base[];
 
+  activePlayerId: number;
+
   currentMode: Mode = "Game";
 
   coroutines: { [key: number]: {
@@ -94,6 +96,8 @@ class StateClass {
     this.tilemap = new TiledTilemap(data) as any;
     this.playerLeft = new PlayerLeft(this);
     this.playerRight = new PlayerRight(this);
+
+    this.activePlayerId = this.playerLeft.id;
 
     this.keyboard = new Keyboard();
     this.physics = new Physics();

@@ -20,6 +20,10 @@ class Entity extends Base {
 
   private textureName: string;
 
+  private static MaxEntityId = 0;
+
+  id: number;
+
   private getCachedSpritesheetTexture(state: StateClass, textureName: string, x: number, y: number): PIXI.Texture {
     const { tilewidth, tileheight } = state;
     const key = `${ textureName }-${ x }-${ y }`;
@@ -66,6 +70,8 @@ class Entity extends Base {
     this.sprite.height = height || 32;
 
     parent.addChild(this.sprite);
+
+    this.id = ++Entity.MaxEntityId;
   }
 
   setTexture(index: SpritesheetIndex): void {

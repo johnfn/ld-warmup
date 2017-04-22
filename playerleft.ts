@@ -19,30 +19,35 @@ class PlayerLeft extends Entity {
     this.camera = cameraLeft;
   }
 
+  isActive(state: StateClass): boolean {
+    return state.activePlayerId === this.id;
+  }
+
   move(state: StateClass) {
     const { keyboard, physics } = state;
     let dx = 0, dy = 0;
 
-    if (keyboard.down.A) {
-      dx -= 5;
+    if (this.isActive(state)) {
+      if (keyboard.down.A) {
+        dx -= 5;
+      }
+
+      if (keyboard.down.D) {
+        dx += 5;
+      }
+
+      if (this.onGround && keyboard.down.Spacebar) {
+        this.vy -= 6;
+      }
+
+      if (!keyboard.down.Spacebar && this.vy < 0) {
+        this.vy = 0;
+      }
     }
 
-    if (keyboard.down.D) {
-      dx += 5;
-    }
-
-    this.vy += 0.2;
-
-    if (this.onGround && keyboard.down.Spacebar) {
-      this.vy -= 6;
-    }
-
-    if (!keyboard.down.Spacebar && this.vy < 0) {
-      this.vy = 0;
-    }
+    this.vy += G.Gravity;
 
     dy += this.vy;
-
     const {
       hitDown,
       hitUp,

@@ -17,11 +17,15 @@ class PlayerRight extends Entity {
     this.camera = cameraRight;
   }
 
+  isActive(state: StateClass): boolean {
+    return state.activePlayerId === this.id;
+  }
+
   move(state: StateClass) {
     const { keyboard, physics } = state;
     let dx = 0, dy = 0;
 
-    if (false) {
+    if (this.isActive(state)) {
       if (keyboard.down.A) {
         dx -= 5;
       }
@@ -39,7 +43,7 @@ class PlayerRight extends Entity {
       }
     }
 
-    this.vy += 0.2;
+    this.vy += G.Gravity;
 
     dy += this.vy;
 
