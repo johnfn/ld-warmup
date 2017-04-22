@@ -1,8 +1,8 @@
 type CurrentActiveEvent = "None"
-                        | "Professor Goes Home";
+                        | "First Convo";
 
 class Cinematics extends Base {
-  activeEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "None";
   activeCoroutine = -1;
   state: StateClass;
 
@@ -13,10 +13,19 @@ class Cinematics extends Base {
   }
 
   update(state: StateClass): void {
-    if (this.activeEvent === "None") {
-      this.activeEvent = "Professor Goes Home";
-      this.activeCoroutine = this.startCoroutine(state, this.professorGoesHomeCinematic());
+    if (this.activeCoroutine === -1) {
+      switch (this.currentOrLastEvent) {
+        case "None":
+          this.currentOrLastEvent = "First Convo";
+          this.activeCoroutine = this.startCoroutine(state, this.firstConvo());
+        break;
+      }
     }
+  }
+
+  finishCinematic(): void {
+    this.stopCoroutine(this.state, this.activeCoroutine);
+    this.activeCoroutine = -1;
   }
 
   *textFollowPlayer(thing: TextEntity, following: Entity) {
@@ -79,7 +88,7 @@ class Cinematics extends Base {
     }
   }
 
-  *professorGoesHomeCinematic() {
+  *firstConvo() {
     const prof = state.playerRightProf;
     const you = state.playerLeft;
 
@@ -92,11 +101,14 @@ class Cinematics extends Base {
     yield* this.talk(prof, "Ludum Dare?");
     yield* this.talk(prof, "The Great Event, foretold by prophecy, to\nhappen once every 4 months?");
     yield* this.talk(you, "Yeah.");
+    yield* this.talk(prof, "(Amazing... one cognizant of Ludum Dare...\n could he be the one spoken of\n by prophecy?");
+    yield* this.talk(you, "Sorry?");
+    yield* this.talk(prof, "Just talking to myself. Continue!");
     yield* this.talk(you, "It never seems to go well for me.");
     yield* this.talk(you, "There was this one time... where you turned\n me into Godzilla... it was bad.");
     yield* this.talk(prof, "You don't look like a godzilla to me.");
     yield* this.talk(you, "Yeah, getting back to human was quite\n an adventure, let me tell you.");
-    yield* this.talk(prof, "Do I smell a straight-to-dvd prequel?");
+    yield* this.talk(prof, "Do I feel the plot for LD39\n coming on?");
     yield* this.talk(you, "Sorry?");
     yield* this.talk(prof, "Anyways... why don't you come to my\nlabratory?");
     yield* this.talk(prof, "I've got an interesting experiment\n in its final stages.");
