@@ -34,11 +34,11 @@ class Controllable extends Entity {
     let dx = 0, dy = 0;
 
     if (this.isActive(state)) {
-      if (keyboard.down.A) {
+      if (keyboard.down.Left) {
         dx -= 5;
       }
 
-      if (keyboard.down.D) {
+      if (keyboard.down.Right) {
         dx += 5;
       }
 

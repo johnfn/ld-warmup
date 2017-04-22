@@ -5,7 +5,7 @@ type CurrentActiveEvent = "None"
                         | "Professor Fiddles"
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Follow Prof To Home";
+  currentOrLastEvent: CurrentActiveEvent = "None";
   activeCoroutine = -1;
   state: StateClass;
 
@@ -132,9 +132,14 @@ class Cinematics extends Base {
       const dx = where.centerX > who.x ? 2 : -2;
       const {
         hitRight,
+        hitLeft,
       } = physics.move(this.state, who, dx, 0);
 
-      if (hitRight && who.onGround) {
+      if (
+        (dx > 0 && hitRight && who.onGround) ||
+        (dx < 0 && hitLeft  && who.onGround)
+      ) {
+
         who.jump();
       }
 
@@ -204,13 +209,16 @@ class Cinematics extends Base {
     const { playerRightProf: prof, playerLeft: you } = state;
 
     yield* this.talk(prof, "See that right there?");
-    yield* this.talk(you, "Uh... yeah, I think I do.");
+    yield* this.talk(prof, "Just slightly to the left of the camera viewport?");
+    yield* this.talk(you, "Uh...");
+    yield* this.talk(you, "...yeah, I think I do.");
     yield* this.talk(prof, "That... is a SMALL WORLD.");
     yield* this.talk(prof, "[looks suggestively at camera to indicate theme connection]");
     yield* this.talk(you, "Wow!");
     yield* this.talk(you, "What was that look about just now though.");
     yield* this.talk(prof, "It's not important. ");
     yield* this.talk(prof, "Anyways, I'm just about to finish up my experiments with this small world, so give me a few moments.");
+    yield* this.talk(prof, "As soon as I finish, I'll make all our bad past encounters up to you. I have just the thing.");
     yield* this.talk(you, "...");
     yield* this.talk(prof, "Oh, and try not to get too close. The world may be small, but I assure you the gravity is VERY normal.");
     yield* this.talk(you, "Oh yeah, I'll definitely be sure not to do that.")
