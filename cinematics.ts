@@ -296,6 +296,14 @@ class Cinematics extends Base {
     this.finishCinematic();
   }
 
+  *bubble(target: Controllable, type: BubbleType) {
+    const b = new Bubble(this.state, target, type);
+
+    yield { frames: 45 };
+
+    b.destroy(this.state);
+  }
+
   *professorIsHorrified() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
@@ -312,6 +320,12 @@ class Cinematics extends Base {
     yield* this.talk(prof, "Oh holy freaking crap.");
     yield* this.talk(prof, "He really just got sucked into the small world, didnt he.");
     yield* this.talk(prof, "...");
+    yield* this.bubble(prof, "sweat");
+    yield* this.talk(prof, "And now he's probably tiny too.");
+    yield* this.talk(prof, "Well, there's only one thing to do. First, I better go pick up that tiny world (with X).");
+    yield* this.talk(prof, "Then I'll need to go find my de-minimizer.");
+    yield* this.talk(prof, "I tossed that thing out. I thought it was a waste of space.");
+    yield* this.bubble(prof, ":|");
 
     this.finishCinematic();
   }
