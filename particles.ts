@@ -162,12 +162,12 @@ class Particles extends Base {
 
         const { x: destX, y: destY } = this.behavior.dest;
 
-        obj.entity.x -= Math.sign(obj.entity.x - destX);
-        obj.entity.y -= Math.sign(obj.entity.y - destY);
-      } else {
-        obj.entity.x += obj.dx;
-        obj.entity.y += obj.dy;
+        obj.dx -= Math.sign(obj.entity.x - destX) / 10;
+        obj.dy -= Math.sign(obj.entity.y - destY) / 10;
       }
+
+      obj.entity.x += obj.dx;
+      obj.entity.y += obj.dy;
     }
 
     // release & remove dead particles
