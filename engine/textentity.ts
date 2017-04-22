@@ -28,6 +28,8 @@ class TextEntity extends Base {
         align: "left",
         wordWrap: true,
         wordWrapWidth: 300,
+        dropShadow: true,
+        dropShadowDistance: 3,
       }
     }
   } = {}) {

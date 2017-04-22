@@ -1,6 +1,8 @@
 type CurrentActiveEvent = "None"
                         | "First Convo"
                         | "Follow Prof To Home"
+                        | "Learn About Tiny World"
+                        | "Professor Fiddles"
 
 class Cinematics extends Base {
   currentOrLastEvent: CurrentActiveEvent = "Follow Prof To Home";
@@ -24,6 +26,16 @@ class Cinematics extends Base {
         case "First Convo":
           this.currentOrLastEvent = "Follow Prof To Home";
           this.activeCoroutine = this.startCoroutine(state, this.followProfessor());
+        break;
+
+        case "Follow Prof To Home":
+          this.currentOrLastEvent = "Learn About Tiny World";
+          this.activeCoroutine = this.startCoroutine(state, this.learnAboutTinyWorld());
+        break;
+
+        case "Learn About Tiny World":
+          this.currentOrLastEvent = "Professor Fiddles";
+          this.activeCoroutine = this.startCoroutine(state, this.professorFiddles());
         break;
       }
     }
@@ -49,7 +61,7 @@ class Cinematics extends Base {
     }
   }
 
-  *talk(who: Controllable, text: string, endingCondition?: () => boolean) {
+  *talk(who: Controllable, text: string, endingCondition?: { waitFrames: number } | (() => boolean)) {
     const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
     const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who));
@@ -57,7 +69,21 @@ class Cinematics extends Base {
 
     outer:
     while (true) {
-      if (endingCondition && endingCondition()) { break; }
+      // is ending condition true
+
+      if (endingCondition && charactersVisible >= text.length) {
+        if (typeof endingCondition === "function" && endingCondition()) {
+          break outer;
+        }
+
+        if (typeof endingCondition === "object") {
+          for (let i = 0; i < endingCondition.waitFrames; i++) {
+            yield "next";
+          }
+        }
+
+        break outer;
+      }
 
       textEntity.text = text.slice(0, ++charactersVisible);
 
@@ -156,6 +182,58 @@ class Cinematics extends Base {
       if (Util.Dist(prof, you) > 100) {
         yield* this.talk(prof, this.getRandomSlowbieMessage(), () => Util.Dist(prof, you) < 100);
       }
+    }
+
+    this.finishCinematic();
+  }
+
+  *learnAboutTinyWorld() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.talk(prof, "See that right there?");
+    yield* this.talk(you, "Uh... yeah, I think I do.");
+    yield* this.talk(prof, "That... is a SMALL WORLD.");
+    yield* this.talk(prof, "[looks suggestively at camera to indicate theme connection]");
+    yield* this.talk(you, "Wow!");
+    yield* this.talk(you, "What was that look about just now though.");
+    yield* this.talk(prof, "It's not important. ");
+    yield* this.talk(prof, "Anyways, I'm just about to finish up my experiments with this small world, so give me a few moments.");
+    yield* this.talk(you, "...");
+    yield* this.talk(prof, "Oh, and try not to get too close. The world may be small, but I assure you the gravity is VERY normal.");
+    yield* this.talk(you, "Oh yeah, I'll definitely be sure not to do that.")
+    yield* this.talk(prof, "Good!");
+    yield* this.talk(prof, "We wouldn't want any...");
+    yield* this.talk(prof, "Accidents!");
+    yield* this.talk(prof, "[looks suggestively at camera again]");
+    yield* this.talk(you, "Can you stop doing that?")
+
+    this.finishCinematic();
+  }
+
+  *professorFiddles() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    const spotOne = new Point({ x: prof.x - 100, y: prof.y });
+    const spotTwo = new Point({ x: prof.x + 200, y: prof.y });
+
+    while (true) {
+      yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));
+
+      yield* this.talk(prof, "Dum de doo...", { waitFrames: 10 })
+
+      yield* this.walkTo(prof, Rect.FromPoint(spotTwo, 100));
+
+      yield* this.talk(prof, "Hum... that's interesting...", { waitFrames: 10 });
+
+      yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));
+
+      yield* this.talk(prof, "Tinker tinker tinker", { waitFrames: 10 })
+
+      yield* this.walkTo(prof, Rect.FromPoint(spotTwo, 100));
+
+      yield* this.talk(prof, "Fiddle dee dee...", { waitFrames: 10 });
+      yield* this.talk(prof, "Nothing dangerous...", { waitFrames: 10 });
+      yield* this.talk(prof, "No accidents...", { waitFrames: 10 });
     }
 
     this.finishCinematic();
