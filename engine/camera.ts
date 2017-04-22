@@ -51,6 +51,10 @@ class Camera {
     this.setY(value - this.height / 2);
   }
 
+  get centerY(): number {
+    return -this.stage.y + this.height / 2;
+  }
+
   constructor(state: StateClass) {
     const { width, height, stage } = state;
 

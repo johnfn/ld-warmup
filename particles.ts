@@ -64,6 +64,9 @@ interface ParticleBehavior {
   lifespan: NumberOrRange;
   dx: NumberOrRange;
   dy: NumberOrRange;
+
+  x: NumberOrRange;
+  y: NumberOrRange;
 }
 
 type NumberOrRange = number | [number, number];
@@ -77,6 +80,8 @@ class Particles extends Base {
     lifespan: [100, 200],
     dx: [-3, 3],
     dy: [-3, 3],
+    x: 0,
+    y: 0,
   }) {
     super(state);
 
@@ -91,6 +96,10 @@ class Particles extends Base {
     });
   }
 
+  setBehaviorTo(b: ParticleBehavior): void {
+    this.behavior = b;
+  }
+
   getValueFrom(thing: NumberOrRange): number {
     if (Array.isArray(thing)) {
       return Util.RandRange(thing);
@@ -99,9 +108,7 @@ class Particles extends Base {
     return thing;
   }
 
-  update(state: StateClass): void {
-    const pos = state.getActivePlayer();
-
+  update(_state: StateClass): void {
     if (Math.random() > 0.9) {
       const ent = this.pool.get();
 
@@ -121,8 +128,8 @@ class Particles extends Base {
         dy,
       });
 
-      ent.x = pos.x;
-      ent.y = pos.y;
+      ent.x = this.getValueFrom(this.behavior.x);
+      ent.y = this.getValueFrom(this.behavior.y);
     }
 
     for (let i = 0; i < this.particles.length; i++) {

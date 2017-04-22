@@ -42,7 +42,7 @@ class StateClass {
   cinematics: Cinematics;
   cameraLeft: CameraLeft;
   cameraRight: CameraRight;
-  particles: Particles;
+  particles: AtmosphericParticles;
 
   rightCamActive = false;
 
@@ -128,7 +128,7 @@ class StateClass {
 
     this.cinematics = new Cinematics(this);
 
-    this.particles = new Particles(this);
+    this.particles = new AtmosphericParticles(this);
 
     const se = new SpritedEnemy(this);
     se.x = 400;
