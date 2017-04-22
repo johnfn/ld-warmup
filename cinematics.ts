@@ -3,6 +3,7 @@ type CurrentActiveEvent = "None"
                         | "Follow Prof To Home"
                         | "Learn About Tiny World"
                         | "Professor Fiddles"
+                        | "Professor is Horrified"
 
 class Cinematics extends Base {
   currentOrLastEvent: CurrentActiveEvent = "Professor Fiddles";
@@ -16,6 +17,8 @@ class Cinematics extends Base {
   }
 
   update(state: StateClass): void {
+    const { playerLeft: you } = state;
+
     if (this.activeCoroutine === -1) {
       switch (this.currentOrLastEvent) {
         case "None":
@@ -37,6 +40,14 @@ class Cinematics extends Base {
           this.currentOrLastEvent = "Professor Fiddles";
           this.activeCoroutine = this.startCoroutine(state, this.professorFiddles());
         break;
+
+        case "Professor Fiddles":
+          if (Util.Dist(you, TinyWorld.Instance) < 20) {
+            this.currentOrLastEvent = "Professor is Horrified";
+            this.activeCoroutine = this.startCoroutine(state, this.professorIsHorrified());
+          }
+
+          break;
       }
     }
   }
@@ -283,5 +294,14 @@ class Cinematics extends Base {
     }
 
     this.finishCinematic();
+  }
+
+  *professorIsHorrified() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    Controllable.SwitchActivePlayer(state);
+    state.rightCamActive = true;
+
+    yield "next";
   }
 }

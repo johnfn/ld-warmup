@@ -20,8 +20,8 @@ class Controllable extends Entity {
     return state.activePlayerId === this.id;
   }
 
-  switchActivePlayer(state: StateClass): void {
-    let currentIndex = state.playerIds.indexOf(this.id);
+  static SwitchActivePlayer(state: StateClass): void {
+    let currentIndex = state.playerIds.indexOf(state.activePlayerId);
 
     state.activePlayerId = state.playerIds[(currentIndex + 1) % state.playerIds.length];
   }
