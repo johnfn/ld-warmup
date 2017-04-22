@@ -1,4 +1,4 @@
-class BigCamera extends Camera {
+class CameraLeft extends Camera {
   update(state: StateClass) {
     const { player } = state;
 

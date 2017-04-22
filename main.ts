@@ -35,8 +35,8 @@ class StateClass {
 
   keyboard: Keyboard;
   physics: Physics;
-  cameraBig: BigCamera;
-  cameraTiny: TinyCamera;
+  cameraBig: CameraLeft;
+  cameraTiny: CameraRight;
 
   entities: Base[];
 
@@ -87,8 +87,8 @@ class StateClass {
     this.drawCallText.x = this.width - 100;
     this.drawCallText.y = 0;
 
-    this.cameraBig = new BigCamera(this);
-    this.cameraTiny = new TinyCamera(this);
+    this.cameraBig = new CameraLeft(this);
+    this.cameraTiny = new CameraRight(this);
 
     this.tilemap = new TiledTilemap(data) as any;
     this.player = new Player(this);
