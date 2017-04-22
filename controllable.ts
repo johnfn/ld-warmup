@@ -1,5 +1,6 @@
 class Controllable extends Entity {
   vy = 0;
+  vx = 0;
   onGround = false;
 
   constructor(state: StateClass, props: {
@@ -60,6 +61,7 @@ class Controllable extends Entity {
     this.vy += G.Gravity;
 
     dy += this.vy;
+    dx += this.vx;
 
     const moveResult = physics.move(state, this, dx, dy);
     const hitDown = moveResult.hitDown;
@@ -70,6 +72,12 @@ class Controllable extends Entity {
     }
 
     this.onGround = hitDown && dy > 0;
+
+    // apply friction
+
+    this.vx /= 1.1;
+
+    if (Math.abs(this.vx) < 0.5) { this.vx = 0; }
 
     return moveResult;
   }
