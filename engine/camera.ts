@@ -1,7 +1,4 @@
 class Camera {
-  x = 0;
-  y = 0;
-
   width: number;
   height: number;
   stage: PIXI.Container;
@@ -11,6 +8,22 @@ class Camera {
   id: number;
 
   static cameras = 0;
+
+  get x(): number {
+    return this.centerX - this.width / 2;
+  }
+
+  get right(): number {
+    return this.centerX + this.width / 2;
+  }
+
+  get y(): number {
+    return this.centerY - this.height / 2;
+  }
+
+  get bottom(): number {
+    return this.centerY + this.height / 2;
+  }
 
   setX(value: number) {
     if (value < this.bounds.x) { value = this.bounds.x; }

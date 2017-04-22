@@ -53,8 +53,8 @@ class Cinematics extends Base {
       text.x = following.x + 10;
       text.y = following.y - 16;
 
-      if (text.x + text.wordWrapWidth > cam.bounds.right) {
-        text.x = cam.bounds.right - text.wordWrapWidth;
+      if (text.x + text.wordWrapWidth > cam.right) {
+        text.x = cam.right - text.wordWrapWidth;
       }
 
       yield "next";
