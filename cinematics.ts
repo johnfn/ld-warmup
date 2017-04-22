@@ -78,13 +78,14 @@ class Cinematics extends Base {
     this.stopCoroutine(this.state, id);
   }
 
-  *walkTo(who: Controllable, where: Point) {
+  *walkTo(who: Controllable, where: Rect) {
     const { physics } = this.state;
 
-    while (true) {
+    while (!where.contains(who)) {
+      const dx = where.centerX > who.x ? 2 : -2;
       const {
         hitRight,
-      } = physics.move(this.state, who, 2, 0);
+      } = physics.move(this.state, who, dx, 0);
 
       if (hitRight && who.onGround) {
         who.jump();
@@ -126,11 +127,13 @@ class Cinematics extends Base {
   *followProfessor() {
     const { tilemap, playerRightProf: prof, playerLeft: you } = state;
 
-    console.log(tilemap.regionLayers.ProfessorDestRegions);
+    const regionsToGo = tilemap.regionLayers.ProfessorDestRegions.regions.sort((a, b) => a.properties!.order - b.properties!.order);
 
-    yield* this.walkTo(prof, new Point({ x: 500, y: 500 }));
+    for (const { region } of regionsToGo) {
+      yield* this.walkTo(prof, region);
 
-    yield "next";
+      // ensure that the player is there before moving on.
+    }
 
     this.finishCinematic();
   }

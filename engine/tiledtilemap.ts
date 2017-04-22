@@ -110,7 +110,7 @@ interface SpritesheetTile {
 
 interface TiledRegion {
   region: Rect;
-  properties?: { [key: string]: string; };
+  properties?: { [key: string]: any; };
 }
 
 interface RegionLayer {
