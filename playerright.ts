@@ -30,8 +30,6 @@ class PlayerRight extends Entity {
         dx += 5;
       }
 
-      this.vy += 0.2;
-
       if (this.onGround && keyboard.down.Spacebar) {
         this.vy -= 6;
       }
@@ -39,9 +37,11 @@ class PlayerRight extends Entity {
       if (!keyboard.down.Spacebar && this.vy < 0) {
         this.vy = 0;
       }
-
-      dy += this.vy;
     }
+
+    this.vy += 0.2;
+
+    dy += this.vy;
 
     const {
       hitDown,
