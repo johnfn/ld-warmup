@@ -29,7 +29,6 @@ class PlayerLeft extends Controllable {
   update(state: StateClass) {
     super.update(state);
 
-    this.move(state);
     this.checkForMapTransition(state);
     this.checkForRegionDialogs(state);
   }

@@ -184,13 +184,26 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.currentRegion[cam.id] = newRegion;
 
     this.removeAllSprites(state, cam);
-    this.addTileSprites(state, cam);
+    this.displayMap(state, cam);
 
     cam.bounds = new Rect({ x: newRegion.x, y: newRegion.y, w: newRegion.w, h: newRegion.h, });
   }
 
   private removeAllSprites(state: StateClass, cam: Camera): void {
     const { stage } = state;
+
+    const currentRegionForCam = this.currentRegion[cam.id];
+    let otherRegion: Rect | undefined;
+
+    for (const key in this.currentRegion) {
+      if (key !== String(cam.id)) {
+        otherRegion = this.currentRegion[key];
+      }
+    }
+
+    if (currentRegionForCam === otherRegion) {
+      return;
+    }
 
     for (const key of Object.keys(this.spriteLayers)) {
       const layer = this.spriteLayers[key];
@@ -384,7 +397,18 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   }
 
   displayMap(state: StateClass, cam: Camera): void {
-    this.addTileSprites(state, cam);
+    const currentRegionForCam = this.currentRegion[cam.id];
+    let otherRegion: Rect | undefined;
+
+    for (const key in this.currentRegion) {
+      if (key !== String(cam.id)) {
+        otherRegion = this.currentRegion[key];
+      }
+    }
+
+    if (currentRegionForCam !== otherRegion) {
+      this.addTileSprites(state, cam);
+    }
   }
 
   checkRegionValidity(state: StateClass): void {
@@ -401,16 +425,10 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     const tileY = Math.floor(p.y / this.data.tileheight);
 
     if (tileX < 0 || tileX >= this.data.width || tileY < 0 || tileY >= this.data.height) {
-      return undefined;
+      return [];
     }
 
-    for (const tile of this.tiles[tileX][tileY]) {
-      if (tile.layername === "Walls") {
-        return tile;
-      }
-    }
-
-    return undefined;
+    return this.tiles[tileX][tileY];
   }
 
   contains(e: Entity, cam: Camera): boolean {

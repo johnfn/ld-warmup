@@ -1,6 +1,8 @@
-type HitTestResult = undefined | Tile;
+type HitTestResult = Tile[];
 type MoveResult = {
   hit: boolean;
+
+  thingsHit: Tile[];
 
   hitUp: boolean;
   hitLeft: boolean;
@@ -24,13 +26,23 @@ class Physics {
       topLeft.add(new Point({ x: wh.x - 4, y: wh.y  - 4})),
     ];
 
-    for (const point of pointsToTest) {
-      const result = this.hitTestPoint(state, point);
+    let tiles: Tile[] = [];
 
-      if (result) { return result; }
+    for (const point of pointsToTest) {
+      tiles = tiles.concat(this.hitTestPoint(state, point));
     }
 
-    return undefined;
+    return tiles;
+  }
+
+  isAgainstWall(res: HitTestResult): boolean {
+    for (const tile of res) {
+      if (tile.layername === "Walls") {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   move(state: StateClass, entity: Entity, dx: number, dy: number): MoveResult {
@@ -42,9 +54,9 @@ class Physics {
     let hitY = false;
 
     const wh = new Point({ x: entity.width, y: entity.height });
-    const hitResult = this.hitTestSprite(state, new Point({ x: newX, y: newY }), wh);
+    const thingsHit = this.hitTestSprite(state, new Point({ x: newX, y: newY }), wh);
 
-    if (!hitResult) {
+    if (!this.isAgainstWall(thingsHit)) {
       entity.x = newX;
       entity.y = newY;
     } else {
@@ -52,12 +64,12 @@ class Physics {
       hitX = true;
       hitY = true;
 
-      if (!this.hitTestSprite(state, new Point({ x: entity.x, y: newY }), wh)) {
+      if (!this.isAgainstWall(this.hitTestSprite(state, new Point({ x: entity.x, y: newY }), wh))) {
         entity.y = newY;
         hitY   = false;
       }
 
-      if (!this.hitTestSprite(state, new Point({ x: newX, y: entity.y }), wh)) {
+      if (!this.isAgainstWall(this.hitTestSprite(state, new Point({ x: newX, y: entity.y }), wh))) {
         entity.x = newX;
         hitX   = false;
       }
@@ -65,6 +77,7 @@ class Physics {
 
     return {
       hit,
+      thingsHit,
 
       hitUp   : hitY && dy < 0,
       hitDown : hitY && dy > 0,

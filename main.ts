@@ -20,6 +20,7 @@ class StateClass {
     // Sprites
 
     Walls: true,
+    HouseFront: true,
   }, {
     // Regions
 

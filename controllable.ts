@@ -29,7 +29,7 @@ class Controllable extends Entity {
     this.vy -= 6;
   }
 
-  move(state: StateClass) {
+  move(state: StateClass): MoveResult {
     const { keyboard, physics } = state;
     let dx = 0, dy = 0;
 
@@ -61,19 +61,30 @@ class Controllable extends Entity {
 
     dy += this.vy;
 
-    const {
-      hitDown,
-      hitUp,
-    } = physics.move(state, this, dx, dy);
+    const moveResult = physics.move(state, this, dx, dy);
+    const hitDown = moveResult.hitDown;
+    const hitUp = moveResult.hitUp;
 
     if (hitDown || hitUp) {
       this.vy = 0;
     }
 
     this.onGround = hitDown && dy > 0;
+
+    return moveResult;
   }
 
-  update(_state: StateClass) {
+  update(state: StateClass) {
+    if (this.isActive(state)) {
+      const { thingsHit } = this.move(state);
 
+      this.checkForCollisionReactions(state, thingsHit);
+    }
+  }
+
+  checkForCollisionReactions(state: StateClass, tiles: Tile[]): void {
+    const dimHouseFront = tiles.filter(t => t.layername === "HouseFront").length > 0;
+
+    state.tilemap.spriteLayers.HouseFront.alpha = dimHouseFront ? 0.3 : 1.0;
   }
 }
