@@ -381,7 +381,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.loadObjects();
   }
 
-  displayMap(state: StateClass): void {
+  deduplicatedRegions(): Rect[] {
     const dedupedRegions: Rect[] = [];
 
     for (const key in this.currentRegion) {
@@ -392,7 +392,11 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
       }
     }
 
-    for (const region of dedupedRegions) {
+    return dedupedRegions;
+  }
+
+  displayMap(state: StateClass): void {
+    for (const region of this.deduplicatedRegions()) {
       this.addTileSprites(state, region);
     }
   }

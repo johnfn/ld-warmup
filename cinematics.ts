@@ -3,7 +3,7 @@ type CurrentActiveEvent = "None"
                         | "Follow Prof To Home"
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "First Convo";
+  currentOrLastEvent: CurrentActiveEvent = "Follow Prof To Home";
   activeCoroutine = -1;
   state: StateClass;
 
