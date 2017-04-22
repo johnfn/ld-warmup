@@ -5,6 +5,8 @@ class AtmosphericParticles extends Particles {
     dx: [-3, 3],
     dy: [-3, 3],
 
+    rotation: [-0.2, 0.2],
+
     x: 0,
     y: 0,
   };

@@ -58,10 +58,15 @@ interface Particle {
 
   dx: number;
   dy: number;
+
+  rotation: number;
 }
 
 interface ParticleBehavior {
   lifespan: NumberOrRange;
+
+  rotation: NumberOrRange;
+
   dx: NumberOrRange;
   dy: NumberOrRange;
 
@@ -82,6 +87,7 @@ class Particles extends Base {
     dy: [-3, 3],
     x: 0,
     y: 0,
+    rotation: 1,
   }) {
     super(state);
 
@@ -89,9 +95,13 @@ class Particles extends Base {
 
     this.pool = new Pooler({
       create: () => {
-        return new Entity(state, {
+        const e = new Entity(state, {
           texture: "tinyworld",
         });
+
+        e.sprite.pivot = new PIXI.Point(16, 16);
+
+        return e;
       }
     });
   }
@@ -124,6 +134,7 @@ class Particles extends Base {
       this.particles.push({
         entity: ent,
         lifespan: this.getValueFrom(this.behavior.lifespan),
+        rotation: this.getValueFrom(this.behavior.rotation),
         dx,
         dy,
       });
@@ -133,11 +144,13 @@ class Particles extends Base {
     }
 
     for (let i = 0; i < this.particles.length; i++) {
-      const particle = this.particles[i];
+      const obj = this.particles[i];
 
-      particle.lifespan--;
-      particle.entity.x += particle.dx;
-      particle.entity.y += particle.dy;
+      obj.lifespan--;
+
+      obj.entity.x += obj.dx;
+      obj.entity.y += obj.dy;
+      obj.entity.sprite.rotation += obj.rotation;
     }
 
     // release & remove dead particles
