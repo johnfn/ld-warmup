@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="19">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="20">
  <tileset firstgid="1" name="tilesheet" tilewidth="32" tileheight="32" tilecount="4" columns="2">
   <image source="tilesheet.png" width="64" height="64"/>
  </tileset>
@@ -124,17 +124,17 @@
     <property name="order" type="int" value="0"/>
    </properties>
   </object>
-  <object id="15" x="1628" y="799" width="192" height="212">
+  <object id="15" x="1569" y="960" width="192" height="97">
    <properties>
     <property name="order" type="int" value="1"/>
    </properties>
   </object>
-  <object id="16" x="1098" y="1138" width="192" height="212">
+  <object id="16" x="1098" y="1280" width="192" height="70">
    <properties>
     <property name="order" type="int" value="2"/>
    </properties>
   </object>
-  <object id="17" x="1624" y="1323" width="192" height="212">
+  <object id="17" x="1440" y="1376" width="192" height="212">
    <properties>
     <property name="order" type="int" value="3"/>
    </properties>

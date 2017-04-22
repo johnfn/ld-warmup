@@ -43,7 +43,7 @@ class Cinematics extends Base {
     }
   }
 
-  *talk(who: Controllable, text: string) {
+  *talk(who: Controllable, text: string, endingCondition?: () => boolean) {
     const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
     const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who));
@@ -51,6 +51,8 @@ class Cinematics extends Base {
 
     outer:
     while (true) {
+      if (endingCondition && endingCondition()) { break; }
+
       textEntity.text = text.slice(0, ++charactersVisible);
 
       for (let i = 0; i < 3; i++) {
@@ -124,6 +126,19 @@ class Cinematics extends Base {
     this.finishCinematic();
   }
 
+  getRandomSlowbieMessage(): string {
+    return Util.RandElement([
+      "Hurry up now!",
+      "Try to be a bit faster, please.",
+      "An old man is faster than you?",
+      "Come on, now.",
+      "Zzz... oops, sorry, fell asleep.",
+      "Come along!",
+      "Hurry!",
+      "Almost there... I think?",
+    ]);
+  }
+
   *followProfessor() {
     const { tilemap, playerRightProf: prof, playerLeft: you } = state;
 
@@ -132,7 +147,9 @@ class Cinematics extends Base {
     for (const { region } of regionsToGo) {
       yield* this.walkTo(prof, region);
 
-      // ensure that the player is there before moving on.
+      if (Util.Dist(prof, you) > 100) {
+        yield* this.talk(prof, this.getRandomSlowbieMessage(), () => Util.Dist(prof, you) < 100);
+      }
     }
 
     this.finishCinematic();
