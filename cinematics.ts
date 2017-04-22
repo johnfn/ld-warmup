@@ -46,14 +46,14 @@ class Cinematics extends Base {
     this.activeCoroutine = -1;
   }
 
-  *textFollowPlayer(text: TextEntity, following: Entity) {
+  *textFollowPlayer(text: TextEntity, following: Entity, stayOnScreen = true) {
     const cam = this.state.getActiveCamera();
 
     while (text.exists) {
       text.x = following.x + 10;
       text.y = following.y - 16;
 
-      if (text.x + text.wordWrapWidth > cam.right) {
+      if (stayOnScreen && text.x + text.wordWrapWidth > cam.right) {
         text.x = cam.right - text.wordWrapWidth;
       }
 
@@ -61,12 +61,15 @@ class Cinematics extends Base {
     }
   }
 
-  *talk(who: Controllable, text: string, endingCondition?: { waitFrames: number } | (() => boolean)) {
+  *talk(
+    who: Controllable,
+    text: string, endingCondition?: { waitFrames: number } | (() => boolean),
+    stayOnScreen = true) {
     const { playerRightProf: prof, playerLeft: you } = state;
 
     const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
-    const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who));
+    const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who, stayOnScreen));
 
     let charactersVisible = 1;
 
@@ -249,21 +252,21 @@ class Cinematics extends Base {
     while (true) {
       yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));
 
-      yield* this.talk(prof, "Dum de doo...", { waitFrames: 10 })
+      yield* this.talk(prof, "Dum de doo...", { waitFrames: 10 }, false);
 
       yield* this.walkTo(prof, Rect.FromPoint(spotTwo, 100));
 
-      yield* this.talk(prof, "Not too close now...", { waitFrames: 10 });
+      yield* this.talk(prof, "Not too close now...", { waitFrames: 10 }, false);
 
       yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));
 
-      yield* this.talk(prof, "Tinker tinker tinker", { waitFrames: 10 })
+      yield* this.talk(prof, "Tinker tinker tinker", { waitFrames: 10 }, false)
 
       yield* this.walkTo(prof, Rect.FromPoint(spotTwo, 100));
 
-      yield* this.talk(prof, "Fiddle dee dee...", { waitFrames: 10 });
-      yield* this.talk(prof, "Nothing dangerous...", { waitFrames: 10 });
-      yield* this.talk(prof, "No accidents...", { waitFrames: 10 });
+      yield* this.talk(prof, "Fiddle dee dee...", { waitFrames: 10 }, false);
+      yield* this.talk(prof, "Nothing dangerous...", { waitFrames: 10 }, false);
+      yield* this.talk(prof, "No accidents...", { waitFrames: 10 }, false);
     }
 
     this.finishCinematic();
