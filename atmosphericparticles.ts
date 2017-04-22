@@ -24,8 +24,8 @@ class AtmosphericParticles extends Particles {
     this.behavior.y = [ cameraLeft.y, cameraLeft.y + cameraLeft.height ];
 
     this.behavior.dest = {
-      x: state.getActivePlayer().x,
-      y: state.getActivePlayer().y,
+      x: TinyWorld.Instance.x + 16,
+      y: TinyWorld.Instance.y + 16,
 
       range: 200,
     };
