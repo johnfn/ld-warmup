@@ -239,21 +239,42 @@ class StateClass {
     // transition and camera didn't see it, we'd have a frame where the camera
     // was way out of sync.
 
+    // RENDER LEFT
+
     cameraLeft.update(state);
 
     if (state.rightCamActive) {
       root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
       state.playerLeft.sprite.alpha = 1.0;
       state.playerRightProf.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
+
+      // hide irrelevant entities
+
+      for (const e of entities) {
+        if (e instanceof Entity && e.oneCameraOnly !== "no") {
+          e.sprite.visible = e.oneCameraOnly === "left";
+        }
+      }
     }
 
     rendererBig.render(root);
+
+    // RENDER RIGHT
 
     if (state.rightCamActive) {
       cameraRight.update(state);
       root.alpha = state.playerRightProf.isActive(state) ? 1.0 : 0.3;
       state.playerRightProf.sprite.alpha = 1.0;
       state.playerLeft.sprite.alpha = state.playerRightProf.isActive(state) ? 0.3 : 1.0;
+
+      // hide irrelevant entities
+
+      for (const e of entities) {
+        if (e instanceof Entity && e.oneCameraOnly !== "no") {
+          e.sprite.visible = e.oneCameraOnly === "right";
+        }
+      }
+
       rendererTiny.render(root);
     }
   }

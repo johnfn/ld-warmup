@@ -8,6 +8,8 @@ interface SpritesheetIndex {
 class Entity extends Base {
   sprite: PIXI.Sprite;
 
+  oneCameraOnly: "left" | "right" | "no" = "no";
+
   public get x(): number { return this.sprite.x; }
   public set x(v: number) { this.sprite.x = v; }
 

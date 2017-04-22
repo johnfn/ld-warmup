@@ -299,6 +299,10 @@ class Cinematics extends Base {
   *professorIsHorrified() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
+    const fade = new FadeOutIn(this.state, "left");
+
+    yield* fade.doFadeOut(this.state, "left");
+
     Controllable.SwitchActivePlayer(state);
     state.rightCamActive = true;
 
