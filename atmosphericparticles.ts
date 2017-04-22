@@ -23,6 +23,13 @@ class AtmosphericParticles extends Particles {
     this.behavior.x = [ cameraLeft.x, cameraLeft.x + cameraLeft.right ];
     this.behavior.y = [ cameraLeft.y, cameraLeft.y + cameraLeft.height ];
 
+    this.behavior.dest = {
+      x: state.getActivePlayer().x,
+      y: state.getActivePlayer().y,
+
+      range: 200,
+    };
+
     this.setBehaviorTo(this.behavior);
 
     super.update(state);

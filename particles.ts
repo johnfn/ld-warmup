@@ -72,6 +72,13 @@ interface ParticleBehavior {
 
   x: NumberOrRange;
   y: NumberOrRange;
+
+  dest?: {
+    x: number;
+    y: number;
+
+    range: number;
+  }
 }
 
 type NumberOrRange = number | [number, number];
@@ -148,9 +155,19 @@ class Particles extends Base {
 
       obj.lifespan--;
 
-      obj.entity.x += obj.dx;
-      obj.entity.y += obj.dy;
       obj.entity.sprite.rotation += obj.rotation;
+
+      if (this.behavior.dest &&
+          Util.Dist(obj.entity, this.behavior.dest) < this.behavior.dest.range) {
+
+        const { x: destX, y: destY } = this.behavior.dest;
+
+        obj.entity.x -= Math.sign(obj.entity.x - destX);
+        obj.entity.y -= Math.sign(obj.entity.y - destY);
+      } else {
+        obj.entity.x += obj.dx;
+        obj.entity.y += obj.dy;
+      }
     }
 
     // release & remove dead particles
