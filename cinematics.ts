@@ -29,15 +29,33 @@ class Cinematics extends Base {
   }
 
   *talk(who: Controllable, text: string) {
+    const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
     const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who));
+    let charactersVisible = 1;
 
+    outer:
     while (true) {
-      textEntity.text = text;
+      textEntity.text = text.slice(0, ++charactersVisible);
 
-      yield { frames: 10 };
+      for (let i = 0; i < 3; i++) {
+        yield "next";
+
+        if (keyboard.down.Z) {
+          if (charactersVisible < text.length) {
+            charactersVisible++;
+          }
+        }
+
+        if (keyboard.justDown.Z) {
+          if (charactersVisible >= text.length) {
+            break outer;
+          }
+        }
+      }
     }
 
+    textEntity.destroy();
     this.stopCoroutine(this.state, id);
   }
 
@@ -60,9 +78,7 @@ class Cinematics extends Base {
   *professorGoesHomeCinematic() {
     const prof = state.playerRightProf;
 
-    yield* this.talk(prof, "Hello my boy!");
-
-    yield "next";
+    yield* this.talk(prof, "Hello my boy! (Press Z to continue.)");
 
     yield* this.walkTo(prof, new Point({ x: 500, y: 500 }));
   }

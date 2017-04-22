@@ -27,4 +27,8 @@ class TextEntity extends Base {
 
     parent.addChild(this.textObject);
   }
+
+  destroy(): void {
+    this.textObject.parent.removeChild(this.textObject);
+  }
 }
