@@ -1,14 +1,17 @@
+PIXI.loader.add("atmosphere-particle", "assets/particle.png");
+
 class AtmosphericParticles extends Particles {
   behavior: ParticleBehavior = {
     lifespan: [100, 200],
 
-    dx: [-3, 3],
-    dy: [-3, 3],
+    dx: [-2, 2],
+    dy: [-2, 2],
 
     rotation: [-0.2, 0.2],
 
     x: 0,
     y: 0,
+    tilesheet: "atmosphere-particle",
   };
 
   constructor(state: StateClass) {

@@ -67,6 +67,8 @@ interface ParticleBehavior {
 
   rotation: NumberOrRange;
 
+  tilesheet: string;
+
   dx: NumberOrRange;
   dy: NumberOrRange;
 
@@ -95,6 +97,7 @@ class Particles extends Base {
     x: 0,
     y: 0,
     rotation: 1,
+    tilesheet: "atmosphere-particle",
   }) {
     super(state);
 
@@ -103,7 +106,7 @@ class Particles extends Base {
     this.pool = new Pooler({
       create: () => {
         const e = new Entity(state, {
-          texture: "tinyworld",
+          texture: this.behavior.tilesheet,
         });
 
         e.sprite.pivot = new PIXI.Point(16, 16);
