@@ -23,7 +23,7 @@ class TextEntity extends Base {
     style = {
       default: {
         fontFamily: "FreePixel",
-        fontSize: "18px",
+        fontSize: "20px",
         fill: "#ffffff",
         align: "left",
         wordWrap: true,

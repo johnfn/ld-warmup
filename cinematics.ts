@@ -5,7 +5,7 @@ type CurrentActiveEvent = "None"
                         | "Professor Fiddles"
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "Follow Prof To Home";
   activeCoroutine = -1;
   state: StateClass;
 
@@ -206,11 +206,20 @@ class Cinematics extends Base {
   }
 
   *learnAboutTinyWorld() {
-    const { playerRightProf: prof, playerLeft: you } = state;
+    const { playerRightProf: prof, playerLeft: you, cameraLeft } = state;
 
     yield* this.talk(prof, "See that right there?");
     yield* this.talk(prof, "Just slightly to the left of the camera viewport?");
     yield* this.talk(you, "Uh...");
+
+    cameraLeft.isExternallyControlled = true;
+
+    yield* cameraLeft.panTo(TinyWorld.Instance);
+    yield { frames: 30 };
+    yield* cameraLeft.panTo(you);
+
+    cameraLeft.isExternallyControlled = false;
+
     yield* this.talk(you, "...yeah, I think I do.");
     yield* this.talk(prof, "That... is a SMALL WORLD.");
     yield* this.talk(prof, "[looks suggestively at camera to indicate theme connection]");
