@@ -26,9 +26,12 @@ class Pooler {
   }
 
   get(): Entity | undefined {
-    for (const { alive, entity } of this.pool) {
+    for (const obj of this.pool) {
+      const { alive, entity } = obj;
+
       if (alive) { continue; }
 
+      obj.alive = true;
       entity.sprite.visible = true;
 
       return entity;
