@@ -1,5 +1,6 @@
 class TextEntity extends Base {
   textObject: MultiStyleText;
+  exists = true;
 
   public get x(): number { return this.textObject.x; }
   public set x(v: number) { this.textObject.x = v; }
@@ -30,5 +31,6 @@ class TextEntity extends Base {
 
   destroy(): void {
     this.textObject.parent.removeChild(this.textObject);
+    this.exists = false;
   }
 }

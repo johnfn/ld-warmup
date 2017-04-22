@@ -24,6 +24,7 @@ class StateClass {
     // Regions
 
     "Camera Regions": true,
+    "ProfessorDestRegions": true,
   }, {
     // Objects
     ObjLayer: true,

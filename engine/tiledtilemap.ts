@@ -108,8 +108,13 @@ interface SpritesheetTile {
   tileheight: number
 }
 
+interface TiledRegion {
+  region: Rect;
+  properties?: { [key: string]: string; };
+}
+
 interface RegionLayer {
-  regions: Rect[];
+  regions: TiledRegion[];
 }
 
 interface ObjectLayer {
@@ -157,7 +162,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
   getRegionFor(point: { x: number, y: number }): Rect {
     const newRegionCandidates = this.regionLayers["Camera Regions"].regions.filter(r => {
-      return r.contains({ x: point.x, y: point.y });
+      return r.region.contains({ x: point.x, y: point.y });
     });
 
     if (newRegionCandidates.length === 0) {
@@ -168,7 +173,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
       throw new Error("Overlapping regions!");
     }
 
-    return newRegionCandidates[0];
+    return newRegionCandidates[0].region;
   }
 
   changeSection(state: StateClass, who: Entity, cam: Camera): void {
@@ -333,12 +338,17 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
   private loadRegionLayer(layer: TiledObjectLayerJSON): void {
     const result: RegionLayer = {
-      regions: layer.objects.map(obj => (new Rect({
-        x: obj.x,
-        y: obj.y,
-        w: obj.width,
-        h: obj.height,
-      })))
+      regions: layer.objects.map(obj => {
+        return {
+          properties: obj.properties,
+          region: new Rect({
+            x: obj.x,
+            y: obj.y,
+            w: obj.width,
+            h: obj.height,
+          }),
+        };
+      }),
     };
 
     this.regionLayers[layer.name] = result;
@@ -378,10 +388,10 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   }
 
   checkRegionValidity(state: StateClass): void {
-    for (const r of this.regionLayers["Camera Regions"].regions) {
-      if (r.w < state.width || r.h < state.height) {
+    for (const { region } of this.regionLayers["Camera Regions"].regions) {
+      if (region.w < state.width || region.h < state.height) {
         console.error("Bad size for camera region!")
-        console.error(r);
+        console.error(region);
       }
     }
   }

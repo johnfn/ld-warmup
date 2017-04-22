@@ -1,8 +1,9 @@
 type CurrentActiveEvent = "None"
-                        | "First Convo";
+                        | "First Convo"
+                        | "Follow Prof To Home"
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "First Convo";
   activeCoroutine = -1;
   state: StateClass;
 
@@ -19,6 +20,11 @@ class Cinematics extends Base {
           this.currentOrLastEvent = "First Convo";
           this.activeCoroutine = this.startCoroutine(state, this.firstConvo());
         break;
+
+        case "First Convo":
+          this.currentOrLastEvent = "Follow Prof To Home";
+          this.activeCoroutine = this.startCoroutine(state, this.followProfessor());
+        break;
       }
     }
   }
@@ -28,10 +34,10 @@ class Cinematics extends Base {
     this.activeCoroutine = -1;
   }
 
-  *textFollowPlayer(thing: TextEntity, following: Entity) {
-    while (true) {
-      thing.x = following.x + 10;
-      thing.y = following.y - 16;
+  *textFollowPlayer(text: TextEntity, following: Entity) {
+    while (text.exists) {
+      text.x = following.x + 10;
+      text.y = following.y - 16;
 
       yield "next";
     }
@@ -89,8 +95,7 @@ class Cinematics extends Base {
   }
 
   *firstConvo() {
-    const prof = state.playerRightProf;
-    const you = state.playerLeft;
+    const { playerRightProf: prof, playerLeft: you } = state;
 
     yield* this.talk(prof, "Hello my boy! (Press Z to continue.)");
     yield* this.talk(you, "Err... hello... again.");
@@ -115,6 +120,18 @@ class Cinematics extends Base {
     yield* this.talk(prof, "I'll make it up to you!");
     yield* this.talk(you, "Well, given that the the left side of\n this world is a giant wall, it would seem\nI don't have much of a choice.");
 
+    this.finishCinematic();
+  }
+
+  *followProfessor() {
+    const { tilemap, playerRightProf: prof, playerLeft: you } = state;
+
+    console.log(tilemap.regionLayers.ProfessorDestRegions);
+
     yield* this.walkTo(prof, new Point({ x: 500, y: 500 }));
+
+    yield "next";
+
+    this.finishCinematic();
   }
 }
