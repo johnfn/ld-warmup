@@ -19,6 +19,28 @@ class Cinematics extends Base {
     }
   }
 
+  *textFollowPlayer(thing: TextEntity, following: Entity) {
+    while (true) {
+      thing.x = following.x + 10;
+      thing.y = following.y - 16;
+
+      yield "next";
+    }
+  }
+
+  *talk(who: Controllable, text: string) {
+    const textEntity = new TextEntity(this.state);
+    const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who));
+
+    while (true) {
+      textEntity.text = text;
+
+      yield { frames: 10 };
+    }
+
+    this.stopCoroutine(this.state, id);
+  }
+
   *walkTo(who: Controllable, where: Point) {
     const { physics } = this.state;
 
@@ -37,6 +59,8 @@ class Cinematics extends Base {
 
   *professorGoesHomeCinematic() {
     const prof = state.playerRightProf;
+
+    yield* this.talk(prof, "Hello my boy!");
 
     yield "next";
 
