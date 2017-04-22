@@ -31,12 +31,13 @@ class StateClass {
 
   rendererBig: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   rendererTiny: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
-  player: Player;
+  playerLeft: PlayerLeft;
+  playerRight: PlayerRight;
 
   keyboard: Keyboard;
   physics: Physics;
-  cameraBig: CameraLeft;
-  cameraTiny: CameraRight;
+  cameraLeft: CameraLeft;
+  cameraRight: CameraRight;
 
   entities: Base[];
 
@@ -87,11 +88,12 @@ class StateClass {
     this.drawCallText.x = this.width - 100;
     this.drawCallText.y = 0;
 
-    this.cameraBig = new CameraLeft(this);
-    this.cameraTiny = new CameraRight(this);
+    this.cameraLeft = new CameraLeft(this);
+    this.cameraRight = new CameraRight(this);
 
     this.tilemap = new TiledTilemap(data) as any;
-    this.player = new Player(this);
+    this.playerLeft = new PlayerLeft(this);
+    this.playerRight = new PlayerRight(this);
 
     this.keyboard = new Keyboard();
     this.physics = new Physics();
@@ -117,11 +119,11 @@ class StateClass {
     });
 
     this.tilemap.load().then(() => {
-      this.tilemap.changeSection(this, this.player, this.cameraBig);
-      this.tilemap.changeSection(this, this.player, this.cameraTiny);
+      this.tilemap.changeSection(this, this.playerLeft, this.cameraLeft);
+      this.tilemap.changeSection(this, this.playerRight, this.cameraRight);
 
-      this.tilemap.displayMap(state, this.cameraBig);
-      this.tilemap.displayMap(state, this.cameraTiny);
+      this.tilemap.displayMap(state, this.cameraLeft);
+      this.tilemap.displayMap(state, this.cameraRight);
 
       this.tilemap.checkRegionValidity(state);
 
@@ -187,7 +189,7 @@ class StateClass {
   }
 
   update(): void {
-    const { rendererBig, rendererTiny, keyboard, cameraBig, cameraTiny, entities, root, currentMode } = state;
+    const { rendererBig, rendererTiny, keyboard, cameraLeft, cameraRight, entities, root, currentMode } = state;
 
     keyboard.update();
 
@@ -206,10 +208,10 @@ class StateClass {
     // transition and camera didn't see it, we'd have a frame where the camera
     // was way out of sync.
 
-    cameraBig.update(state);
+    cameraLeft.update(state);
     rendererBig.render(root);
 
-    cameraTiny.update(state);
+    cameraRight.update(state);
     rendererTiny.render(root);
   }
 }

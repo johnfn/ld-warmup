@@ -48,11 +48,4 @@ class Camera {
 
     this.id = ++Camera.cameras;
   }
-
-  update(state: StateClass) {
-    const { player } = state;
-
-    this.centerX = player.x;
-    this.centerY = player.y;
-  }
 }

@@ -1,6 +1,6 @@
 PIXI.loader.add("sprite", "assets/sprite.png");
 
-class Player extends Entity {
+class PlayerLeft extends Entity {
   vy = 0;
   onGround = false;
   camera: Camera;
@@ -8,7 +8,7 @@ class Player extends Entity {
   constructor(state: StateClass) {
     super(state, { texture: "sprite" });
 
-    const { tilemap, cameraBig } = state;
+    const { tilemap, cameraLeft } = state;
     const startingObject = tilemap.objectLayers["ObjLayer"].objects[0];
 
     this.x = startingObject.x;
@@ -16,7 +16,7 @@ class Player extends Entity {
 
     this.z = 10;
 
-    this.camera = cameraBig;
+    this.camera = cameraLeft;
   }
 
   move(state: StateClass) {

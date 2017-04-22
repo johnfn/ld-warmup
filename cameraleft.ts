@@ -1,8 +1,8 @@
 class CameraLeft extends Camera {
   update(state: StateClass) {
-    const { player } = state;
+    const { playerLeft } = state;
 
-    this.centerX = player.x;
-    this.centerY = player.y;
+    this.centerX = playerLeft.x;
+    this.centerY = playerLeft.y;
   }
 }

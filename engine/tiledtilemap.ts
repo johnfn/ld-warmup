@@ -116,7 +116,7 @@ interface ObjectLayer {
   objects: TiledObject[];
 }
 
-PIXI.loader.add("tilemap", "assets/tiled.json");
+PIXI.loader.add("tilemap", "assets/tiled2.json");
 class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   private data: TiledJSON;
 

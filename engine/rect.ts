@@ -192,8 +192,8 @@ class Rect {
   }
 
   contains(p: IPoint): boolean {
-    return p.x >= this.x && p.x <= this.x + this.w &&
-           p.y >= this.y && p.y <= this.y + this.h;
+    return p.x >= this.x && p.x < this.x + this.w &&
+           p.y >= this.y && p.y < this.y + this.h;
   }
 
   clone(): Rect {
