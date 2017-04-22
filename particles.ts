@@ -53,14 +53,26 @@ class Pooler {
 
 interface Particle {
   entity: Entity;
+  lifespan: number;
 }
+
+interface ParticleBehavior {
+  lifespan: NumberOrRange;
+}
+
+type NumberOrRange = number | [number, number];
 
 class Particles extends Base {
   pool: Pooler;
   particles: Particle[] = [];
+  behavior: ParticleBehavior;
 
-  constructor(state: StateClass) {
+  constructor(state: StateClass, behavior: ParticleBehavior = {
+    lifespan: [10, 20],
+  }) {
     super(state);
+
+    this.behavior = behavior;
 
     this.pool = new Pooler({
       create: () => {
@@ -71,16 +83,25 @@ class Particles extends Base {
     });
   }
 
+  getValueFrom(thing: NumberOrRange): number {
+    if (Array.isArray(thing)) {
+      return Util.RandRange(thing);
+    }
+
+    return thing;
+  }
+
   update(state: StateClass): void {
     const pos = state.getActivePlayer();
 
     if (Math.random() > 0.9) {
       const ent = this.pool.get();
 
-      if (!ent) { return; }
+      if (!ent) { console.log('fail2get particle'); return; }
 
       this.particles.push({
         entity: ent,
+        lifespan: this.getValueFrom(this.behavior.lifespan),
       });
 
       ent.x = pos.x;
@@ -88,7 +109,22 @@ class Particles extends Base {
     }
 
     for (let i = 0; i < this.particles.length; i++) {
-      this.particles[i].entity.x += 1;
+      const particle = this.particles[i];
+
+      particle.lifespan--;
+
+      particle.entity.x += 1;
     }
+
+    // release & remove dead particles
+    this.particles = this.particles.filter(particle => {
+      if (particle.lifespan < 0) {
+        this.pool.release(particle.entity);
+
+        return false;
+      }
+
+      return true;
+    });
   }
 }

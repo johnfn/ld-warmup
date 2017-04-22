@@ -7,7 +7,5 @@ class TinyWorld extends Entity {
 
   update(state: StateClass) {
     super.update(state);
-
-    console.log(this.x, this.y);
   }
 }

@@ -12,4 +12,10 @@ class Util {
   static RandElement<T>(arr: T[]): T {
     return arr[Math.floor(arr.length * Math.random())];
   }
+
+  static RandRange(range: [number, number]): number {
+    const [low, high] = range;
+
+    return low + Math.floor(Math.random() * (high - low));
+  }
 }
