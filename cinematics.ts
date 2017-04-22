@@ -223,7 +223,7 @@ class Cinematics extends Base {
 
       yield* this.walkTo(prof, Rect.FromPoint(spotTwo, 100));
 
-      yield* this.talk(prof, "Hum... that's interesting...", { waitFrames: 10 });
+      yield* this.talk(prof, "Not too close now...", { waitFrames: 10 });
 
       yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));
 

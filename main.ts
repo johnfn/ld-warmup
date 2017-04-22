@@ -131,6 +131,13 @@ class StateClass {
         enemy.x = obj.x;
         enemy.y = obj.y;
       }
+
+      if (layerName === "TinyWorld") {
+        const tw = new TinyWorld(this)
+
+        tw.x = obj.x;
+        tw.y = obj.y - 32;
+      }
     });
 
     this.tilemap.load().then(() => {
