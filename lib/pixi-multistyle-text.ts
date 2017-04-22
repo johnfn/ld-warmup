@@ -231,14 +231,14 @@ class MultiStyleText extends PIXI.Text {
 				outputTextData[i][j].width = this.context.measureText(outputTextData[i][j].text).width;
 
 				if (outputTextData[i][j].text.length === 0) {
-					outputTextData[i][j].width += (outputTextData[i][j].text.length - 1) * sty.letterSpacing;
+					outputTextData[i][j].width += (outputTextData[i][j].text.length - 1) * sty.letterSpacing!;
 
 					if (j > 0) {
-						lineWidth += sty.letterSpacing / 2; // spacing before first character
+						lineWidth += sty.letterSpacing! / 2; // spacing before first character
 					}
 
 					if (j < outputTextData[i].length - 1) {
-						lineWidth += sty.letterSpacing / 2; // spacing after last character
+						lineWidth += sty.letterSpacing! / 2; // spacing after last character
 					}
 				}
 
@@ -247,11 +247,11 @@ class MultiStyleText extends PIXI.Text {
 				// new PIXI.TextMetrics(this.text, textStyle, this.width, this.height, this.lin)
 
 				// save the font properties
-				outputTextData[i][j].fontProperties = PIXI.Text.calculateFontProperties(this.context.font);
+				outputTextData[i][j].fontProperties = (PIXI.Text as any).calculateFontProperties(this.context.font);
 
 				// save the height
 				outputTextData[i][j].height =
-						outputTextData[i][j].fontProperties.fontSize + outputTextData[i][j].style.strokeThickness;
+						outputTextData[i][j].fontProperties.fontSize + outputTextData[i][j].style.strokeThickness!;
 				lineHeight = Math.max(lineHeight, outputTextData[i][j].height);
 			}
 
@@ -312,9 +312,9 @@ class MultiStyleText extends PIXI.Text {
 				let linePositionY = maxStrokeThickness / 2 + basePositionY + fontProperties.ascent;
 
 				if (style.valign === "bottom") {
-					linePositionY += lineHeights[i] - line[j].height - (maxStrokeThickness - style.strokeThickness) / 2;
+					linePositionY += lineHeights[i] - line[j].height - (maxStrokeThickness - style.strokeThickness!) / 2;
 				} else if (style.valign === "middle") {
-					linePositionY += (lineHeights[i] - line[j].height) / 2 - (maxStrokeThickness - style.strokeThickness) / 2;
+					linePositionY += (lineHeights[i] - line[j].height) / 2 - (maxStrokeThickness - style.strokeThickness!) / 2;
 				}
 
 				if (style.letterSpacing === 0) {
@@ -331,7 +331,7 @@ class MultiStyleText extends PIXI.Text {
 
 					for (let k = 0; k < text.length; k++) {
 						if (k > 0 || j > 0) {
-							linePositionX += style.letterSpacing / 2;
+							linePositionX += style.letterSpacing! / 2;
 						}
 
 						drawingData.push({
@@ -344,7 +344,7 @@ class MultiStyleText extends PIXI.Text {
 						linePositionX += this.context.measureText(text.charAt(k)).width;
 
 						if (k < text.length - 1 || j < line.length - 1) {
-							linePositionX += style.letterSpacing / 2;
+							linePositionX += style.letterSpacing! / 2;
 						}
 					}
 				}
@@ -369,10 +369,10 @@ class MultiStyleText extends PIXI.Text {
 			if (typeof dropFillStyle === "number") {
 				dropFillStyle = PIXI.utils.hex2string(dropFillStyle);
 			}
-			this.context.shadowColor = dropFillStyle;
-			this.context.shadowBlur = style.dropShadowBlur;
-			this.context.shadowOffsetX = Math.cos(style.dropShadowAngle) * style.dropShadowDistance * this.resolution;
-			this.context.shadowOffsetY = Math.sin(style.dropShadowAngle) * style.dropShadowDistance * this.resolution;
+			this.context.shadowColor = dropFillStyle!;
+			this.context.shadowBlur = style.dropShadowBlur!;
+			this.context.shadowOffsetX = Math.cos(style.dropShadowAngle!) * style.dropShadowDistance! * this.resolution;
+			this.context.shadowOffsetY = Math.sin(style.dropShadowAngle!) * style.dropShadowDistance! * this.resolution;
 
 			this.context.fillText(text, x, y);
 		});
@@ -388,8 +388,8 @@ class MultiStyleText extends PIXI.Text {
 				strokeStyle = PIXI.utils.hex2string(strokeStyle);
 			}
 
-			this.context.strokeStyle = strokeStyle;
-			this.context.lineWidth = style.strokeThickness;
+			this.context.strokeStyle = strokeStyle!;
+			this.context.lineWidth = style.strokeThickness!;
 
 			// set canvas text styles
 			let fillStyle = style.fill;
@@ -427,7 +427,7 @@ class MultiStyleText extends PIXI.Text {
 		const lines = text.split("\n");
 		const wordWrapWidth = this._style.wordWrapWidth;
 		let styleStack = [this.assign({}, this.textStyles["default"])];
-		this.context.font = PIXI.Text.getFontStyle(this.textStyles["default"]);
+		this.context.font = (PIXI.Text as any).getFontStyle(this.textStyles["default"]);
 
 		for (let i = 0; i < lines.length; i++) {
 			let spaceLeft = wordWrapWidth;
@@ -446,7 +446,7 @@ class MultiStyleText extends PIXI.Text {
 							k++;
 							styleStack.push(this.assign({}, styleStack[styleStack.length - 1], this.textStyles[parts[k]]));
 						}
-						this.context.font = PIXI.Text.getFontStyle(styleStack[styleStack.length - 1]);
+						this.context.font = (PIXI.Text as any).getFontStyle(styleStack[styleStack.length - 1]);
 						continue;
 					}
 
@@ -521,11 +521,11 @@ class MultiStyleText extends PIXI.Text {
 		texture.baseTexture.realHeight = this.canvas.height;
 		texture.baseTexture.width = this.canvas.width / this.resolution;
 		texture.baseTexture.height = this.canvas.height / this.resolution;
-		texture.trim.width = texture.frame.width = this.canvas.width / this.resolution;
-		texture.trim.height = texture.frame.height = this.canvas.height / this.resolution;
+		texture.trim!.width = texture.frame.width = this.canvas.width / this.resolution;
+		texture.trim!.height = texture.frame.height = this.canvas.height / this.resolution;
 
-		texture.trim.x = -this._style.padding - dropShadowPadding;
-		texture.trim.y = -this._style.padding - dropShadowPadding;
+		texture.trim!.x = -this._style.padding - dropShadowPadding;
+		texture.trim!.y = -this._style.padding - dropShadowPadding;
 
 		texture.orig.width = texture.frame.width - (this._style.padding + dropShadowPadding) * 2;
 		texture.orig.height = texture.frame.height - (this._style.padding + dropShadowPadding) * 2;
