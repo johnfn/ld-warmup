@@ -68,4 +68,8 @@ class Controllable extends Entity {
 
     this.onGround = hitDown && dy > 0;
   }
+
+  update(_state: StateClass) {
+
+  }
 }

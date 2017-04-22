@@ -214,9 +214,15 @@ class StateClass {
     // was way out of sync.
 
     cameraLeft.update(state);
+    root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
+    state.playerLeft.sprite.alpha = 1.0;
+    state.playerRight.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
     rendererBig.render(root);
 
     cameraRight.update(state);
+    root.alpha = state.playerRight.isActive(state) ? 1.0 : 0.3;
+    state.playerRight.sprite.alpha = 1.0;
+    state.playerLeft.sprite.alpha = state.playerRight.isActive(state) ? 0.3 : 1.0;
     rendererTiny.render(root);
   }
 }

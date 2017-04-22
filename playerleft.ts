@@ -26,13 +26,9 @@ class PlayerLeft extends Controllable {
   }
 
   update(state: StateClass) {
+    super.update(state);
+
     this.move(state);
     this.checkForMapTransition(state);
-
-    if (this.isActive(state)) {
-      this.sprite.alpha = 1.0;
-    } else {
-      this.sprite.alpha = 0.3;
-    }
   }
 }
