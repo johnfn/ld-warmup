@@ -183,13 +183,13 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
     this.currentRegion[cam.id] = newRegion;
 
-    this.removeAllSprites(state, cam);
-    this.displayMap(state, cam);
+    this.removeAllSprites(state);
+    this.displayMap(state);
 
     cam.bounds = new Rect({ x: newRegion.x, y: newRegion.y, w: newRegion.w, h: newRegion.h, });
   }
 
-  private removeAllSprites(state: StateClass, cam: Camera): void {
+  private removeAllSprites(state: StateClass): void {
     const { stage } = state;
 
     for (const key of Object.keys(this.spriteLayers)) {
@@ -381,7 +381,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.loadObjects();
   }
 
-  displayMap(state: StateClass, cam: Camera): void {
+  displayMap(state: StateClass): void {
     const dedupedRegions: Rect[] = [];
 
     for (const key in this.currentRegion) {

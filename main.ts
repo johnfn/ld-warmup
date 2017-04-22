@@ -137,8 +137,7 @@ class StateClass {
       this.tilemap.changeSection(this, this.playerLeft, this.cameraLeft);
       this.tilemap.changeSection(this, this.playerRightProf, this.cameraRight);
 
-      this.tilemap.displayMap(state, this.cameraLeft);
-      this.tilemap.displayMap(state, this.cameraRight);
+      this.tilemap.displayMap(state);
 
       this.tilemap.checkRegionValidity(state);
 
