@@ -42,6 +42,7 @@ class StateClass {
   cinematics: Cinematics;
   cameraLeft: CameraLeft;
   cameraRight: CameraRight;
+  particles: Particles;
 
   rightCamActive = false;
 
@@ -72,6 +73,14 @@ class StateClass {
       return this.cameraRight;
     } else {
       return this.cameraLeft;
+    }
+  }
+
+  getActivePlayer(): Controllable {
+    if (this.rightCamActive) {
+      return this.playerRightProf;
+    } else {
+      return this.playerLeft;
     }
   }
 
@@ -118,6 +127,8 @@ class StateClass {
     this.physics = new Physics();
 
     this.cinematics = new Cinematics(this);
+
+    this.particles = new Particles(this);
 
     const se = new SpritedEnemy(this);
     se.x = 400;
