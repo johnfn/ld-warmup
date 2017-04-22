@@ -50,8 +50,8 @@ class Controllable extends Entity {
         this.vy = 0;
       }
 
-      if (keyboard.justDown.X) {
-        keyboard.clear("X");
+      if (keyboard.justDown.C) {
+        keyboard.clear("C");
 
         this.switchActivePlayer(state);
       }

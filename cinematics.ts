@@ -39,8 +39,6 @@ class Cinematics extends Base {
       textEntity.text = text.slice(0, ++charactersVisible);
 
       for (let i = 0; i < 3; i++) {
-        yield "next";
-
         if (keyboard.down.Z) {
           if (charactersVisible < text.length) {
             charactersVisible++;
@@ -52,6 +50,12 @@ class Cinematics extends Base {
             break outer;
           }
         }
+
+        if (keyboard.justDown.X) {
+          charactersVisible = text.length;
+        }
+
+        yield "next";
       }
     }
 
@@ -77,8 +81,27 @@ class Cinematics extends Base {
 
   *professorGoesHomeCinematic() {
     const prof = state.playerRightProf;
+    const you = state.playerLeft;
 
     yield* this.talk(prof, "Hello my boy! (Press Z to continue.)");
+    yield* this.talk(you, "Err... hello... again.");
+    yield* this.talk(prof, "We've met before?");
+    yield* this.talk(you, "...");
+    yield* this.talk(you, "Yes...");
+    yield* this.talk(you, "In a few past Ludum Dare games...");
+    yield* this.talk(prof, "Ludum Dare?");
+    yield* this.talk(prof, "The Great Event, foretold by prophecy, to\nhappen once every 4 months?");
+    yield* this.talk(you, "Yeah.");
+    yield* this.talk(you, "It never seems to go well for me.");
+    yield* this.talk(you, "There was this one time... where you turned\n me into Godzilla... it was bad.");
+    yield* this.talk(prof, "You don't look like a godzilla to me.");
+    yield* this.talk(you, "Yeah, getting back to human was quite\n an adventure, let me tell you.");
+    yield* this.talk(prof, "Do I smell a straight-to-dvd prequel?");
+    yield* this.talk(you, "Sorry?");
+    yield* this.talk(prof, "Anyways... why don't you come to my\nlabratory?");
+    yield* this.talk(prof, "I've got an interesting experiment\n in its final stages.");
+    yield* this.talk(prof, "I'll make it up to you!");
+    yield* this.talk(you, "Well, given that the the left side of\n this world is a giant wall, it would seem\nI don't have much of a choice.");
 
     yield* this.walkTo(prof, new Point({ x: 500, y: 500 }));
   }
