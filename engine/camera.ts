@@ -1,6 +1,8 @@
-class Camera {
+class Camera extends Base {
   width: number;
   height: number;
+  shaking = false;
+
   stage: PIXI.Container;
 
   bounds: Rect;
@@ -56,6 +58,8 @@ class Camera {
   }
 
   constructor(state: StateClass) {
+    super(state);
+
     const { width, height, stage } = state;
 
     this.width = width;

@@ -29,16 +29,20 @@ class PlayerLeft extends Controllable {
   update(state: StateClass) {
     this.checkForMapTransition(state);
     this.checkForRegionDialogs(state);
-    this.checkForWorldSucking(state);
+    this.checkForWorldSucking();
 
     super.update(state);
   }
 
-  checkForWorldSucking(state: StateClass): void {
+  checkForWorldSucking(): void {
     const tinyWorld = TinyWorld.Instance;
 
-    if (Util.Dist(tinyWorld, this) < 300) {
+    if (Util.Dist(tinyWorld, this) < 400) {
       this.vx = Math.sign(tinyWorld.x - this.x);
+    }
+
+    if (Util.Dist(tinyWorld, this) < 200) {
+      this.vx = Math.sign(tinyWorld.x - this.x) * 3;
     }
   }
 

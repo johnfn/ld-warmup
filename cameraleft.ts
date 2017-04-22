@@ -8,6 +8,21 @@ class CameraLeft extends Camera {
       this.centerX = playerLeft.x;
       this.centerY = playerLeft.y;
     }
+
+    if (this.shouldShake()) {
+      this.centerX += Math.random() * 4 - 2;
+      this.centerY += Math.random() * 4 - 2;
+    }
+  }
+
+  shouldShake(): boolean {
+    const { playerLeft: you } = state;
+
+    if (Util.Dist(you, TinyWorld.Instance) < 200) {
+      return true;
+    }
+
+    return false;
   }
 
   *panTo(point: IPoint) {

@@ -238,6 +238,13 @@ class Cinematics extends Base {
     yield* this.talk(you, "...");
     yield* this.talk(prof, "Oh, and try not to get too close. The world may be small, but I assure you the gravity is VERY normal.");
     yield* this.talk(prof, "I've got my heavy boots on, so I'm not affected, but you have to watch out!");
+    yield* this.talk(prof, "It'll literally suck you in!");
+    yield* this.talk(prof, "...");
+    yield* this.talk(prof, "It's kind of like a metaphor.");
+    yield* this.talk(prof, "The world sucks. Literally.");
+    yield* this.talk(you, "(...how can it be a metaphor if it's literal...)")
+    yield* this.talk(prof, "Well at least this tiny one does.");
+    yield* this.talk(prof, "Anyways.");
     yield* this.talk(prof, "Safety first!");
     yield* this.talk(you, "Oh yeah, I'll definitely be sure not to do that.")
     yield* this.talk(prof, "Good!");
