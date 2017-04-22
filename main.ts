@@ -45,6 +45,7 @@ class StateClass {
   particles: AtmosphericParticles;
 
   rightCamActive = false;
+  leftCamActive  = true;
 
   entities: Base[];
 
@@ -241,12 +242,14 @@ class StateClass {
 
     // RENDER LEFT
 
-    cameraLeft.update(state);
+    if (state.leftCamActive) {
+      cameraLeft.update(state);
 
-    if (state.rightCamActive) {
-      root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
-      state.playerLeft.sprite.alpha = 1.0;
-      state.playerRightProf.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
+      if (state.rightCamActive) {
+        root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
+        state.playerLeft.sprite.alpha = 1.0;
+        state.playerRightProf.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
+      }
 
       // hide irrelevant entities
 
@@ -255,14 +258,15 @@ class StateClass {
           e.sprite.visible = e.oneCameraOnly === "left";
         }
       }
-    }
 
-    rendererBig.render(root);
+      rendererBig.render(root);
+    }
 
     // RENDER RIGHT
 
     if (state.rightCamActive) {
       cameraRight.update(state);
+
       root.alpha = state.playerRightProf.isActive(state) ? 1.0 : 0.3;
       state.playerRightProf.sprite.alpha = 1.0;
       state.playerLeft.sprite.alpha = state.playerRightProf.isActive(state) ? 0.3 : 1.0;

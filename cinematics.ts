@@ -301,10 +301,11 @@ class Cinematics extends Base {
 
     const fade = new FadeOutIn(this.state, "left");
 
-    yield* fade.doFadeOut(this.state, "left");
+    yield* fade.doFadeOut(this.state);
 
     Controllable.SwitchActivePlayer(state);
     state.rightCamActive = true;
+    state.leftCamActive  = false;
 
     yield "next";
   }
