@@ -35,9 +35,15 @@ class Cinematics extends Base {
   }
 
   *textFollowPlayer(text: TextEntity, following: Entity) {
+    const cam = this.state.getActiveCamera();
+
     while (text.exists) {
       text.x = following.x + 10;
       text.y = following.y - 16;
+
+      if (text.x + text.wordWrapWidth > cam.bounds.right) {
+        text.x = cam.bounds.right - text.wordWrapWidth;
+      }
 
       yield "next";
     }

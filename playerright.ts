@@ -1,3 +1,4 @@
+// Professor
 class PlayerRight extends Controllable {
   vy = 0;
   onGround = false;

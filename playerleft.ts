@@ -1,5 +1,6 @@
 PIXI.loader.add("sprite", "assets/sprite.png");
 
+// You.
 class PlayerLeft extends Controllable {
   camera: Camera;
 
@@ -30,5 +31,25 @@ class PlayerLeft extends Controllable {
 
     this.move(state);
     this.checkForMapTransition(state);
+    this.checkForRegionDialogs(state);
+  }
+
+  checkForRegionDialogs(state: StateClass) {
+    const { cinematics } = state;
+    const dialogRegions = state.tilemap.regionLayers.YourDialogRegions;
+
+    for (const { region, properties } of dialogRegions.regions) {
+      if (!properties) {
+        console.error('dialog region w/o props...')
+
+        continue;
+      }
+
+      if (region.contains(this) && !properties.done) {
+        this.startCoroutine(state, cinematics.talk(this, properties.dialog));
+
+        properties.done = true;
+      }
+    }
   }
 }

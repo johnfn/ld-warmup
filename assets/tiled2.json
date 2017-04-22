@@ -183,8 +183,39 @@
          "width":100,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":100,
+         "name":"YourDialogRegions",
+         "objects":[
+                {
+                 "height":224,
+                 "id":21,
+                 "name":"",
+                 "properties":
+                    {
+                     "dialog":"That old man couldn't jump off this cliff... could he?"
+                    },
+                 "propertytypes":
+                    {
+                     "dialog":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":224,
+                 "x":1280,
+                 "y":352
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":100,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":20,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,

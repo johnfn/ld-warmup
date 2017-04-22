@@ -14,23 +14,39 @@ class TextEntity extends Base {
 
   public set text(value: string) { this.textObject.text = value; }
 
-  constructor(state: StateClass, { parent = state.stage } = {}) {
-    super(state);
+  style: TextStyleSet;
 
-    this.textObject = new MultiStyleText("hallo", {
+  wordWrapWidth: number;
+
+  constructor(state: StateClass, {
+    parent = state.stage,
+    style = {
       default: {
         fontFamily: "FreePixel",
         fontSize: "18px",
         fill: "#ffffff",
         align: "left",
+        wordWrap: true,
+        wordWrapWidth: 300,
       }
-    });
+    }
+  } = {}) {
+    super(state);
+
+    this.style = style;
+    this.textObject = new MultiStyleText("hallo", style);
 
     parent.addChild(this.textObject);
+
+    this.wordWrapWidth = style.default.wordWrapWidth;
   }
 
   destroy(): void {
     this.textObject.parent.removeChild(this.textObject);
     this.exists = false;
+  }
+
+  update(state: StateClass) {
+    super.update(state);
   }
 }

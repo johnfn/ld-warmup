@@ -25,6 +25,7 @@ class StateClass {
 
     "Camera Regions": true,
     "ProfessorDestRegions": true,
+    "YourDialogRegions": true,
   }, {
     // Objects
     ObjLayer: true,
@@ -64,6 +65,14 @@ class StateClass {
   root: PIXI.Container;
 
   drawCallText: TextEntity;
+
+  getActiveCamera(): Camera {
+    if (this.rightCamActive) {
+      return this.cameraRight;
+    } else {
+      return this.cameraLeft;
+    }
+  }
 
   constructor(data: TiledJSON) {
     this.rendererBig = PIXI.autoDetectRenderer(this.width, this.height, {
