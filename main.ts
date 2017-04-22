@@ -32,7 +32,7 @@ class StateClass {
   rendererBig: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   rendererTiny: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   playerLeft: PlayerLeft;
-  playerRight: PlayerRight;
+  playerRightProf: PlayerRight;
 
   keyboard: Keyboard;
   physics: Physics;
@@ -99,7 +99,7 @@ class StateClass {
 
     this.tilemap = new TiledTilemap(data) as any;
     this.playerLeft = new PlayerLeft(this);
-    this.playerRight = new PlayerRight(this);
+    this.playerRightProf = new PlayerRight(this);
 
     this.activePlayerId = this.playerLeft.id;
 
@@ -130,7 +130,7 @@ class StateClass {
 
     this.tilemap.load().then(() => {
       this.tilemap.changeSection(this, this.playerLeft, this.cameraLeft);
-      this.tilemap.changeSection(this, this.playerRight, this.cameraRight);
+      this.tilemap.changeSection(this, this.playerRightProf, this.cameraRight);
 
       this.tilemap.displayMap(state, this.cameraLeft);
       this.tilemap.displayMap(state, this.cameraRight);
@@ -224,16 +224,16 @@ class StateClass {
     if (state.rightCamActive) {
       root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
       state.playerLeft.sprite.alpha = 1.0;
-      state.playerRight.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
+      state.playerRightProf.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
     }
 
     rendererBig.render(root);
 
     if (state.rightCamActive) {
       cameraRight.update(state);
-      root.alpha = state.playerRight.isActive(state) ? 1.0 : 0.3;
-      state.playerRight.sprite.alpha = 1.0;
-      state.playerLeft.sprite.alpha = state.playerRight.isActive(state) ? 0.3 : 1.0;
+      root.alpha = state.playerRightProf.isActive(state) ? 1.0 : 0.3;
+      state.playerRightProf.sprite.alpha = 1.0;
+      state.playerLeft.sprite.alpha = state.playerRightProf.isActive(state) ? 0.3 : 1.0;
       rendererTiny.render(root);
     }
   }

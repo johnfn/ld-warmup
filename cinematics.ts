@@ -4,9 +4,12 @@ type CurrentActiveEvent = "None"
 class Cinematics extends Base {
   activeEvent: CurrentActiveEvent = "None";
   activeCoroutine = -1;
+  state: StateClass;
 
   constructor(state: StateClass) {
     super(state);
+
+    this.state = state;
   }
 
   update(state: StateClass): void {
@@ -16,9 +19,27 @@ class Cinematics extends Base {
     }
   }
 
+  *walkTo(who: Controllable, where: Point) {
+    const { physics } = this.state;
+
+    while (true) {
+      const {
+        hitRight,
+      } = physics.move(this.state, who, 2, 0);
+
+      if (hitRight && who.onGround) {
+        who.jump();
+      }
+
+      yield "next";
+    }
+  }
+
   *professorGoesHomeCinematic() {
+    const prof = state.playerRightProf;
+
     yield "next";
 
-    console.log('yep, this is the prof all right');
+    yield* this.walkTo(prof, new Point({ x: 500, y: 500 }));
   }
 }

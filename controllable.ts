@@ -25,6 +25,10 @@ class Controllable extends Entity {
     state.activePlayerId = state.playerIds[(currentIndex + 1) % state.playerIds.length];
   }
 
+  jump(): void {
+    this.vy -= 6;
+  }
+
   move(state: StateClass) {
     const { keyboard, physics } = state;
     let dx = 0, dy = 0;
@@ -39,7 +43,7 @@ class Controllable extends Entity {
       }
 
       if (this.onGround && keyboard.down.Spacebar) {
-        this.vy -= 6;
+        this.jump();
       }
 
       if (!keyboard.down.Spacebar && this.vy < 0) {
