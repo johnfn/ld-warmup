@@ -42,6 +42,7 @@ class StateClass {
   entities: Base[];
 
   activePlayerId: number;
+  playerIds: number[] = [];
 
   currentMode: Mode = "Game";
 

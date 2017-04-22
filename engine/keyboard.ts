@@ -116,4 +116,8 @@ class Keyboard {
 
     this._queuedEvents = [];
   }
+
+  clear(key: string): void {
+    this.justDown[key] = false;
+  }
 }
