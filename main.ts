@@ -124,12 +124,6 @@ class StateClass {
 
     new PauseScreen(this);
 
-    const tt = new TextEntity(this);
-    tt.x = 400;
-    tt.y = 400;
-
-    tt.text = "Foo Bar.";
-
     this.tilemap.processObjects(({ layerName, obj }) => {
       if (layerName === "EnemyLayer") {
         const enemy = new Enemy(this);

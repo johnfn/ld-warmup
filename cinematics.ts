@@ -113,21 +113,21 @@ class Cinematics extends Base {
     yield* this.talk(you, "Yes...");
     yield* this.talk(you, "In a few past Ludum Dare games...");
     yield* this.talk(prof, "Ludum Dare?");
-    yield* this.talk(prof, "The Great Event, foretold by prophecy, to\nhappen once every 4 months?");
+    yield* this.talk(prof, "The Great Event, foretold by prophecy, to happen once every 4 months?");
     yield* this.talk(you, "Yeah.");
-    yield* this.talk(prof, "(Amazing... one cognizant of Ludum Dare...\n could he be the one spoken of\n by prophecy?");
+    yield* this.talk(prof, "(Amazing... one cognizant of Ludum Dare... could he be the one spoken of by prophecy?)");
     yield* this.talk(you, "Sorry?");
     yield* this.talk(prof, "Just talking to myself. Continue!");
     yield* this.talk(you, "It never seems to go well for me.");
-    yield* this.talk(you, "There was this one time... where you turned\n me into Godzilla... it was bad.");
+    yield* this.talk(you, "There was this one time... where you turned me into Godzilla... it was bad.");
     yield* this.talk(prof, "You don't look like a godzilla to me.");
-    yield* this.talk(you, "Yeah, getting back to human was quite\n an adventure, let me tell you.");
-    yield* this.talk(prof, "Do I feel the plot for LD39\n coming on?");
+    yield* this.talk(you, "Yeah, getting back to human was quite an adventure, let me tell you.");
+    yield* this.talk(prof, "Do I feel the plot for LD39 coming on?");
     yield* this.talk(you, "Sorry?");
-    yield* this.talk(prof, "Anyways... why don't you come to my\nlabratory?");
-    yield* this.talk(prof, "I've got an interesting experiment\n in its final stages.");
+    yield* this.talk(prof, "Anyways... why don't you come to my labratory?");
+    yield* this.talk(prof, "I've got an interesting experiment in its final stages.");
     yield* this.talk(prof, "I'll make it up to you!");
-    yield* this.talk(you, "Well, given that the the left side of\n this world is a giant wall, it would seem\nI don't have much of a choice.");
+    yield* this.talk(you, "Well, given that the the left side of this world is a giant wall, it would seem I don't have much of a choice.");
 
     this.finishCinematic();
   }

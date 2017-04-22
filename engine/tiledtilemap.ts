@@ -192,19 +192,6 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   private removeAllSprites(state: StateClass, cam: Camera): void {
     const { stage } = state;
 
-    const currentRegionForCam = this.currentRegion[cam.id];
-    let otherRegion: Rect | undefined;
-
-    for (const key in this.currentRegion) {
-      if (key !== String(cam.id)) {
-        otherRegion = this.currentRegion[key];
-      }
-    }
-
-    if (currentRegionForCam === otherRegion) {
-      return;
-    }
-
     for (const key of Object.keys(this.spriteLayers)) {
       const layer = this.spriteLayers[key];
 
@@ -291,7 +278,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.tiles = tiles;
   }
 
-  private addTileSprites(state: StateClass, cam: Camera): void {
+  private addTileSprites(state: StateClass, region: Rect): void {
     const { stage } = state;
 
     for (const layer of this.data.layers) {
@@ -300,8 +287,6 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
       this.spriteLayers[layer.name] = container;
       stage.addChild(container);
     }
-
-    const region = this.currentRegion[cam.id];
 
     if (!region) { throw new Error("tried to add tile sprites w/o current region"); }
 
@@ -397,17 +382,18 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   }
 
   displayMap(state: StateClass, cam: Camera): void {
-    const currentRegionForCam = this.currentRegion[cam.id];
-    let otherRegion: Rect | undefined;
+    const dedupedRegions: Rect[] = [];
 
     for (const key in this.currentRegion) {
-      if (key !== String(cam.id)) {
-        otherRegion = this.currentRegion[key];
+      const region = this.currentRegion[key];
+
+      if (dedupedRegions.indexOf(region) === -1) {
+        dedupedRegions.push(region);
       }
     }
 
-    if (currentRegionForCam !== otherRegion) {
-      this.addTileSprites(state, cam);
+    for (const region of dedupedRegions) {
+      this.addTileSprites(state, region);
     }
   }
 
