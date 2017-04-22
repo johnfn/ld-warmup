@@ -53,11 +53,17 @@ class Pooler {
 
 interface Particle {
   entity: Entity;
+
   lifespan: number;
+
+  dx: number;
+  dy: number;
 }
 
 interface ParticleBehavior {
   lifespan: NumberOrRange;
+  dx: NumberOrRange;
+  dy: NumberOrRange;
 }
 
 type NumberOrRange = number | [number, number];
@@ -68,7 +74,9 @@ class Particles extends Base {
   behavior: ParticleBehavior;
 
   constructor(state: StateClass, behavior: ParticleBehavior = {
-    lifespan: [10, 20],
+    lifespan: [100, 200],
+    dx: [-3, 3],
+    dy: [-3, 3],
   }) {
     super(state);
 
@@ -99,9 +107,18 @@ class Particles extends Base {
 
       if (!ent) { console.log('fail2get particle'); return; }
 
+      let dx = 0, dy = 0;
+
+      while (dx * dx + dy * dy < 2) {
+        dx = this.getValueFrom(this.behavior.dx);
+        dy = this.getValueFrom(this.behavior.dy);
+      }
+
       this.particles.push({
         entity: ent,
         lifespan: this.getValueFrom(this.behavior.lifespan),
+        dx,
+        dy,
       });
 
       ent.x = pos.x;
@@ -112,8 +129,8 @@ class Particles extends Base {
       const particle = this.particles[i];
 
       particle.lifespan--;
-
-      particle.entity.x += 1;
+      particle.entity.x += particle.dx;
+      particle.entity.y += particle.dy;
     }
 
     // release & remove dead particles
