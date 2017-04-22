@@ -308,5 +308,7 @@ class Cinematics extends Base {
     state.leftCamActive  = false;
 
     yield "next";
+
+    this.finishCinematic();
   }
 }
