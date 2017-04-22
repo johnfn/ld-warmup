@@ -36,8 +36,11 @@ class StateClass {
 
   keyboard: Keyboard;
   physics: Physics;
+  cinematics: Cinematics;
   cameraLeft: CameraLeft;
   cameraRight: CameraRight;
+
+  rightCamActive = false;
 
   entities: Base[];
 
@@ -102,6 +105,8 @@ class StateClass {
 
     this.keyboard = new Keyboard();
     this.physics = new Physics();
+
+    this.cinematics = new Cinematics(this);
 
     const se = new SpritedEnemy(this);
     se.x = 400;
@@ -194,9 +199,10 @@ class StateClass {
   }
 
   update(): void {
-    const { rendererBig, rendererTiny, keyboard, cameraLeft, cameraRight, entities, root, currentMode } = state;
+    const { cinematics, rendererBig, rendererTiny, keyboard, cameraLeft, cameraRight, entities, root, currentMode } = state;
 
     keyboard.update();
+    cinematics.update(this);
 
     const activeEntities = entities.filter(e => e.activeModes.indexOf(currentMode) !== -1);
 
@@ -214,16 +220,22 @@ class StateClass {
     // was way out of sync.
 
     cameraLeft.update(state);
-    root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
-    state.playerLeft.sprite.alpha = 1.0;
-    state.playerRight.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
+
+    if (state.rightCamActive) {
+      root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
+      state.playerLeft.sprite.alpha = 1.0;
+      state.playerRight.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
+    }
+
     rendererBig.render(root);
 
-    cameraRight.update(state);
-    root.alpha = state.playerRight.isActive(state) ? 1.0 : 0.3;
-    state.playerRight.sprite.alpha = 1.0;
-    state.playerLeft.sprite.alpha = state.playerRight.isActive(state) ? 0.3 : 1.0;
-    rendererTiny.render(root);
+    if (state.rightCamActive) {
+      cameraRight.update(state);
+      root.alpha = state.playerRight.isActive(state) ? 1.0 : 0.3;
+      state.playerRight.sprite.alpha = 1.0;
+      state.playerLeft.sprite.alpha = state.playerRight.isActive(state) ? 0.3 : 1.0;
+      rendererTiny.render(root);
+    }
   }
 }
 
