@@ -30,7 +30,15 @@ class TextEntity extends Base {
         wordWrapWidth: 300,
         dropShadow: true,
         dropShadowDistance: 3,
-      }
+      },
+
+      you: {
+        fill: "#aaff88",
+      },
+
+      prof: {
+        fill: "#44aaee",
+      },
     }
   } = {}) {
     super(state);

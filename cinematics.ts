@@ -62,14 +62,17 @@ class Cinematics extends Base {
   }
 
   *talk(who: Controllable, text: string, endingCondition?: { waitFrames: number } | (() => boolean)) {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
     const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
     const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who));
+
     let charactersVisible = 1;
 
     outer:
     while (true) {
-      // is ending condition true
+      // check to see if we're done
 
       if (endingCondition && charactersVisible >= text.length) {
         if (typeof endingCondition === "function" && endingCondition()) {
@@ -85,7 +88,17 @@ class Cinematics extends Base {
         break outer;
       }
 
-      textEntity.text = text.slice(0, ++charactersVisible);
+      // color & render text
+
+      let textToRender = text.slice(0, ++charactersVisible);
+
+      if (who === prof) {
+        textToRender = `<prof>${ textToRender }</prof>`;
+      } else if (who === you) {
+        textToRender = `<you>${ textToRender }</you>`;
+      }
+
+      textEntity.text = textToRender;
 
       for (let i = 0; i < 3; i++) {
         if (keyboard.down.Z) {
