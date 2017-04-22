@@ -309,6 +309,10 @@ class Cinematics extends Base {
 
     yield "next";
 
+    yield* this.talk(prof, "Oh holy freaking crap.");
+    yield* this.talk(prof, "He really just got sucked into the small world, didnt he.");
+    yield* this.talk(prof, "...");
+
     this.finishCinematic();
   }
 }
