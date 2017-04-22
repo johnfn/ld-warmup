@@ -42,12 +42,15 @@ class PlayerLeft extends Controllable {
     }
 
     if (Util.Dist(tinyWorld, this) < 200) {
-      this.vx = Math.sign(tinyWorld.x - this.x) * 3;
+      this.vy = 0;
+      this.vx = Math.sign(tinyWorld.x - this.x) * 2;
 
       this.sprite.scale.x = Util.Dist(tinyWorld, this) / 200;
       this.sprite.scale.y = Util.Dist(tinyWorld, this) / 200;
 
-      this.y = tinyWorld.y - (1 - this.sprite.scale.y) * this.height;
+      const desiredY = tinyWorld.y - (1 - this.sprite.scale.y) * (this.height / 2);
+
+      this.y += (desiredY - this.y) / 10;
     }
   }
 
