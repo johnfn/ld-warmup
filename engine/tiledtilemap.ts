@@ -126,7 +126,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   private data: TiledJSON;
 
   private tilesets: Tileset[];
-  private tiles: (Tile | undefined)[][];
+  private tiles: Tile[][][];
 
   private currentRegion: { [key: number]: Rect } = {};
 
@@ -243,13 +243,13 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   }
 
   private loadTiles(): void {
-    const tiles: (Tile | undefined)[][] = [];
+    const tiles: Tile[][][] = [];
 
     for (let i = 0; i < this.data.width; i++) {
       tiles[i] = [];
 
       for (let j = 0; j < this.data.height; j++) {
-        tiles[i][j] = undefined;
+        tiles[i][j] = [];
       }
     }
 
@@ -266,12 +266,12 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
         const x = (idx % width);
         const y = Math.floor(idx / width);
 
-        tiles[x][y] = {
+        tiles[x][y].push({
           x: x * this.data.tilewidth,
           y: y * this.data.tileheight,
           tile: this.gidToTileset(value),
           layername: layername,
-        };
+        });
       }
     }
 
@@ -297,29 +297,29 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
     for (let i = region.x / tw; i <= region.right / tw; i++) {
       for (let j = region.y / th; j <= region.bottom / th; j++) {
-        const tile = this.tiles[i][j];
+        if (!this.tiles[i][j]) { continue; }
 
-        if (!tile) { continue; }
+        for (const tile of this.tiles[i][j]) {
+          const {
+            x,
+            y,
+            layername,
+            tile: {
+              name: spritesheet,
+              spritesheetx,
+              spritesheety,
+            }
+          } = tile;
 
-        const {
-          x,
-          y,
-          layername,
-          tile: {
-            name: spritesheet,
-            spritesheetx,
-            spritesheety,
-          }
-        } = tile;
+          const sprite = new Entity(state, {
+            texture: spritesheet,
+            spritesheet: { x: spritesheetx, y: spritesheety, },
+            parent: this.spriteLayers[layername],
+          });
 
-        const sprite = new Entity(state, {
-          texture: spritesheet,
-          spritesheet: { x: spritesheetx, y: spritesheety, },
-          parent: this.spriteLayers[layername],
-        });
-
-        sprite.x = x;
-        sprite.y = y;
+          sprite.x = x;
+          sprite.y = y;
+        }
       }
     }
   }
@@ -404,7 +404,13 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
       return undefined;
     }
 
-    return this.tiles[tileX][tileY];
+    for (const tile of this.tiles[tileX][tileY]) {
+      if (tile.layername === "Walls") {
+        return tile;
+      }
+    }
+
+    return undefined;
   }
 
   contains(e: Entity, cam: Camera): boolean {
