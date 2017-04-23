@@ -34,6 +34,13 @@ class HUD extends Entity {
       }
     }
 
+    const phones = state.entities.filter(x => x instanceof Phone) as Phone[];
+    const closestPhone = Util.minBy(phones, p => Util.Dist(p, activePlayer))!;
+
+    if (Util.Dist(activePlayer, closestPhone) < 200) {
+      text = "X to use phone!"
+    }
+
     this.actionText.text = text;
   }
 }
