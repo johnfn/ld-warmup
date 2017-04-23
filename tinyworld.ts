@@ -39,20 +39,19 @@ class TinyWorld extends Entity {
     const { hitDown, hitUp, hitLeft, hitRight, hit } = moveResult;
 
     if (hitDown || hitUp) {
-      this.vy = -this.vy * 0.8;
+      this.vy = -this.vy * 0.4;
+      this.vx = this.vx * 0.4;
     }
 
     if (hitLeft || hitRight) {
-      this.vx = -this.vx * 0.8;
+      this.vx = -this.vx * 0.4;
     }
 
     if (hit && (Math.abs(this.vx) > 5 || Math.abs(this.vy) > 5)) {
       activeCam.shake = { duration: 10, strength: 10 };
     }
 
-    // friction is not fiction, to be clear
-
-    this.vx /= 1.03;
+    // friction is again fiction
 
     if (Math.abs(this.vx) < 0.5) { this.vx = 0; }
   }

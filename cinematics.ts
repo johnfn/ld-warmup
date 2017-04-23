@@ -381,6 +381,8 @@ class Cinematics extends Base {
     const { playerRightProf: prof, playerLeft: you } = state;
 
     yield* this.talk(prof, "Phew! Just like ... ergh ... nothing!");
+    yield* this.talk(prof, "I might not be able to jump while carrying this thing. It's pretty heavy!");
+    yield* this.bubble(prof, "sweat");
     yield* this.talk(prof, "Alright, so I can toss this thing around. Hold X, then choose a direction with WASD.");
     yield* this.talk(prof, "Finally, release X and let it go flying!");
     yield* this.bubble(prof, ":|");
@@ -390,7 +392,21 @@ class Cinematics extends Base {
     yield* this.talk(prof, "And apparently it has that guy on it...");
     yield* this.talk(prof, "...");
     yield* this.talk(prof, "I'm sure he'll be fine...");
+    yield* this.talk(prof, "...");
+    yield* this.talk(prof, "Anyways, I should go to the left and down to get my de-minimizer back.");
 
     this.finishCinematic();
+  }
+
+  *spikeIrony() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.talk(prof, "Aww... crap...");
+    yield* this.bubble(prof, ":|");
+    yield* this.talk(prof, "I completely forgot that along with the de-minimizer, I *also* dumped a bunch of spike traps down here.");
+    yield* this.talk(prof, "Why did I even buy those?");
+    yield* this.talk(prof, "...and leave them here?");
+    yield* this.talk(prof, "Definitely not my best choice in retrospect.")
+    yield* this.bubble(prof, "sweat");
   }
 }

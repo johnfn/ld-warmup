@@ -27,6 +27,7 @@ class StateClass {
     "Camera Regions": true,
     "ProfessorDestRegions": true,
     "YourDialogRegions": true,
+    "ProfDialogRegions": true,
     "InspectRegions": true,
   }, {
     // Objects

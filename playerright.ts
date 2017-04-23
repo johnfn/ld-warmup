@@ -1,6 +1,8 @@
 // Professor
 
 class PlayerRight extends Controllable {
+  readonly tossSpeed = 8;
+
   vy = 0;
   onGround = false;
   camera: Camera;
@@ -54,24 +56,47 @@ class PlayerRight extends Controllable {
       if (keyboard.down.Right) {
         this.facing = 1;
       }
-    }
 
-    if (state.activePlayerId === this.id && keyboard.justDown.X) {
-      const hadInteraction = this.checkForInteractions(state);
+      if (keyboard.justDown.X) {
+        const hadInteraction = this.checkForInteractions(state);
 
-      if (hadInteraction) {
-        return;
+        if (hadInteraction) {
+          return;
+        }
+
+        if (TinyWorld.Instance.carrier === this) {
+          this.isTossingWorld = true;
+        }
       }
 
-      if (TinyWorld.Instance.carrier === this) {
-        this.isTossingWorld = true;
+      this.drawScopes(state);
+
+      if (this.isTossingWorld) {
+        this.throwWorld(state);
       }
+
+      this.checkForRegionDialogs(state);
     }
+  }
 
-    this.drawScopes(state);
+  checkForRegionDialogs(state: StateClass) {
+    const { cinematics } = state;
+    const dialogRegions = state.tilemap.regionLayers.ProfDialogRegions;
 
-    if (this.isTossingWorld) {
-      this.throwWorld(state);
+    for (const { region, properties } of dialogRegions.regions) {
+      if (!properties) {
+        console.error('dialog region w/o props...')
+
+        continue;
+      }
+
+      if (region.contains(this) && !properties.done) {
+        if (properties.name === "spikeirony") {
+          this.startCoroutine(state, cinematics.spikeIrony());
+        }
+
+        properties.done = true;
+      }
     }
   }
 
@@ -116,12 +141,13 @@ class PlayerRight extends Controllable {
 
   throwWorld(state: StateClass): void {
     const { keyboard } = state;
+    const speed = this.tossSpeed;
 
     if (!keyboard.down.X) {
       this.isTossingWorld = false;
 
-      let vx = (keyboard.down.Left ? -10 : 0) + (keyboard.down.Right ? 10 : 0);
-      let vy = (keyboard.down.Up ? -10 : 0)   + (keyboard.down.Down ? 10 : 0);
+      let vx = (keyboard.down.Left ? -speed : 0) + (keyboard.down.Right ? speed : 0);
+      let vy = (keyboard.down.Up ? -speed : 0)   + (keyboard.down.Down ? speed : 0);
 
       // no faster diagonals!
 
