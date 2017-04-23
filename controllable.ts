@@ -1,10 +1,13 @@
 class Controllable extends Entity {
   vy = 0;
   vx = 0;
+
   onGround = false;
+  onSafeGround = false;
   canPickUpWorld = false;
   isTossingWorld = false;
   facing = 1;
+  lastSafeSpot: IPoint;
 
   private lastTalkCoID: number = -1;
 
@@ -78,6 +81,12 @@ class Controllable extends Entity {
 
     this.onGround = hitDown && dy > 0;
 
+    this.onSafeGround = false;
+
+    if (this.onGround) {
+      this.onSafeGround = moveResult.thingsHit.filter(x => isTile(x)).length > 0;
+    }
+
     // apply friction
 
     this.vx /= 1.1;
@@ -98,16 +107,20 @@ class Controllable extends Entity {
       }
     }
 
+    // you dont move when you're tossing the world.
+
     if (!this.isTossingWorld) {
       const { thingsHit } = this.move(state);
 
       if (this.isActive(state)) {
-        this.checkForCollisionReactions(state, thingsHit);
+        this.checkForActiveCollisions(state, thingsHit);
 
         if (keyboard.justDown.X) {
           this.checkInspect(state);
         }
       }
+
+      this.checkForIndiscriminateCollisions(state, thingsHit);
     }
   }
 
@@ -126,9 +139,35 @@ class Controllable extends Entity {
     }
   }
 
-  checkForCollisionReactions(state: StateClass, tiles: (Entity | Tile)[]): void {
+  checkForActiveCollisions(state: StateClass, tiles: HitTestResult): void {
     const dimHouseFront = tiles.filter(t => isTile(t) && t.layername === "HouseFront").length > 0;
 
     state.tilemap.spriteLayers.HouseFront.alpha = dimHouseFront ? 0.3 : 1.0;
+  }
+
+  checkForIndiscriminateCollisions(state: StateClass, things: HitTestResult): void {
+    let hitSpike = false;
+
+    for (const thing of things) {
+      if (thing instanceof Spike) {
+        hitSpike = true;
+
+        break;
+      }
+    }
+
+    if (hitSpike) {
+      this.x = this.lastSafeSpot.x;
+      this.y = this.lastSafeSpot.y;
+
+      return;
+    }
+
+    if (this.onSafeGround) {
+      this.lastSafeSpot = {
+        x: this.x,
+        y: this.y,
+      };
+    }
   }
 }
