@@ -5,6 +5,9 @@ class PlayerRight extends Controllable {
   onGround = false;
   camera: Camera;
   canPickUpWorld = true;
+  isTossingWorld = false;
+
+  facing = 1;
 
   constructor(state: StateClass) {
     super(state, { texture: "sprite" });
@@ -35,15 +38,55 @@ class PlayerRight extends Controllable {
 
     this.checkForMapTransition(state);
 
+    if (state.activePlayerId === this.id) {
+      if (keyboard.down.Left) {
+        this.facing = -1;
+      }
+
+      if (keyboard.down.Right) {
+        this.facing = 1;
+      }
+    }
+
     if (state.activePlayerId === this.id && keyboard.justDown.X) {
-      this.checkForInteractions(state);
+      const hadInteraction = this.checkForInteractions(state);
+
+      if (hadInteraction) {
+        return;
+      }
+
+      if (TinyWorld.Instance.carrier === this) {
+        this.isTossingWorld = true;
+      }
+    }
+
+    if (this.isTossingWorld) {
+      this.throwWorld(state);
     }
   }
 
-  checkForInteractions(state: StateClass) {
-    if (Util.Dist(this, TinyWorld.Instance) < TinyWorld.InteractionDistance) {
+  checkForInteractions(state: StateClass): boolean {
+    if (
+      Util.Dist(this, TinyWorld.Instance) < TinyWorld.InteractionDistance &&
+      TinyWorld.Instance.canBePickedUp()
+    ) {
       TinyWorld.Instance.isBeingCarried = true;
       TinyWorld.Instance.carrier = this;
+
+      return true;
+    }
+
+    return false;
+  }
+
+  throwWorld(state: StateClass): void {
+    const { keyboard } = state;
+
+    if (!keyboard.down.X) {
+      this.isTossingWorld = false;
+
+      TinyWorld.Instance.vx = 5 * this.facing;
+      TinyWorld.Instance.carrier = null;
     }
   }
 }

@@ -7,7 +7,7 @@ class TinyWorld extends Entity {
   static InteractionDistance = 100;
   static Instance: TinyWorld;
   isBeingCarried = false;
-  carrier: Controllable;
+  carrier: Controllable | null = null;
 
   constructor(state: StateClass) {
     super(state, { texture: "tinyworld" });
@@ -18,9 +18,22 @@ class TinyWorld extends Entity {
   update(state: StateClass) {
     super.update(state);
 
-    if (this.isBeingCarried) {
+    this.updatePosition(state);
+  }
+
+  updatePosition(state: StateClass) {
+    if (this.isBeingCarried && this.carrier) {
       this.x = this.carrier.x;
       this.y = this.carrier.y - 32;
+
+      return;
     }
+
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+
+  canBePickedUp(): boolean {
+    return this.vx === 0 && this.vy === 0 && !this.isBeingCarried;
   }
 }
