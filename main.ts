@@ -85,6 +85,15 @@ class StateClass {
     }
   }
 
+  isProfActive(): boolean {
+    return this.rightCamActive;
+  }
+
+  // HOW DO I GRAMMAR HALP
+  isYouActive(): boolean {
+    return this.leftCamActive;
+  }
+
   constructor(data: TiledJSON) {
     this.rendererBig = PIXI.autoDetectRenderer(this.width, this.height, {
       antialias: false,

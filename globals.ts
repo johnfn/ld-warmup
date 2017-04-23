@@ -1,5 +1,6 @@
 class G {
   static Gravity = 0.2;
+  static Debug = true;
 }
 
 class Util {

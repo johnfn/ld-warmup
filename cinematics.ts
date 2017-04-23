@@ -4,9 +4,11 @@ type CurrentActiveEvent = "None"
                         | "Learn About Tiny World"
                         | "Professor Fiddles"
                         | "Professor is Horrified"
+                        | "Professor Explains Tossing"
+                        | "Professor Tosses a Few Times"
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Professor Fiddles";
+  currentOrLastEvent: CurrentActiveEvent = "Professor Tosses a Few Times";
   activeCoroutine = -1;
   state: StateClass;
 
@@ -14,6 +16,17 @@ class Cinematics extends Base {
     super(state);
 
     this.state = state;
+
+    setTimeout(() => {
+      if (G.Debug && this.currentOrLastEvent === "Professor Tosses a Few Times") {
+        this.currentOrLastEvent = "Professor Tosses a Few Times";
+        TinyWorld.Instance.isBeingCarried = true;
+        TinyWorld.Instance.carrier = state.playerRightProf;
+        Controllable.SwitchActivePlayer(state);
+        state.rightCamActive = true;
+        state.leftCamActive  = false;
+      }
+    });
   }
 
   update(state: StateClass): void {
@@ -47,7 +60,20 @@ class Cinematics extends Base {
             this.activeCoroutine = this.startCoroutine(state, this.professorIsHorrified());
           }
 
-          break;
+        break;
+
+        case "Professor is Horrified":
+          if (TinyWorld.Instance.isBeingCarried) {
+            this.currentOrLastEvent = "Professor Explains Tossing";
+            this.activeCoroutine = this.startCoroutine(state, this.professorExplainsTossing());
+          }
+
+        break;
+
+        case "Professor Explains Tossing":
+          this.currentOrLastEvent = "Professor Tosses a Few Times";
+
+        break;
       }
     }
   }
@@ -334,17 +360,36 @@ class Cinematics extends Base {
 
     yield "next";
 
-    yield* this.talk(prof, "Oh holy freaking crap.");
+    yield* this.talk(prof, "OH MY GOD NO!");
+    yield* this.talk(prof, "...");
+    yield* this.talk(prof, "Holy freaking crap.");
     yield* this.talk(prof, "He really just got sucked into the small world, didnt he.");
     yield* this.talk(prof, "...");
     yield* this.bubble(prof, "sweat");
     yield* this.talk(prof, "And now he's probably tiny too.");
     yield* this.talk(prof, "Well, there's only one thing to do. First, I better go pick up that tiny world (with X).");
     yield* this.talk(prof, "I'm not affected by the weird gravity. I've got these heavy boots on.");
-    yield* this.talk(prof, "Then I'll need to go find my de-minimizer.");
+    yield* this.talk(prof, "Then I'll need to go find my de-minimizer. It's the only way to get him back to normal size.");
     yield* this.talk(prof, "I tossed that thing out. I thought it was a waste of space.");
     yield* this.bubble(prof, ":|");
     yield* this.talk(prof, "Anyway, yep, gotta pick it up with X.");
+
+    this.finishCinematic();
+  }
+
+  *professorExplainsTossing() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.talk(prof, "Phew! Just like ... ergh ... nothing!");
+    yield* this.talk(prof, "Alright, so I can toss this thing around. Hold X, then choose a direction with WASD.");
+    yield* this.talk(prof, "Finally, release X and let it go flying!");
+    yield* this.bubble(prof, ":|");
+    yield* this.talk(prof, "I mean... TRY to be careful. It is an entire tiny world, after all.");
+    yield* this.bubble(prof, ":|");
+    yield* this.bubble(prof, "sweat");
+    yield* this.talk(prof, "And apparently it has that guy on it...");
+    yield* this.talk(prof, "...");
+    yield* this.talk(prof, "I'm sure he'll be fine...");
 
     this.finishCinematic();
   }

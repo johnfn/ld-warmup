@@ -291,11 +291,13 @@
                  "name":"",
                  "properties":
                     {
-                     "inspect":"The professor has some high quality doodads here."
+                     "inspect":"The professor has some high quality doodads here.",
+                     "profinspect":"My doodad collection. Now's not the time!"
                     },
                  "propertytypes":
                     {
-                     "inspect":"string"
+                     "inspect":"string",
+                     "profinspect":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -310,11 +312,13 @@
                  "name":"",
                  "properties":
                     {
-                     "inspect":"The professor has some assorted doohickeys here."
+                     "inspect":"The professor has some assorted doohickeys here.",
+                     "profinspect":"Doohickeys as far as the eye can see. But they can't help me."
                     },
                  "propertytypes":
                     {
-                     "inspect":"string"
+                     "inspect":"string",
+                     "profinspect":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -329,11 +333,13 @@
                  "name":"",
                  "properties":
                     {
-                     "inspect":"The professor seems to have stashed some top quality combobulators here."
+                     "inspect":"The professor seems to have stashed some top quality combobulators here.",
+                     "profinspect":"Err... this is garbage. Better toss this stuff out before someone sees."
                     },
                  "propertytypes":
                     {
-                     "inspect":"string"
+                     "inspect":"string",
+                     "profinspect":"string"
                     },
                  "rotation":0,
                  "type":"",
