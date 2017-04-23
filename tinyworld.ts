@@ -34,11 +34,14 @@ class TinyWorld extends Entity {
     this.vy += G.Gravity;
 
     const moveResult = physics.move(state, this, this.vx, this.vy);
-    const hitDown = moveResult.hitDown;
-    const hitUp = moveResult.hitUp;
+    const { hitDown, hitUp, hitLeft, hitRight } = moveResult;
 
     if (hitDown || hitUp) {
-      this.vy = 0;
+      this.vy = -this.vy * 0.8;
+    }
+
+    if (hitLeft || hitRight) {
+      this.vx = -this.vx * 0.8;
     }
 
     // friction is not fiction, to be clear

@@ -100,7 +100,7 @@ class PlayerRight extends Controllable {
     let vy = (keyboard.down.Up ? -25 : 0)   + (keyboard.down.Down ? 25 : 0);
 
     let x = 16;
-    let y = 16;
+    let y = -16; // center of tinyworld (above head!)
 
     for (const s of this.scopes) {
       x += vx;
