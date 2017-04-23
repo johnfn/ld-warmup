@@ -563,12 +563,32 @@ class Cinematics extends Base {
   *profYouTalk() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
-    yield* this.talk(you, "Hello..?");
+    yield* this.talk(you, "Hello..?", { waitFrames: 30 });
 
     yield* this.bubble(prof, ":D");
 
     yield* this.talk(prof, "Hello!");
     yield* this.talk(prof, "Oh thank god it worked!!!");
     yield* this.talk(prof, "I was worried for a moment we would lose you forever!");
+
+    yield* this.talk(prof, "I had put a phone on the tiny world for this exact purpose.");
+    yield* this.bubble(you, "sweat");
+
+    yield* this.talk(you, "So I seem to be trapped on this... very... little.. planet thing.", { waitFrames: 30 });
+    yield* this.talk(prof, "A TINY WORLD?");
+    yield* this.talk(prof, "[looks at camera dramatically]");
+    yield* this.talk(you, "Could you stop doing that please.");
+    yield* this.talk(prof, "How could you tell?");
+    yield* this.talk(you, "Bro, your massive face is basically the only thing I can see right now.");
+
+    yield* this.bubble(prof, "sweat");
+
+    yield* this.talk(prof, "Uergh.. anyway... let's focus on the task at hand. Getting you untiny.");
+    yield* this.talk(you, "Ok!");
+    yield* this.bubble(prof, "!");
+    yield* this.talk(prof, "Here's the plan. I'll go look for the de-minimizer. If I need you to do anything, I'll call you up.");
+    yield* this.talk(prof, "Fortunately, along with all my spike traps, I also threw away a ton of phones, so it should be pretty easy to talk!.");
+
+    this.finishCinematic();
   }
 }
