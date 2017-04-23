@@ -16,6 +16,6 @@ class CameraRight extends Camera {
       this.centerY = destY;
     }
 
-    // super.update(state);
+    super.update(state);
   }
 }

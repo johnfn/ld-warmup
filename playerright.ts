@@ -147,6 +147,14 @@ class PlayerRight extends Controllable {
         vy /= Math.sqrt(2);
       }
 
+      // if they didnt input a direction, do a half hearted toss in the last
+      // direction they were facing
+
+      if (vx === 0 && vy === 0) {
+        vx = this.facing * speed / 2;
+        vy = speed / 2;
+      }
+
       TinyWorld.Instance.vx = vx;
       TinyWorld.Instance.vy = vy;
       TinyWorld.Instance.carrier = null;
