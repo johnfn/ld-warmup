@@ -6,6 +6,7 @@ class PlayerRight extends Controllable {
   camera: Camera;
   canPickUpWorld = true;
   facing = 1;
+  collideable = true;
 
   scopes: Scope[] = [];
 
