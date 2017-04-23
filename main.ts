@@ -165,6 +165,13 @@ class StateClass {
         enemy.y = obj.y - 32;
       }
 
+      if (layerName === "Phone") {
+        const enemy = new Phone(this);
+
+        enemy.x = obj.x;
+        enemy.y = obj.y - 32;
+      }
+
       if (layerName === "TinyWorld") {
         const tw = new TinyWorld(this)
 
