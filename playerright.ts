@@ -4,6 +4,7 @@ class PlayerRight extends Controllable {
   vy = 0;
   onGround = false;
   camera: Camera;
+  canPickUpWorld = true;
 
   constructor(state: StateClass) {
     super(state, { texture: "sprite" });
@@ -28,8 +29,21 @@ class PlayerRight extends Controllable {
   }
 
   update(state: StateClass) {
+    const { keyboard } = state;
+
     super.update(state);
 
     this.checkForMapTransition(state);
+
+    if (state.activePlayerId === this.id && keyboard.justDown.X) {
+      this.checkForInteractions(state);
+    }
+  }
+
+  checkForInteractions(state: StateClass) {
+    if (Util.Dist(this, TinyWorld.Instance) < TinyWorld.InteractionDistance) {
+      TinyWorld.Instance.isBeingCarried = true;
+      TinyWorld.Instance.carrier = this;
+    }
   }
 }

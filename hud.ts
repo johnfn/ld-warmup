@@ -18,13 +18,21 @@ class HUD extends Entity {
   }
 
   update(state: StateClass) {
-    const player = state.getActivePlayer();
+    const activePlayer = state.getActivePlayer();
     const inspectRegions = state.tilemap.regionLayers.InspectRegions.regions;
     let text = "";
 
     for (const { region, properties } of inspectRegions) {
-      if (region.contains(player)) {
+      if (region.contains(activePlayer)) {
         text = "X to Inspect!";
+      }
+    }
+
+    if (activePlayer.canPickUpWorld) {
+      if (!TinyWorld.Instance.isBeingCarried) {
+        if (Util.Dist(activePlayer, TinyWorld.Instance) < TinyWorld.InteractionDistance) {
+          text = "X to pick up world!"
+        }
       }
     }
 

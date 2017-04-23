@@ -340,9 +340,11 @@ class Cinematics extends Base {
     yield* this.bubble(prof, "sweat");
     yield* this.talk(prof, "And now he's probably tiny too.");
     yield* this.talk(prof, "Well, there's only one thing to do. First, I better go pick up that tiny world (with X).");
+    yield* this.talk(prof, "I'm not affected by the weird gravity. I've got these heavy boots on.");
     yield* this.talk(prof, "Then I'll need to go find my de-minimizer.");
     yield* this.talk(prof, "I tossed that thing out. I thought it was a waste of space.");
     yield* this.bubble(prof, ":|");
+    yield* this.talk(prof, "Anyway, yep, gotta pick it up with X.");
 
     this.finishCinematic();
   }

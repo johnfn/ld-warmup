@@ -2,6 +2,7 @@ class Controllable extends Entity {
   vy = 0;
   vx = 0;
   onGround = false;
+  canPickUpWorld = false;
 
   private lastTalkCoID: number = -1;
 
