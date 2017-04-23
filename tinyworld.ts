@@ -39,7 +39,8 @@ class TinyWorld extends Entity {
 
   updatePosition(state: StateClass) {
     const { physics } = state;
-    const activeCam = state.getActiveCamera();
+    // const activeCam = state.getActiveCamera();
+    const inactiveCam = state.getInactiveCamera();
 
     if (this.isBeingCarried && this.carrier) {
       this.x = this.carrier.x;
@@ -62,8 +63,9 @@ class TinyWorld extends Entity {
       this.vx = -this.vx * 0.4;
     }
 
-    if (hit && (Math.abs(this.vx) > 5 || Math.abs(this.vy) > 5)) {
-      activeCam.shake = { duration: 10, strength: 10 };
+    if (hit && (Math.abs(this.vx) > 4 || Math.abs(this.vy) > 4)) {
+      // activeCam.shake = { duration: 10, strength: 10 };
+      inactiveCam.shake = { duration: 20, strength: 10 };
     }
 
     // friction is again fiction

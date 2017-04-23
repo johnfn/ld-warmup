@@ -84,6 +84,15 @@ class StateClass {
     }
   }
 
+  getInactiveCamera(): Camera {
+    if (this.rightCamActive) {
+      return this.cameraLeft;
+    } else {
+      return this.cameraRight;
+    }
+  }
+
+
   getActivePlayer(): Controllable {
     if (this.rightCamActive) {
       return this.playerRightProf;
@@ -279,11 +288,13 @@ class StateClass {
     if (state.leftCamActive) {
       cameraLeft.update(state);
 
+      /*
       if (state.rightCamActive) {
         root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
         state.playerLeft.sprite.alpha = 1.0;
         state.playerRightProf.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
       }
+      */
 
       // hide irrelevant entities
 

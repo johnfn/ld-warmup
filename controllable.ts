@@ -101,7 +101,7 @@ class Controllable extends Entity {
   update(state: StateClass) {
     const { keyboard } = state;
 
-    if (this.isActive) {
+    if (this.isActive(state)) {
       if (keyboard.down.Left) {
         this.facing = -1;
       } else if (keyboard.down.Right) {
