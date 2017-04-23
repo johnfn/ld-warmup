@@ -32,6 +32,7 @@ class StateClass {
   }, {
     // Objects
     ObjLayer: true,
+    Spikes: true,
   }>;
 
   rendererBig: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
@@ -149,6 +150,13 @@ class StateClass {
 
         enemy.x = obj.x;
         enemy.y = obj.y;
+      }
+
+      if (layerName === "Spikes") {
+        const enemy = new Spike(this);
+
+        enemy.x = obj.x;
+        enemy.y = obj.y - 32;
       }
 
       if (layerName === "TinyWorld") {
