@@ -27,7 +27,7 @@ class Controllable extends Entity {
   }
 
   jump(): void {
-    this.vy -= 6;
+    this.vy -= 7;
   }
 
   move(state: StateClass): MoveResult {

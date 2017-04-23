@@ -17,7 +17,9 @@ class HUD extends Entity {
     this.actionText.y = 0;
   }
 
-  update(_state: StateClass) {
+  update(state: StateClass) {
+    const player = state.getActivePlayer();
+
     this.actionText.text = "X to Foobar!";
   }
 }
