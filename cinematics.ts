@@ -56,6 +56,8 @@ class Cinematics extends Base {
 
         case "Professor Fiddles":
           if (Util.Dist(you, TinyWorld.Instance) < 20) {
+            this.finishCinematic();
+
             this.currentOrLastEvent = "Professor is Horrified";
             this.activeCoroutine = this.startCoroutine(state, this.professorIsHorrified());
           }
@@ -304,7 +306,7 @@ class Cinematics extends Base {
   }
 
   *professorFiddles() {
-    const { playerRightProf: prof, playerLeft: you } = state;
+    const { playerRightProf: prof } = state;
 
     const spotOne = new Point({ x: prof.x - 100, y: prof.y });
     const spotTwo = new Point({ x: prof.x + 200, y: prof.y });
@@ -329,8 +331,6 @@ class Cinematics extends Base {
       yield* this.talk(prof, "Nothing dangerous...", { waitFrames: 10 }, false);
       yield* this.talk(prof, "No accidents...", { waitFrames: 10 }, false);
     }
-
-    this.finishCinematic();
   }
 
   *bubble(target: Controllable, type: BubbleType) {
@@ -348,7 +348,7 @@ class Cinematics extends Base {
   }
 
   *professorIsHorrified() {
-    const { playerRightProf: prof, playerLeft: you } = state;
+    const { playerRightProf: prof } = state;
 
     const fade = new FadeOutIn(this.state, "left");
 
@@ -378,7 +378,7 @@ class Cinematics extends Base {
   }
 
   *professorExplainsTossing() {
-    const { playerRightProf: prof, playerLeft: you } = state;
+    const { playerRightProf: prof } = state;
 
     yield* this.talk(prof, "Phew! Just like ... ergh ... nothing!");
     yield* this.talk(prof, "I might not be able to jump while carrying this thing. It's pretty heavy!");
@@ -399,7 +399,7 @@ class Cinematics extends Base {
   }
 
   *spikeIrony() {
-    const { playerRightProf: prof, playerLeft: you } = state;
+    const { playerRightProf: prof } = state;
 
     yield* this.talk(prof, "Aww... crap...");
     yield* this.bubble(prof, ":|");

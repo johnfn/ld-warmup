@@ -100,7 +100,7 @@ class PlayerRight extends Controllable {
     }
   }
 
-  checkForInteractions(state: StateClass): boolean {
+  checkForInteractions(_state: StateClass): boolean {
     if (TinyWorld.Instance.canBePickedUp(this)) {
       TinyWorld.Instance.isBeingCarried = true;
       TinyWorld.Instance.carrier = this;
