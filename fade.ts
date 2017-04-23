@@ -16,7 +16,7 @@ class FadeOutIn extends Entity {
     this.sprite.width = 10000;
     this.sprite.height = 10000;
 
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i <= 60; i++) {
       yield "next";
       this.sprite.alpha = i / 60;
     }

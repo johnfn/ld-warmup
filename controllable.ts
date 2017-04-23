@@ -83,9 +83,9 @@ class Controllable extends Entity {
   }
 
   update(state: StateClass) {
-    if (this.isActive(state)) {
-      const { thingsHit } = this.move(state);
+    const { thingsHit } = this.move(state);
 
+    if (this.isActive(state)) {
       this.checkForCollisionReactions(state, thingsHit);
     }
   }

@@ -168,6 +168,7 @@ class Cinematics extends Base {
     yield* this.talk(you, "Err... hello... again.");
     yield* this.talk(prof, "We've met before?");
     yield* this.talk(you, "...");
+    yield* this.bubble(you, ":|");
     yield* this.talk(you, "Yes...");
     yield* this.talk(you, "In a few past Ludum Dare games...");
     yield* this.talk(prof, "Ludum Dare?");
@@ -176,6 +177,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "(Amazing... one cognizant of Ludum Dare... could he be the one spoken of by prophecy?)");
     yield* this.talk(you, "Sorry?");
     yield* this.talk(prof, "Just talking to myself. Continue!");
+    yield* this.bubble(you, ":|");
     yield* this.talk(you, "It never seems to go well for me.");
     yield* this.talk(you, "There was this one time... where you turned me into Godzilla... it was bad.");
     yield* this.talk(prof, "You don't look like a godzilla to me.");
@@ -184,6 +186,7 @@ class Cinematics extends Base {
     yield* this.talk(you, "Sorry?");
     yield* this.talk(prof, "Anyways... why don't you come to my labratory?");
     yield* this.talk(prof, "I've got an interesting experiment in its final stages.");
+    yield* this.bubble(prof, ":D");
     yield* this.talk(prof, "I'll make it up to you!");
     yield* this.talk(you, "Well, given that the the left side of this world is a giant wall, it would seem I don't have much of a choice.");
 
@@ -213,6 +216,8 @@ class Cinematics extends Base {
 
       if (Util.Dist(prof, you) > 100) {
         yield* this.talk(prof, this.getRandomSlowbieMessage(), () => Util.Dist(prof, you) < 100);
+
+        yield { frames: 40 };
       }
     }
 
@@ -225,7 +230,9 @@ class Cinematics extends Base {
     yield* this.talk(prof, "Welcome!");
     yield* this.talk(prof, "...");
     yield* this.talk(prof, "To my TINY WORLD LABORATORY!");
+    yield* this.bubble(prof, ":D");
     yield* this.talk(you, "Uh...");
+    yield* this.bubble(you, ":|");
     yield* this.talk(prof, "See that right there?");
     yield* this.talk(prof, "Just slightly to the left of the camera viewport?");
     yield* this.talk(you, "Uhhhhh...");
@@ -246,6 +253,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "It's not important. ");
     yield* this.talk(prof, "Anyways, I'm just about to finish up my experiments with this small world, so give me a few moments.");
     yield* this.talk(prof, "As soon as I finish, I'll make all our bad past encounters up to you. I have just the thing.");
+    yield* this.bubble(prof, ":D");
     yield* this.talk(you, "...");
     yield* this.talk(prof, "Oh, and try not to get too close. The world may be small, but I assure you the gravity is VERY normal.");
     yield* this.talk(prof, "I've got my heavy boots on, so I'm not affected, but you have to watch out!");
@@ -253,6 +261,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "...");
     yield* this.talk(prof, "It's kind of like a metaphor.");
     yield* this.talk(prof, "The world sucks. Literally.");
+    yield* this.bubble(prof, ":|");
     yield* this.talk(you, "(...how can it be a metaphor if it's literal...)")
     yield* this.talk(prof, "Well at least this tiny one does.");
     yield* this.talk(prof, "Anyways.");
@@ -262,6 +271,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "We wouldn't want any...");
     yield* this.talk(prof, "Accidents!");
     yield* this.talk(prof, "[looks suggestively at camera again]");
+    yield* this.bubble(prof, ":|");
     yield* this.talk(you, "Can you stop doing that?")
 
     this.finishCinematic();
@@ -285,6 +295,7 @@ class Cinematics extends Base {
       yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));
 
       yield* this.talk(prof, "Tinker tinker tinker", { waitFrames: 10 }, false)
+      yield* this.bubble(prof, "sweat");
 
       yield* this.walkTo(prof, Rect.FromPoint(spotTwo, 100));
 
@@ -299,7 +310,13 @@ class Cinematics extends Base {
   *bubble(target: Controllable, type: BubbleType) {
     const b = new Bubble(this.state, target, type);
 
-    yield { frames: 45 };
+    for (let i = 0; i < 45; i++) {
+      yield "next";
+
+      if (this.state.keyboard.justDown.Z || this.state.keyboard.justDown.X) {
+        break;
+      }
+    }
 
     b.destroy(this.state);
   }

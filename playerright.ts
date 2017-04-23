@@ -31,5 +31,7 @@ class PlayerRight extends Controllable {
     super.update(state);
 
     this.checkForMapTransition(state);
+
+    console.log(this.vy);
   }
 }

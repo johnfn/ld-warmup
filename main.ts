@@ -43,6 +43,7 @@ class StateClass {
   cameraLeft: CameraLeft;
   cameraRight: CameraRight;
   particles: AtmosphericParticles;
+  hudObj: HUD;
 
   rightCamActive = false;
   leftCamActive  = true;
@@ -66,8 +67,6 @@ class StateClass {
   stage: PIXI.Container;
   hud: PIXI.Container;
   root: PIXI.Container;
-
-  drawCallText: TextEntity;
 
   getActiveCamera(): Camera {
     if (this.rightCamActive) {
@@ -110,11 +109,6 @@ class StateClass {
     this.root.addChild(this.stage);
     this.root.addChild(this.hud);
 
-    this.drawCallText = new TextEntity(this, { parent: this.hud });
-
-    this.drawCallText.x = this.width - 100;
-    this.drawCallText.y = 0;
-
     this.cameraLeft = new CameraLeft(this);
     this.cameraRight = new CameraRight(this);
 
@@ -126,6 +120,8 @@ class StateClass {
 
     this.keyboard = new Keyboard();
     this.physics = new Physics();
+
+    this.hudObj = new HUD(this);
 
     this.cinematics = new Cinematics(this);
 
@@ -232,8 +228,6 @@ class StateClass {
     }
 
     this.updateCoroutines();
-
-    this.drawCallText.text = String(this.countEntitiesUnder(this.stage));
 
     // It's actually important that camera is updated last, so it can be in sync
     // with the rest of the entities in the game. If the player has a screen
