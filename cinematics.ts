@@ -8,6 +8,7 @@ type CurrentActiveEvent = "None"
                         | "Professor Tosses a Few Times"
                         | "You Wake Up"
                         | "You Use Phone"
+                        | "We Talk"
                         ;
 
 class Cinematics extends Base {
@@ -133,6 +134,13 @@ class Cinematics extends Base {
           this.currentOrLastEvent = "You Use Phone";
           this.activeCoroutine = this.startCoroutine(state, this.youUsePhone());
         break;
+
+        case "You Use Phone":
+          this.currentOrLastEvent = "We Talk";
+          this.activeCoroutine = this.startCoroutine(state, this.profYouTalk());
+
+          this.finishCinematic();
+        break;
       }
     }
   }
@@ -142,9 +150,7 @@ class Cinematics extends Base {
     this.activeCoroutine = -1;
   }
 
-  *textFollowPlayer(text: TextEntity, following: Controllable, stayOnScreen = true) {
-    const cam = following.camera;
-
+  *textFollowPlayer(text: TextEntity, following: Entity, cam: Camera, stayOnScreen = true) {
     while (text.exists) {
       text.x = following.x + 10;
       text.y = following.y - 16;
@@ -158,14 +164,25 @@ class Cinematics extends Base {
   }
 
   *talk(
-    who: Controllable,
+    who: Entity,
     text: string, endingCondition?: { waitFrames: number } | (() => boolean),
-    stayOnScreen = true) {
+    stayOnScreen = true,
+    cam?: Camera) {
     const { playerRightProf: prof, playerLeft: you } = state;
 
     const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
-    const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who, stayOnScreen));
+    if (!cam) {
+      if (who instanceof Controllable) {
+        cam = who.camera;
+      }
+
+      console.log('err, no associated cam!')
+
+      cam = state.cameraLeft; // random
+    }
+
+    const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who, cam, stayOnScreen));
 
     let charactersVisible = 1;
 
@@ -518,16 +535,29 @@ class Cinematics extends Base {
   }
 
   *youUsePhone() {
-    const { playerRightProf: prof, playerLeft: you, tilemap, entities } = state;
+    const { playerRightProf: prof, playerLeft: you } = state;
+    const phones = state.entities.filter(x => x instanceof Phone) as Phone[];
 
-    const phones = entities.filter(x => x instanceof Phone) as Phone[];
-    let closestPhone: Phone = Util.minBy(phones, p => Util.Dist(p, you))!;
+    let closestPhoneYou: Phone = Util.minBy(phones, p => Util.Dist(p, you))!;
+    let closestPhoneProf: Phone = Util.minBy(phones, p => Util.Dist(p, prof))!;
 
     yield* this.bubble(you, ":D");
     yield* this.talk(you, "I'll just try random ones.", { waitFrames: 30 }, true);
 
-    yield* this.walkTo(you, Rect.FromPoint(closestPhone, 50));
+    yield* this.walkTo(you, Rect.FromPoint(closestPhoneYou, 50));
 
-    this.finishCinematic();
+    while (true) {
+      this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", undefined, false, state.cameraRight));
+
+      yield* this.talk(you, "Ring ring ring...", { waitFrames: 30 }, true);
+
+      yield { frames: 40 };
+    }
+  }
+
+  *profYouTalk() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.talk(prof, "Hello..?", { waitFrames: 30 }, true);
   }
 }
