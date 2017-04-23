@@ -20,6 +20,9 @@ class Entity extends Base {
 
   public get height(): number { return this.sprite.height; }
 
+  public get visible(): boolean { return this.sprite.visible; }
+  public set visible(v: boolean) { this.sprite.visible = v; }
+
   private textureName: string;
 
   private static MaxEntityId = 0;

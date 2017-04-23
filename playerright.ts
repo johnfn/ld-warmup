@@ -5,8 +5,9 @@ class PlayerRight extends Controllable {
   onGround = false;
   camera: Camera;
   canPickUpWorld = true;
-
   facing = 1;
+
+  scopes: Scope[] = [];
 
   constructor(state: StateClass) {
     super(state, { texture: "sprite" });
@@ -20,6 +21,13 @@ class PlayerRight extends Controllable {
     this.z = 10;
 
     this.camera = cameraRight;
+
+    for (let i = 0; i < 10; i++) {
+      const scope = new Scope(state, this.sprite);
+
+      this.scopes.push(scope);
+      scope.visible = false;
+    }
   }
 
   checkForMapTransition(state: StateClass) {
@@ -59,6 +67,8 @@ class PlayerRight extends Controllable {
       }
     }
 
+    this.drawScopes(state);
+
     if (this.isTossingWorld) {
       this.throwWorld(state);
     }
@@ -73,6 +83,34 @@ class PlayerRight extends Controllable {
     }
 
     return false;
+  }
+
+  drawScopes(state: StateClass): void {
+    const { keyboard } = state;
+
+    if (!this.isTossingWorld) {
+      for (const s of this.scopes) {
+        s.visible = false;
+      }
+
+      return;
+    }
+
+    let vx = (keyboard.down.Left ? -25 : 0) + (keyboard.down.Right ? 25 : 0);
+    let vy = (keyboard.down.Up ? -25 : 0)   + (keyboard.down.Down ? 25 : 0);
+
+    let x = 16;
+    let y = 16;
+
+    for (const s of this.scopes) {
+      x += vx;
+      y += vy;
+
+      s.x = x;
+      s.y = y;
+
+      s.visible = true;
+    }
   }
 
   throwWorld(state: StateClass): void {
