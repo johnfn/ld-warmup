@@ -264,6 +264,9 @@ class StateClass {
         }
       }
 
+      state.stage.x = state.cameraLeft.desiredStageX;
+      state.stage.y = state.cameraLeft.desiredStageY;
+
       rendererBig.render(root);
     }
 
@@ -283,6 +286,9 @@ class StateClass {
           e.sprite.visible = e.oneCameraOnly === "right";
         }
       }
+
+      state.stage.x = state.cameraRight.desiredStageX;
+      state.stage.y = state.cameraRight.desiredStageY;
 
       rendererTiny.render(root);
     }

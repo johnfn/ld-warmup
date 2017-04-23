@@ -93,9 +93,7 @@ class Controllable extends Entity {
     if (this.isActive) {
       if (keyboard.down.Left) {
         this.facing = -1;
-      }
-
-      if (keyboard.down.Right) {
+      } else if (keyboard.down.Right) {
         this.facing = 1;
       }
     }

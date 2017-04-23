@@ -2,9 +2,20 @@ class CameraRight extends Camera {
   update(state: StateClass) {
     const { playerRightProf } = state;
 
-    this.centerX = playerRightProf.x;
-    this.centerY = playerRightProf.y;
+    const destX = playerRightProf.x + playerRightProf.facing * 200;
+    const destY = playerRightProf.y;
 
-    super.update(state);
+    this.centerX += (destX - this.centerX) / 60;
+    this.centerY += (destY - this.centerY) / 60;
+
+    if (Math.abs(destX - this.centerX) < 1) {
+      this.centerX = destX;
+    }
+
+    if (Math.abs(destY - this.centerY) < 1) {
+      this.centerY = destY;
+    }
+
+    // super.update(state);
   }
 }
