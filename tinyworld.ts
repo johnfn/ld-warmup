@@ -80,6 +80,8 @@ class TinyWorld extends Entity {
 
       this.startCoroutine(state, this.flicker());
     } else {
+      // this will never happen but hey
+
       alert('oh my god  how did you screw up so bad  please restart the game wow')
     }
   }

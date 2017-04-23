@@ -6,16 +6,21 @@ type CurrentActiveEvent = "None"
                         | "Professor is Horrified"
                         | "Professor Explains Tossing"
                         | "Professor Tosses a Few Times"
+                        | "You Wake Up"
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Professor Tosses a Few Times";
+  currentOrLastEvent: CurrentActiveEvent = "You Wake Up";
   activeCoroutine = -1;
+  leftFade: FadeOutIn;
+  rightFade: FadeOutIn;
   state: StateClass;
 
   constructor(state: StateClass) {
     super(state);
 
     this.state = state;
+    this.leftFade  = new FadeOutIn(this.state, "left");
+    this.rightFade = new FadeOutIn(this.state, "right");
 
     setTimeout(() => {
       if (G.Debug && this.currentOrLastEvent === "Professor Tosses a Few Times") {
@@ -26,7 +31,26 @@ class Cinematics extends Base {
         state.rightCamActive = true;
         state.leftCamActive  = false;
       }
+
+      if (G.Debug && this.currentOrLastEvent === "You Wake Up") {
+        TinyWorld.Instance.isBeingCarried = true;
+        TinyWorld.Instance.carrier = state.playerRightProf;
+
+        Controllable.SwitchActivePlayer(state);
+
+        state.rightCamActive = true;
+        state.leftCamActive  = true;
+
+        this.putPlayerOnTinyWorld(state.playerLeft);
+      }
     });
+  }
+
+  putPlayerOnTinyWorld(player: Controllable): void {
+    const pos = state.tilemap.objectLayers.TinyWorldLocationLayer.objects[0];
+
+    player.x = pos.x;
+    player.y = pos.y;
   }
 
   update(state: StateClass): void {
@@ -74,6 +98,16 @@ class Cinematics extends Base {
 
         case "Professor Explains Tossing":
           this.currentOrLastEvent = "Professor Tosses a Few Times";
+
+        break;
+
+        case "Professor Tosses a Few Times":
+          const worldDest = state.tilemap.regionLayers.WorldDest1Regions.regions[0];
+
+          if (worldDest.region.contains(TinyWorld.Instance)) {
+            this.currentOrLastEvent = "You Wake Up";
+            this.activeCoroutine = this.startCoroutine(state, this.youWakeUp());
+          }
 
         break;
       }
@@ -350,9 +384,7 @@ class Cinematics extends Base {
   *professorIsHorrified() {
     const { playerRightProf: prof } = state;
 
-    const fade = new FadeOutIn(this.state, "left");
-
-    yield* fade.doFadeOut(this.state);
+    yield* this.leftFade.doFadeOut(this.state);
 
     Controllable.SwitchActivePlayer(state);
     state.rightCamActive = true;
@@ -408,5 +440,14 @@ class Cinematics extends Base {
     yield* this.talk(prof, "...and leave them here?");
     yield* this.talk(prof, "Definitely not my best choice in retrospect.")
     yield* this.bubble(prof, "sweat");
+  }
+
+  *youWakeUp() {
+    const { playerLeft: you } = state;
+
+    state.rightCamActive = true;
+    state.leftCamActive  = true;
+
+    yield* this.talk(you, "Zzzzzzzzzzzzzzzzzzz...");
   }
 }

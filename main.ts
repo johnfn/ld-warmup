@@ -26,6 +26,7 @@ class StateClass {
 
     "Camera Regions": true,
     "ProfessorDestRegions": true,
+    "WorldDest1Regions": true,
     "YourDialogRegions": true,
     "ProfDialogRegions": true,
     "InspectRegions": true,
@@ -33,6 +34,7 @@ class StateClass {
     // Objects
     ObjLayer: true,
     Spikes: true,
+    TinyWorldLocationLayer: true,
   }>;
 
   rendererBig: PIXI.WebGLRenderer | PIXI.CanvasRenderer;

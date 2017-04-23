@@ -55,9 +55,7 @@ class PlayerLeft extends Controllable {
     }
 
     if (Util.Dist(this, TinyWorld.Instance) < 20) {
-      // TODO: Move to tiny world.
-
-      this.collideable = false;
+      state.cinematics.putPlayerOnTinyWorld(state.playerLeft);
     }
   }
 
