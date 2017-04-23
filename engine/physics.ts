@@ -3,6 +3,7 @@ type MoveResult = {
   hit: boolean;
 
   thingsHit: HitTestResult;
+  wallsHit: HitTestResult;
 
   hitUp: boolean;
   hitLeft: boolean;
@@ -47,20 +48,27 @@ class Physics {
     return tiles;
   }
 
+  isWall(thing: Tile | Entity, entity: Entity): boolean {
+    if (isTile(thing)) {
+      if (thing.layername === "Walls") {
+        return true;
+      }
+    } else if (thing instanceof Entity) {
+      if (thing === entity) {
+        // no self collisions!
+
+        return false;
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
   isCollision(res: HitTestResult, entity: Entity): boolean {
     for (const thing of res) {
-
-      if (isTile(thing)) {
-        if (thing.layername === "Walls") {
-          return true;
-        }
-      } else if (thing instanceof Entity) {
-        if (thing === entity) {
-          // no self collisions!
-
-          continue;
-        }
-
+      if (this.isWall(thing, entity)) {
         return true;
       }
     }
@@ -101,6 +109,7 @@ class Physics {
     return {
       hit,
       thingsHit,
+      wallsHit: thingsHit.filter(x => this.isWall(x, entity)),
 
       hitUp   : hitY && dy < 0,
       hitDown : hitY && dy > 0,

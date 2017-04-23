@@ -53,6 +53,12 @@ class PlayerLeft extends Controllable {
 
       this.y += (desiredY - this.y) / 10;
     }
+
+    if (Util.Dist(this, TinyWorld.Instance) < 20) {
+      // TODO: Move to tiny world.
+
+      this.collideable = false;
+    }
   }
 
   checkForRegionDialogs(state: StateClass) {
