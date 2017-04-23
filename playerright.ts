@@ -7,7 +7,6 @@ class PlayerRight extends Controllable {
   onGround = false;
   camera: Camera;
   canPickUpWorld = true;
-  facing = 1;
   collideable = true;
 
   scopes: Scope[] = [];
@@ -49,14 +48,6 @@ class PlayerRight extends Controllable {
     this.checkForMapTransition(state);
 
     if (state.activePlayerId === this.id) {
-      if (keyboard.down.Left) {
-        this.facing = -1;
-      }
-
-      if (keyboard.down.Right) {
-        this.facing = 1;
-      }
-
       if (keyboard.justDown.X) {
         const hadInteraction = this.checkForInteractions(state);
 

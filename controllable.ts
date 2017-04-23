@@ -4,6 +4,7 @@ class Controllable extends Entity {
   onGround = false;
   canPickUpWorld = false;
   isTossingWorld = false;
+  facing = 1;
 
   private lastTalkCoID: number = -1;
 
@@ -89,6 +90,16 @@ class Controllable extends Entity {
   update(state: StateClass) {
     const { keyboard } = state;
 
+    if (this.isActive) {
+      if (keyboard.down.Left) {
+        this.facing = -1;
+      }
+
+      if (keyboard.down.Right) {
+        this.facing = 1;
+      }
+    }
+
     if (!this.isTossingWorld) {
       const { thingsHit } = this.move(state);
 
@@ -117,8 +128,8 @@ class Controllable extends Entity {
     }
   }
 
-  checkForCollisionReactions(state: StateClass, tiles: Tile[]): void {
-    const dimHouseFront = tiles.filter(t => t.layername === "HouseFront").length > 0;
+  checkForCollisionReactions(state: StateClass, tiles: (Entity | Tile)[]): void {
+    const dimHouseFront = tiles.filter(t => isTile(t) && t.layername === "HouseFront").length > 0;
 
     state.tilemap.spriteLayers.HouseFront.alpha = dimHouseFront ? 0.3 : 1.0;
   }
