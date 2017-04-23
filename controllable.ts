@@ -9,6 +9,8 @@ class Controllable extends Entity {
   facing = 1;
   lastSafeSpot: IPoint;
 
+  camera: Camera;
+
   private lastTalkCoID: number = -1;
 
   constructor(state: StateClass, props: {

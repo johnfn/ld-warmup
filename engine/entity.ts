@@ -26,6 +26,10 @@ class Entity extends Base {
   public get visible(): boolean { return this.sprite.visible; }
   public set visible(v: boolean) { this.sprite.visible = v; }
 
+  public get pt(): Point {
+    return new Point({ x: this.x, y: this.y });
+  }
+
   private textureName: string;
 
   private static MaxEntityId = 0;

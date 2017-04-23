@@ -2,7 +2,6 @@ PIXI.loader.add("sprite", "assets/sprite.png");
 
 // You.
 class PlayerLeft extends Controllable {
-  camera: Camera;
   collideable = true;
 
   constructor(state: StateClass) {

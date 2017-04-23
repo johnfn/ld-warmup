@@ -1,8 +1,9 @@
-type BubbleType = "sweat" | ":D" | ":|";
+type BubbleType = "sweat" | ":D" | ":|" | "!";
 
 PIXI.loader.add("sweat", "assets/sweat.png");
 PIXI.loader.add(":|", "assets/confused.png");
 PIXI.loader.add(":D", "assets/happy.png");
+PIXI.loader.add("!", "assets/exclamation.png");
 
 class Bubble extends Entity {
   following: Controllable;

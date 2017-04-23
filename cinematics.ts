@@ -42,6 +42,8 @@ class Cinematics extends Base {
         state.leftCamActive  = true;
 
         this.putPlayerOnTinyWorld(state.playerLeft);
+
+        this.activeCoroutine = this.startCoroutine(state, this.youWakeUp());
       }
     });
   }
@@ -119,8 +121,8 @@ class Cinematics extends Base {
     this.activeCoroutine = -1;
   }
 
-  *textFollowPlayer(text: TextEntity, following: Entity, stayOnScreen = true) {
-    const cam = this.state.getActiveCamera();
+  *textFollowPlayer(text: TextEntity, following: Controllable, stayOnScreen = true) {
+    const cam = following.camera;
 
     while (text.exists) {
       text.x = following.x + 10;
@@ -201,11 +203,11 @@ class Cinematics extends Base {
     this.stopCoroutine(this.state, id);
   }
 
-  *walkTo(who: Controllable, where: Rect) {
+  *walkTo(who: Controllable, where: Rect, speed = 2) {
     const { physics } = this.state;
 
     while (!where.contains(who)) {
-      const dx = where.centerX > who.x ? 2 : -2;
+      const dx = where.centerX > who.x ? speed : -speed;
       const {
         hitRight,
         hitLeft,
@@ -443,11 +445,55 @@ class Cinematics extends Base {
   }
 
   *youWakeUp() {
-    const { playerLeft: you } = state;
+    const { playerRightProf: prof, playerLeft: you } = state;
 
     state.rightCamActive = true;
     state.leftCamActive  = true;
 
-    yield* this.talk(you, "Zzzzzzzzzzzzzzzzzzz...");
+    yield* this.talk(you, "Zzzzzzzzzzzzzzzzzzz...", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Pass the sugar...", { waitFrames: 30 }, true);
+    yield* this.talk(you, "zzzzzzzzzzzz...", { waitFrames: 30 }, true);
+    yield* this.talk(you, "...", { waitFrames: 30 }, true);
+    yield* this.bubble(you, "!");
+    yield* this.talk(you, "Where...", { waitFrames: 30 }, true);
+    yield* this.talk(you, "What...", { waitFrames: 30 }, true);
+    yield* this.talk(you, "The...", { waitFrames: 30 }, true);
+    yield* this.talk(you, "CRAP?", { waitFrames: 30 }, true);
+    yield* this.bubble(you, "!");
+
+    const middle = you.pt;
+
+    yield* this.walkTo(you, Rect.FromPoint(middle.add(new Point({ x: 300, y: 0 })), 100), 3);
+
+    yield* this.bubble(you, ":|");
+
+    yield* this.walkTo(you, Rect.FromPoint(middle.add(new Point({ x: -300, y: 0 })), 100), 5);
+
+    yield* this.talk(prof, "Whats the matter? Forget how to control me? Arrow keys. (idiot).", { waitFrames: 30 });
+
+    yield* this.bubble(you, ":|");
+    yield* this.bubble(you, "sweat");
+
+    yield* this.talk(you, "Oh man", { waitFrames: 30 }, true);
+    yield* this.talk(you, "What do i do what do i do", { waitFrames: 30 }, true);
+    yield* this.talk(you, "What did the professor say to do at a time like this", { waitFrames: 30 }, true);
+
+    yield* this.bubble(you, "sweat");
+
+    yield* this.talk(you, "Ok... try to turn into godzilla!", { waitFrames: 30 }, true);
+
+    yield* this.bubble(you, "sweat");
+
+    yield* this.talk(you, "It's not working.", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Hey, look, a telephone! Make I can call the professor.", { waitFrames: 30 }, true);
+    yield* this.talk(you, "...", { waitFrames: 30 }, true);
+
+    yield* this.bubble(you, ":|");
+
+    yield* this.talk(you, "I don't know his number...", { waitFrames: 30 }, true);
+    yield* this.bubble(you, ":|");
+    yield* this.bubble(you, ":D");
+
+    yield* this.talk(you, "I'll just try random ones.", { waitFrames: 30 }, true);
   }
 }

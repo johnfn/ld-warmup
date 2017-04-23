@@ -5,7 +5,6 @@ class PlayerRight extends Controllable {
 
   vy = 0;
   onGround = false;
-  camera: Camera;
   canPickUpWorld = true;
   collideable = true;
 
