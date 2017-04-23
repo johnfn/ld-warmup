@@ -75,6 +75,10 @@ interface Tile {
   layername: string;
 }
 
+function isTile(x: any): x is Tile {
+  return x.tile && x.layername && typeof x.x === "number" && typeof x.y === "number";
+}
+
 interface Tileset {
   gidStart: number;
   gidEnd: number;
@@ -418,7 +422,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
       return [];
     }
 
-    return this.tiles[tileX][tileY];
+    return this.tiles[tileX][tileY].slice(0);
   }
 
   contains(e: Entity, cam: Camera): boolean {

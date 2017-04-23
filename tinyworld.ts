@@ -3,6 +3,7 @@ PIXI.loader.add("tinyworld", "assets/tinyworld.png");
 class TinyWorld extends Entity {
   vx = 0;
   vy = 0;
+  collideable = true;
 
   static InteractionDistance = 100;
   static Instance: TinyWorld;

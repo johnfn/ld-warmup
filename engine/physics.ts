@@ -1,8 +1,8 @@
-type HitTestResult = Tile[];
+type HitTestResult = (Tile | Entity)[];
 type MoveResult = {
   hit: boolean;
 
-  thingsHit: Tile[];
+  thingsHit: HitTestResult;
 
   hitUp: boolean;
   hitLeft: boolean;
@@ -13,8 +13,20 @@ type MoveResult = {
 class Physics {
   hitTestPoint(state: StateClass, point: Point): HitTestResult {
     const { tilemap } = state;
+    const { x, y } = point;
 
-    return tilemap.hitTest(point);
+    let results = tilemap.hitTest(point);
+
+    for (const e of state.entities) {
+      if (!(e instanceof Entity)) { continue; }
+      if (!e.collideable) { continue; }
+
+      if (x >= e.x && x < e.x + e.width && y >= e.y && y < e.y + e.height) {
+        results.push(e);
+      }
+    }
+
+    return results;
   }
 
   hitTestSprite(state: StateClass, point: Point, wh: Point): HitTestResult {
@@ -26,7 +38,7 @@ class Physics {
       topLeft.add(new Point({ x: wh.x - 4, y: wh.y  - 4})),
     ];
 
-    let tiles: Tile[] = [];
+    let tiles: HitTestResult = [];
 
     for (const point of pointsToTest) {
       tiles = tiles.concat(this.hitTestPoint(state, point));
@@ -35,9 +47,20 @@ class Physics {
     return tiles;
   }
 
-  isAgainstWall(res: HitTestResult): boolean {
-    for (const tile of res) {
-      if (tile.layername === "Walls") {
+  isCollision(res: HitTestResult, entity: Entity): boolean {
+    for (const thing of res) {
+
+      if (isTile(thing)) {
+        if (thing.layername === "Walls") {
+          return true;
+        }
+      } else if (thing instanceof Entity) {
+        if (thing === entity) {
+          // no self collisions!
+
+          continue;
+        }
+
         return true;
       }
     }
@@ -56,7 +79,7 @@ class Physics {
     const wh = new Point({ x: entity.width, y: entity.height });
     const thingsHit = this.hitTestSprite(state, new Point({ x: newX, y: newY }), wh);
 
-    if (!this.isAgainstWall(thingsHit)) {
+    if (!this.isCollision(thingsHit, entity)) {
       entity.x = newX;
       entity.y = newY;
     } else {
@@ -64,12 +87,12 @@ class Physics {
       hitX = true;
       hitY = true;
 
-      if (!this.isAgainstWall(this.hitTestSprite(state, new Point({ x: entity.x, y: newY }), wh))) {
+      if (!this.isCollision(this.hitTestSprite(state, new Point({ x: entity.x, y: newY }), wh), entity)) {
         entity.y = newY;
         hitY   = false;
       }
 
-      if (!this.isAgainstWall(this.hitTestSprite(state, new Point({ x: newX, y: entity.y }), wh))) {
+      if (!this.isCollision(this.hitTestSprite(state, new Point({ x: newX, y: entity.y }), wh), entity)) {
         entity.x = newX;
         hitX   = false;
       }
