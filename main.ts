@@ -50,6 +50,8 @@ class StateClass {
   particles: AtmosphericParticles;
   hudObj: HUD;
 
+  bgsprite: BGSprite;
+
   rightCamActive = false;
   leftCamActive  = true;
 
@@ -144,7 +146,9 @@ class StateClass {
     const se = new SpritedEnemy(this);
     se.x = 400;
 
-    new PauseScreen(this);
+    // new PauseScreen(this);
+
+    this.bgsprite = new BGSprite(this, this.rendererTiny.view);
 
     this.tilemap.processObjects(({ layerName, obj }) => {
       if (layerName === "EnemyLayer") {
@@ -260,11 +264,13 @@ class StateClass {
     if (state.leftCamActive) {
       cameraLeft.update(state);
 
+      /*
       if (state.rightCamActive) {
         root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
         state.playerLeft.sprite.alpha = 1.0;
         state.playerRightProf.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
       }
+      */
 
       // hide irrelevant entities
 
@@ -276,6 +282,8 @@ class StateClass {
 
       state.stage.x = state.cameraLeft.desiredStageX;
       state.stage.y = state.cameraLeft.desiredStageY;
+
+      this.bgsprite.sprite.visible = true;
 
       rendererBig.render(root);
     }
@@ -300,7 +308,11 @@ class StateClass {
       state.stage.x = state.cameraRight.desiredStageX;
       state.stage.y = state.cameraRight.desiredStageY;
 
+      this.bgsprite.sprite.visible = false;
+
       rendererTiny.render(root);
+
+      this.bgsprite.sprite.texture.update();
     }
   }
 }
