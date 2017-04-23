@@ -7,9 +7,11 @@ type CurrentActiveEvent = "None"
                         | "Professor Explains Tossing"
                         | "Professor Tosses a Few Times"
                         | "You Wake Up"
+                        | "You Use Phone"
+                        ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "You Wake Up";
+  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -44,6 +46,20 @@ class Cinematics extends Base {
         this.putPlayerOnTinyWorld(state.playerLeft);
 
         this.activeCoroutine = this.startCoroutine(state, this.youWakeUp());
+      }
+
+      if (G.Debug && this.currentOrLastEvent === "You Use Phone") {
+        TinyWorld.Instance.isBeingCarried = true;
+        TinyWorld.Instance.carrier = state.playerRightProf;
+
+        Controllable.SwitchActivePlayer(state);
+
+        state.rightCamActive = true;
+        state.leftCamActive  = true;
+
+        this.putPlayerOnTinyWorld(state.playerLeft);
+
+        this.activeCoroutine = this.startCoroutine(state, this.youUsePhone());
       }
     });
   }
@@ -111,6 +127,11 @@ class Cinematics extends Base {
             this.activeCoroutine = this.startCoroutine(state, this.youWakeUp());
           }
 
+        break;
+
+        case "You Wake Up":
+          this.currentOrLastEvent = "You Use Phone";
+          this.activeCoroutine = this.startCoroutine(state, this.youUsePhone());
         break;
       }
     }
@@ -485,15 +506,28 @@ class Cinematics extends Base {
     yield* this.bubble(you, "sweat");
 
     yield* this.talk(you, "It's not working.", { waitFrames: 30 }, true);
-    yield* this.talk(you, "Hey, look, a telephone! Make I can call the professor.", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Hey, look, a telephone! Maybe I can call the professor.", { waitFrames: 30 }, true);
     yield* this.talk(you, "...", { waitFrames: 30 }, true);
 
     yield* this.bubble(you, ":|");
 
     yield* this.talk(you, "I don't know his number...", { waitFrames: 30 }, true);
     yield* this.bubble(you, ":|");
-    yield* this.bubble(you, ":D");
 
+    this.finishCinematic();
+  }
+
+  *youUsePhone() {
+    const { playerRightProf: prof, playerLeft: you, tilemap, entities } = state;
+
+    const phones = entities.filter(x => x instanceof Phone) as Phone[];
+    let closestPhone: Phone = Util.minBy(phones, p => Util.Dist(p, you))!;
+
+    yield* this.bubble(you, ":D");
     yield* this.talk(you, "I'll just try random ones.", { waitFrames: 30 }, true);
+
+    yield* this.walkTo(you, Rect.FromPoint(closestPhone, 50));
+
+    this.finishCinematic();
   }
 }

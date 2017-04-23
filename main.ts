@@ -33,6 +33,7 @@ class StateClass {
   }, {
     // Objects
     ObjLayer: true,
+    PhoneLayer: true,
     Spikes: true,
     TinyWorldLocationLayer: true,
   }>;
@@ -181,7 +182,7 @@ class StateClass {
         enemy.y = obj.y - 32;
       }
 
-      if (layerName === "Phone") {
+      if (layerName === "PhoneLayer") {
         const enemy = new Phone(this);
 
         enemy.x = obj.x;
