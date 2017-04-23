@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
+  currentOrLastEvent: CurrentActiveEvent = "You Wake Up";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -26,6 +26,10 @@ class Cinematics extends Base {
     this.rightFade = new FadeOutIn(this.state, "right");
 
     setTimeout(() => {
+      if (G.Debug && this.currentOrLastEvent === "Professor Fiddles") {
+        this.activeCoroutine = this.startCoroutine(state, this.professorFiddles());
+      }
+
       if (G.Debug && this.currentOrLastEvent === "Professor Tosses a Few Times") {
         this.currentOrLastEvent = "Professor Tosses a Few Times";
         TinyWorld.Instance.isBeingCarried = true;
@@ -98,12 +102,8 @@ class Cinematics extends Base {
         break;
 
         case "Professor Fiddles":
-          if (Util.Dist(you, TinyWorld.Instance) < 20) {
-            this.finishCinematic();
-
-            this.currentOrLastEvent = "Professor is Horrified";
-            this.activeCoroutine = this.startCoroutine(state, this.professorIsHorrified());
-          }
+          this.currentOrLastEvent = "Professor is Horrified";
+          this.activeCoroutine = this.startCoroutine(state, this.professorIsHorrified());
 
         break;
 
@@ -338,11 +338,9 @@ class Cinematics extends Base {
     yield* this.talk(you, "Uhhhhh...");
 
     cameraLeft.isExternallyControlled = true;
-
     yield* cameraLeft.panTo(TinyWorld.Instance);
     yield { frames: 30 };
     yield* cameraLeft.panTo(you);
-
     cameraLeft.isExternallyControlled = false;
 
     yield* this.talk(you, "...yeah, I think I do.");
@@ -377,11 +375,23 @@ class Cinematics extends Base {
     this.finishCinematic();
   }
 
+  *checkStopFiddling() {
+    const { playerLeft: you } = state;
+
+    while (Util.Dist(you, TinyWorld.Instance) > 20) {
+      yield "next";
+    }
+
+    this.finishCinematic();
+  }
+
   *professorFiddles() {
     const { playerRightProf: prof } = state;
 
-    const spotOne = new Point({ x: prof.x - 100, y: prof.y });
-    const spotTwo = new Point({ x: prof.x + 200, y: prof.y });
+    const spotOne = new Point({ x: prof.x, y: prof.y });
+    const spotTwo = new Point({ x: prof.x - 400, y: prof.y });
+
+    this.startCoroutine(state, this.checkStopFiddling());
 
     while (true) {
       yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));
@@ -422,7 +432,7 @@ class Cinematics extends Base {
   *professorIsHorrified() {
     const { playerRightProf: prof } = state;
 
-    yield* this.leftFade.doFadeOut(this.state);
+    // yield* this.leftFade.doFadeOut(this.state);
 
     Controllable.SwitchActivePlayer(state);
     state.rightCamActive = true;
@@ -481,7 +491,7 @@ class Cinematics extends Base {
   }
 
   *youWakeUp() {
-    const { playerRightProf: prof, playerLeft: you } = state;
+    const { playerRightProf: prof, playerLeft: you, cameraLeft } = state;
 
     state.rightCamActive = true;
     state.leftCamActive  = true;
@@ -511,16 +521,31 @@ class Cinematics extends Base {
     yield* this.bubble(you, "sweat");
 
     yield* this.talk(you, "Oh man", { waitFrames: 30 }, true);
-    yield* this.talk(you, "What do i do what do i do", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Oh this is bad", { waitFrames: 30 }, true);
+    yield* this.talk(you, "What do I do what do I do", { waitFrames: 30 }, true);
     yield* this.talk(you, "What did the professor say to do at a time like this", { waitFrames: 30 }, true);
 
     yield* this.bubble(you, "sweat");
 
-    yield* this.talk(you, "Ok... try to turn into godzilla!", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Crap, I can't rememeber!", { waitFrames: 30 }, true);
+    yield* this.talk(you, "I never listened to that guy!", { waitFrames: 30 }, true);
+    yield* this.talk(you, "I can't remember a word he's said!", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Ever!", { waitFrames: 30 }, true);
+    yield* this.talk(you, "He's just that unmemorable!", { waitFrames: 30 }, true);
 
     yield* this.bubble(you, "sweat");
 
-    yield* this.talk(you, "It's not working.", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Okay, don't panic... just... look around...", { waitFrames: 30 }, true);
+
+    const phones = state.entities.filter(x => x instanceof Phone) as Phone[];
+    let closestPhoneYou  = Util.minBy(phones, p => Util.Dist(p, you))!;
+
+    cameraLeft.isExternallyControlled = true;
+    yield* cameraLeft.panTo(closestPhoneYou);
+    yield { frames: 30 };
+    yield* cameraLeft.panTo(you);
+    cameraLeft.isExternallyControlled = false;
+
     yield* this.talk(you, "Hey, look, a telephone! Maybe I can call the professor.", { waitFrames: 30 }, true);
     yield* this.talk(you, "...", { waitFrames: 30 }, true);
 

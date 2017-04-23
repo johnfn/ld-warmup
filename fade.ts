@@ -10,7 +10,8 @@ class FadeOutIn extends Entity {
     this.startCoroutine(state, this.doFadeOut(state));
   }
 
-  *doFadeOut(state: StateClass) {
+  *doFadeOut(_state: StateClass) {
+    /*
     this.x = 0;
     this.y = 0;
     this.sprite.width = 10000;
@@ -20,7 +21,6 @@ class FadeOutIn extends Entity {
       yield "next";
       this.sprite.alpha = i / 60;
     }
-
-    this.destroy(state);
+    */
   }
 }
