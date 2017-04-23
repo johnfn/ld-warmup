@@ -38,6 +38,7 @@ class StateClass {
   }>;
 
   rendererBig: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+  rendererBigNoWorld: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   rendererTiny: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   playerLeft: PlayerLeft;
   playerRightProf: PlayerRight;
@@ -108,6 +109,12 @@ class StateClass {
     });
     document.body.appendChild(this.rendererBig.view);
 
+    this.rendererBigNoWorld = PIXI.autoDetectRenderer(this.width, this.height, {
+      antialias: false,
+      transparent: false,
+      resolution: 1
+    });
+
     this.rendererTiny = PIXI.autoDetectRenderer(this.width, this.height, {
       antialias: false,
       transparent: false,
@@ -148,7 +155,7 @@ class StateClass {
 
     // new PauseScreen(this);
 
-    this.bgsprite = new BGSprite(this, this.rendererTiny.view);
+    this.bgsprite = new BGSprite(this, this.rendererBigNoWorld.view);
 
     this.tilemap.processObjects(({ layerName, obj }) => {
       if (layerName === "EnemyLayer") {
@@ -248,7 +255,7 @@ class StateClass {
   }
 
   update(): void {
-    const { cinematics, rendererBig, rendererTiny, keyboard, cameraLeft, cameraRight, entities, root, currentMode } = state;
+    const { cinematics, rendererBig, rendererTiny, rendererBigNoWorld, keyboard, cameraLeft, cameraRight, entities, root, currentMode } = state;
 
     keyboard.update();
     cinematics.update(this);
@@ -272,13 +279,11 @@ class StateClass {
     if (state.leftCamActive) {
       cameraLeft.update(state);
 
-      /*
       if (state.rightCamActive) {
         root.alpha = state.playerLeft.isActive(state) ? 1.0 : 0.3;
         state.playerLeft.sprite.alpha = 1.0;
         state.playerRightProf.sprite.alpha = state.playerLeft.isActive(state) ? 0.3 : 1.0;
       }
-      */
 
       // hide irrelevant entities
 
@@ -319,6 +324,10 @@ class StateClass {
       this.bgsprite.sprite.visible = false;
 
       rendererTiny.render(root);
+
+      TinyWorld.Instance.visible = false;
+      rendererBigNoWorld.render(root);
+      TinyWorld.Instance.visible = true;
 
       this.bgsprite.sprite.texture.update();
     }
