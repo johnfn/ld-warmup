@@ -3,6 +3,7 @@ class Controllable extends Entity {
   vx = 0;
   onGround = false;
   canPickUpWorld = false;
+  isTossingWorld = false;
 
   private lastTalkCoID: number = -1;
 
@@ -87,13 +88,16 @@ class Controllable extends Entity {
 
   update(state: StateClass) {
     const { keyboard } = state;
-    const { thingsHit } = this.move(state);
 
-    if (this.isActive(state)) {
-      this.checkForCollisionReactions(state, thingsHit);
+    if (!this.isTossingWorld) {
+      const { thingsHit } = this.move(state);
 
-      if (keyboard.justDown.X) {
-        this.checkInspect(state);
+      if (this.isActive(state)) {
+        this.checkForCollisionReactions(state, thingsHit);
+
+        if (keyboard.justDown.X) {
+          this.checkInspect(state);
+        }
       }
     }
   }

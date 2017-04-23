@@ -5,7 +5,6 @@ class PlayerRight extends Controllable {
   onGround = false;
   camera: Camera;
   canPickUpWorld = true;
-  isTossingWorld = false;
 
   facing = 1;
 
@@ -82,7 +81,18 @@ class PlayerRight extends Controllable {
     if (!keyboard.down.X) {
       this.isTossingWorld = false;
 
-      TinyWorld.Instance.vx = 10 * this.facing;
+      let vx = (keyboard.down.Left ? -10 : 0) + (keyboard.down.Right ? 10 : 0);
+      let vy = (keyboard.down.Up ? -10 : 0)   + (keyboard.down.Down ? 10 : 0);
+
+      // no faster diagonals!
+
+      if (vx !== 0 && vy !== 0) {
+        vx /= Math.sqrt(2);
+        vy /= Math.sqrt(2);
+      }
+
+      TinyWorld.Instance.vx = vx;
+      TinyWorld.Instance.vy = vy;
       TinyWorld.Instance.carrier = null;
       TinyWorld.Instance.isBeingCarried = false;
     }
