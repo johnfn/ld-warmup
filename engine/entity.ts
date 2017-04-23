@@ -55,12 +55,13 @@ class Entity extends Base {
   constructor(state: StateClass, props: {
     width?: number;
     height?: number;
+    dontRegister?: boolean;
     texture: string;
 
     spritesheet?: SpritesheetIndex;
     parent?: PIXI.Container;
   }) {
-    super(state);
+    super(state, props.dontRegister || false);
 
     const { stage } = state;
     const { texture: textureName, width, height, spritesheet, parent = stage } = props;

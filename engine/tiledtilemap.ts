@@ -321,6 +321,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
           const sprite = new Entity(state, {
             texture: spritesheet,
+            dontRegister: true,
             spritesheet: { x: spritesheetx, y: spritesheety, },
             parent: this.spriteLayers[layername],
           });
@@ -330,9 +331,6 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
         }
       }
     }
-
-    console.log('created ', num);
-    console.log(state.countEntitiesUnder(state.root));
   }
 
   private loadObjects(): void {

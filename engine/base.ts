@@ -3,8 +3,10 @@ class Base {
 
   activeModes: Mode[] = ["Game"]
 
-  constructor(state: StateClass) {
-    state.entities.push(this);
+  constructor(state: StateClass, dontRegister = false) {
+    if (!dontRegister) {
+      state.entities.push(this);
+    }
   }
 
   update(_state: StateClass) {
