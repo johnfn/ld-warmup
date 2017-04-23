@@ -145,6 +145,13 @@ class Controllable extends Entity {
     state.tilemap.spriteLayers.HouseFront.alpha = dimHouseFront ? 0.3 : 1.0;
   }
 
+  restore(state: StateClass): void {
+    this.x = this.lastSafeSpot.x;
+    this.y = this.lastSafeSpot.y;
+
+    this.startCoroutine(state, this.flicker());
+  }
+
   checkForIndiscriminateCollisions(state: StateClass, things: HitTestResult): void {
     let hitSpike = false;
 
@@ -157,8 +164,7 @@ class Controllable extends Entity {
     }
 
     if (hitSpike) {
-      this.x = this.lastSafeSpot.x;
-      this.y = this.lastSafeSpot.y;
+      this.restore(state);
 
       return;
     }

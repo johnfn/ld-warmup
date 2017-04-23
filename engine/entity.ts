@@ -92,4 +92,26 @@ class Entity extends Base {
 
     state.entities.splice(state.entities.indexOf(this), 1);
   }
+
+  *flicker() {
+    for (let i = 0; i < 5; i++) {
+      this.visible = false;
+
+      yield { frames: 3 };
+
+      this.visible = true;
+
+      yield { frames: 3 };
+    }
+
+    for (let i = 0; i < 5; i++) {
+      this.visible = false;
+
+      yield { frames: 1 };
+
+      this.visible = true;
+
+      yield { frames: 1 };
+    }
+  }
 }
