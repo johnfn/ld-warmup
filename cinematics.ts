@@ -138,8 +138,6 @@ class Cinematics extends Base {
         case "You Use Phone":
           this.currentOrLastEvent = "We Talk";
           this.activeCoroutine = this.startCoroutine(state, this.profYouTalk());
-
-          this.finishCinematic();
         break;
       }
     }
@@ -538,8 +536,8 @@ class Cinematics extends Base {
     const { playerRightProf: prof, playerLeft: you } = state;
     const phones = state.entities.filter(x => x instanceof Phone) as Phone[];
 
-    let closestPhoneYou: Phone = Util.minBy(phones, p => Util.Dist(p, you))!;
-    let closestPhoneProf: Phone = Util.minBy(phones, p => Util.Dist(p, prof))!;
+    let closestPhoneYou  = Util.minBy(phones, p => Util.Dist(p, you))!;
+    let closestPhoneProf = Util.minBy(phones, p => Util.Dist(p, prof))!;
 
     yield* this.bubble(you, ":D");
     yield* this.talk(you, "I'll just try random ones.", { waitFrames: 30 }, true);
@@ -548,11 +546,16 @@ class Cinematics extends Base {
 
     while (true) {
       this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", () => state.keyboard.down.X, false, state.cameraRight));
+      this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", () => state.keyboard.down.X, false, state.cameraRight));
 
-      yield* this.talk(you, "Ring ring ring...", () => state.keyboard.down.X, true);
-
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < 60; i++) {
         yield "next";
+
+        let closestNow: Phone = Util.minBy(phones, p => Util.Dist(p, prof))!;
+
+        if (state.keyboard.down.X && Util.Dist(closestNow, prof) < 100) {
+          this.finishCinematic();
+        }
       }
     }
   }
@@ -560,6 +563,12 @@ class Cinematics extends Base {
   *profYouTalk() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
-    yield* this.talk(prof, "Hello..?", { waitFrames: 30 }, true);
+    yield* this.talk(you, "Hello..?");
+
+    yield* this.bubble(prof, ":D");
+
+    yield* this.talk(prof, "Hello!");
+    yield* this.talk(prof, "Oh thank god it worked!!!");
+    yield* this.talk(prof, "I was worried for a moment we would lose you forever!");
   }
 }
