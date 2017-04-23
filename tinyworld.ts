@@ -22,6 +22,8 @@ class TinyWorld extends Entity {
   }
 
   updatePosition(state: StateClass) {
+    const { physics } = state;
+
     if (this.isBeingCarried && this.carrier) {
       this.x = this.carrier.x;
       this.y = this.carrier.y - 32;
@@ -29,11 +31,27 @@ class TinyWorld extends Entity {
       return;
     }
 
-    this.x += this.vx;
-    this.y += this.vy;
+    this.vy += G.Gravity;
+
+    const moveResult = physics.move(state, this, this.vx, this.vy);
+    const hitDown = moveResult.hitDown;
+    const hitUp = moveResult.hitUp;
+
+    if (hitDown || hitUp) {
+      this.vy = 0;
+    }
+
+    // friction is not fiction, to be clear
+
+    this.vx /= 1.03;
+
+    if (Math.abs(this.vx) < 0.5) { this.vx = 0; }
   }
 
-  canBePickedUp(): boolean {
-    return this.vx === 0 && this.vy === 0 && !this.isBeingCarried;
+  canBePickedUp(by: Controllable): boolean {
+    return Math.abs(this.vx) < 4 &&
+           this.vy === 0 &&
+           Util.Dist(by, this) < TinyWorld.InteractionDistance &&
+           !this.isBeingCarried;
   }
 }

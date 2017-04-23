@@ -29,10 +29,8 @@ class HUD extends Entity {
     }
 
     if (activePlayer.canPickUpWorld) {
-      if (!TinyWorld.Instance.isBeingCarried) {
-        if (Util.Dist(activePlayer, TinyWorld.Instance) < TinyWorld.InteractionDistance) {
-          text = "X to pick up world!"
-        }
+      if (TinyWorld.Instance.canBePickedUp(activePlayer)) {
+        text = "X to pick up world!"
       }
     }
 

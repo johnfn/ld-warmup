@@ -66,10 +66,7 @@ class PlayerRight extends Controllable {
   }
 
   checkForInteractions(state: StateClass): boolean {
-    if (
-      Util.Dist(this, TinyWorld.Instance) < TinyWorld.InteractionDistance &&
-      TinyWorld.Instance.canBePickedUp()
-    ) {
+    if (TinyWorld.Instance.canBePickedUp(this)) {
       TinyWorld.Instance.isBeingCarried = true;
       TinyWorld.Instance.carrier = this;
 
@@ -85,8 +82,9 @@ class PlayerRight extends Controllable {
     if (!keyboard.down.X) {
       this.isTossingWorld = false;
 
-      TinyWorld.Instance.vx = 5 * this.facing;
+      TinyWorld.Instance.vx = 10 * this.facing;
       TinyWorld.Instance.carrier = null;
+      TinyWorld.Instance.isBeingCarried = false;
     }
   }
 }
