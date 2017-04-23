@@ -252,6 +252,7 @@ class StateClass {
 
     keyboard.update();
     cinematics.update(this);
+    this.bgsprite.update(this); // oops
 
     const activeEntities = entities.filter(e => e.activeModes.indexOf(currentMode) !== -1);
 
