@@ -49,9 +49,7 @@ class TinyWorld extends Entity {
   }
 
   canBePickedUp(by: Controllable): boolean {
-    return Math.abs(this.vx) < 4 &&
-           this.vy === 0 &&
-           Util.Dist(by, this) < TinyWorld.InteractionDistance &&
+    return Util.Dist(by, this) < TinyWorld.InteractionDistance &&
            !this.isBeingCarried;
   }
 }
