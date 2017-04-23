@@ -1,13 +1,11 @@
 class BGSprite {
   sprite: PIXI.Sprite;
-  scale = 5;
+  scale = 8;
 
   constructor(state: StateClass, canvas: HTMLCanvasElement) {
     this.sprite = new PIXI.Sprite(PIXI.Texture.fromCanvas(canvas));
 
-    // this.sprite.scale = new PIXI.Point(this.scale, this.scale);
-
-    console.log(this.sprite.width, this.sprite.height);
+    this.sprite.scale = new PIXI.Point(this.scale, this.scale);
 
     state.root.addChildAt(this.sprite, 0);
   }
@@ -22,15 +20,5 @@ class BGSprite {
 
     this.sprite.x = - worldX * this.scale + width  / 2;
     this.sprite.y = - worldY * this.scale + height / 2;
-
-
-    /*
-    const { width, height } = state;
-    const scale = 5;
-
-    this.sprite.x = - width  * scale / 2;
-    this.sprite.y = - height * scale / 2;
-    */
-
   }
 }

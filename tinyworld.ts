@@ -63,9 +63,11 @@ class TinyWorld extends Entity {
       this.vx = -this.vx * 0.4;
     }
 
-    if (hit && (Math.abs(this.vx) > 4 || Math.abs(this.vy) > 4)) {
+    if (hit && Math.abs(this.vx) + Math.abs(this.vy) > 3) {
+      const power = Math.abs(this.vx) + Math.abs(this.vy);
+
       // activeCam.shake = { duration: 10, strength: 10 };
-      inactiveCam.shake = { duration: 20, strength: 10 };
+      inactiveCam.shake = { duration: power * 20, strength: power * 10 };
     }
 
     // friction is again fiction
