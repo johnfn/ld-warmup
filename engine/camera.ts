@@ -1,7 +1,8 @@
 class Camera extends Base {
   width: number;
   height: number;
-  shaking = false;
+
+  shake: null | { duration: number; strength: number };
 
   stage: PIXI.Container;
 
@@ -68,5 +69,20 @@ class Camera extends Base {
     this.stage = stage;
 
     this.id = ++Camera.cameras;
+  }
+
+  update(_state: StateClass) {
+    if (this.shake) {
+      const { strength } = this.shake;
+
+      this.shake.duration--;
+
+      this.centerX += Math.random() * strength - strength / 2;
+      this.centerY += Math.random() * strength - strength / 2;
+
+      if (this.shake.duration <= 0) {
+        this.shake = null;
+      }
+    }
   }
 }

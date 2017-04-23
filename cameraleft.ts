@@ -13,6 +13,8 @@ class CameraLeft extends Camera {
       this.centerX += Math.random() * 4 - 2;
       this.centerY += Math.random() * 4 - 2;
     }
+
+    super.update(state);
   }
 
   shouldShake(): boolean {

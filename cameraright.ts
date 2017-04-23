@@ -4,5 +4,7 @@ class CameraRight extends Camera {
 
     this.centerX = playerRightProf.x;
     this.centerY = playerRightProf.y;
+
+    super.update(state);
   }
 }
