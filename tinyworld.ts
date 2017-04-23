@@ -7,8 +7,23 @@ class TinyWorld extends Entity {
 
   static InteractionDistance = 100;
   static Instance: TinyWorld;
+
   isBeingCarried = false;
-  carrier: Controllable | null = null;
+  _carrier: Controllable | null = null;
+
+  set carrier(v: Controllable | null) {
+    this._carrier = v;
+
+    if (v !== null) {
+      this.lastCarrier = v;
+    }
+  }
+
+  get carrier(): Controllable | null { return this._carrier; }
+
+  lastCarrier: Controllable | null = null;
+
+  lastSafeSpot: IPoint;
 
   constructor(state: StateClass) {
     super(state, { texture: "tinyworld" });
@@ -36,7 +51,7 @@ class TinyWorld extends Entity {
     this.vy += G.Gravity;
 
     const moveResult = physics.move(state, this, this.vx, this.vy);
-    const { hitDown, hitUp, hitLeft, hitRight, hit } = moveResult;
+    const { hitDown, hitUp, hitLeft, hitRight, hit, thingsHit } = moveResult;
 
     if (hitDown || hitUp) {
       this.vy = -this.vy * 0.4;
@@ -54,7 +69,33 @@ class TinyWorld extends Entity {
     // friction is again fiction
 
     if (Math.abs(this.vx) < 0.5) { this.vx = 0; }
+
+    this.checkForIndiscriminateCollisions(state, thingsHit);
   }
+
+  restore(state: StateClass): void {
+    if (this.lastCarrier) {
+      this.isBeingCarried = true;
+      this.carrier = this.lastCarrier;
+
+      this.startCoroutine(state, this.flicker());
+    } else {
+      alert('oh my god  how did you screw up so bad  please restart the game wow')
+    }
+  }
+
+  checkForIndiscriminateCollisions(state: StateClass, things: HitTestResult): void {
+    let died = false;
+
+    died = died || things.filter(x => x instanceof Entity && x.deadly).length > 0;
+
+    if (died) {
+      this.restore(state);
+
+      return;
+    }
+  }
+
 
   canBePickedUp(by: Controllable): boolean {
     return Util.Dist(by, this) < TinyWorld.InteractionDistance &&

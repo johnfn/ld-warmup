@@ -9,6 +9,7 @@ class Entity extends Base {
   sprite: PIXI.Sprite;
 
   collideable = false;
+  deadly      = false;
 
   oneCameraOnly: "left" | "right" | "no" = "no";
 

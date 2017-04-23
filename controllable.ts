@@ -153,17 +153,11 @@ class Controllable extends Entity {
   }
 
   checkForIndiscriminateCollisions(state: StateClass, things: HitTestResult): void {
-    let hitSpike = false;
+    let died = false;
 
-    for (const thing of things) {
-      if (thing instanceof Spike) {
-        hitSpike = true;
+    died = died || things.filter(x => x instanceof Entity && x.deadly).length > 0;
 
-        break;
-      }
-    }
-
-    if (hitSpike) {
+    if (died) {
       this.restore(state);
 
       return;
