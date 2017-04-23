@@ -44,7 +44,7 @@ class TextEntity extends Base {
     super(state);
 
     this.style = style;
-    this.textObject = new MultiStyleText("hallo", style);
+    this.textObject = new MultiStyleText("", style);
 
     parent.addChild(this.textObject);
 

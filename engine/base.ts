@@ -18,4 +18,8 @@ class Base {
   stopCoroutine(state: StateClass, id: number): void {
     delete state.coroutines[id];
   }
+
+  isCoroutineActive(id: number) {
+    return !!state.coroutines[id];
+  }
 }

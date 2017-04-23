@@ -3,6 +3,8 @@ class Controllable extends Entity {
   vx = 0;
   onGround = false;
 
+  private lastTalkCoID: number = -1;
+
   constructor(state: StateClass, props: {
     width?: number;
     height?: number;
@@ -83,10 +85,28 @@ class Controllable extends Entity {
   }
 
   update(state: StateClass) {
+    const { keyboard } = state;
     const { thingsHit } = this.move(state);
 
     if (this.isActive(state)) {
       this.checkForCollisionReactions(state, thingsHit);
+
+      if (keyboard.justDown.X) {
+        this.checkInspect(state);
+      }
+    }
+  }
+
+  checkInspect(state: StateClass): void {
+    const { cinematics } = state;
+    const inspectRegions = state.tilemap.regionLayers.InspectRegions.regions;
+
+    for (const { region, properties } of inspectRegions) {
+      if (region.contains(this) && properties && !this.isCoroutineActive(this.lastTalkCoID)) {
+        this.lastTalkCoID = this.startCoroutine(state, cinematics.talk(this, properties.inspect))
+
+        break;
+      }
     }
   }
 

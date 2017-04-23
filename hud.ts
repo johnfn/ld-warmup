@@ -19,7 +19,15 @@ class HUD extends Entity {
 
   update(state: StateClass) {
     const player = state.getActivePlayer();
+    const inspectRegions = state.tilemap.regionLayers.InspectRegions.regions;
+    let text = "";
 
-    this.actionText.text = "X to Foobar!";
+    for (const { region, properties } of inspectRegions) {
+      if (region.contains(player)) {
+        text = "X to Inspect!";
+      }
+    }
+
+    this.actionText.text = text;
   }
 }
