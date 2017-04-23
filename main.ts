@@ -250,7 +250,7 @@ class StateClass {
     }
   }
 
-  private countEntitiesUnder(container: PIXI.Container): number {
+  countEntitiesUnder(container: PIXI.Container): number {
     let result = 1;
 
     if (!container.children || container.children.length === 0) {

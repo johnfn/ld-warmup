@@ -5,7 +5,7 @@ class BGSprite {
   constructor(state: StateClass, canvas: HTMLCanvasElement) {
     this.sprite = new PIXI.Sprite(PIXI.Texture.fromCanvas(canvas));
 
-    this.sprite.scale = new PIXI.Point(this.scale, this.scale);
+    // this.sprite.scale = new PIXI.Point(this.scale, this.scale);
 
     console.log(this.sprite.width, this.sprite.height);
 

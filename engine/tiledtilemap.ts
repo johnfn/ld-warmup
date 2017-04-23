@@ -138,6 +138,8 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   regionLayers: { [key in keyof RegionLayers]: RegionLayer } = {} as any;
   objectLayers: { [key in keyof ObjectLayers]: ObjectLayer } = {} as any;
 
+  entities: Entity[];
+
   constructor(from: TiledJSON) {
     this.data = from;
 
@@ -194,12 +196,10 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   }
 
   private removeAllSprites(state: StateClass): void {
-    const { stage } = state;
-
     for (const key of Object.keys(this.spriteLayers)) {
       const layer = this.spriteLayers[key];
 
-      stage.removeChild(layer);
+      layer.removeChildren();
     }
   }
 
@@ -286,6 +286,8 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     const { stage } = state;
 
     for (const layer of this.data.layers) {
+      if (this.spriteLayers[layer.name]) { continue; }
+
       const container = new PIXI.Container();
 
       this.spriteLayers[layer.name] = container;
@@ -297,11 +299,15 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     const tw = this.data.tilewidth;
     const th = this.data.tileheight;
 
+    let num = 0;
+
     for (let i = region.x / tw; i <= region.right / tw; i++) {
       for (let j = region.y / th; j <= region.bottom / th; j++) {
         if (!this.tiles[i][j]) { continue; }
 
         for (const tile of this.tiles[i][j]) {
+          ++num;
+
           const {
             x,
             y,
@@ -324,6 +330,9 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
         }
       }
     }
+
+    console.log('created ', num);
+    console.log(state.countEntitiesUnder(state.root));
   }
 
   private loadObjects(): void {
