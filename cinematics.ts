@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -614,11 +614,34 @@ class Cinematics extends Base {
 
     yield* this.walkTo(you, Rect.FromPoint(closestPhoneYou, 100).translate({ x: 0, y: -100 }));
 
+    let i = 0;
+
     while (true) {
       this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", { waitFrames: 30 }, false));
       this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", { waitFrames: 30 }, false));
 
       yield { frames: 90 };
+
+      yield* this.talk(you, "Hello..?", { waitFrames: 30 });
+
+      const msg = [
+        "No one there...",
+        "The number you have dialed has been disconnected or... alright, fine, okay.",
+        "Dial tone.",
+        "Busy.",
+        "It's some old lady yelling at me...",
+        "Oh god, I dialed my ex somehow",
+        "Yes... I'd like one large cheese... my address? ... errr ....",
+        "It's a dog barking.",
+        "Dial tone.",
+        "Oops, I forgot to enter a number...",
+        "Yes, 911? I'd like to report a crime. Uh, it's kind of hard to explain actually you see I got sucked into a very small uh world, and now I'm stuck here, and so I would like you to send a very small police car to come and... huh, they hung up on me.",
+      ];
+
+      i = (i + 1) % msg.length;
+
+      yield* this.talk(you, msg[i], { waitFrames: 30 });
+      yield* this.talk(you, "Let's try again.", { waitFrames: 30 });
     }
   }
 
