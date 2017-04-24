@@ -86,11 +86,15 @@ class Camera extends Base {
   }
 
   *panTo(point: IPoint) {
+    let i = 0;
+
     while (Util.Dist({ x: this.centerX, y: this.centerY }, point) > 30) {
       this.centerX -= (this.centerX - point.x) / 40;
       this.centerY -= (this.centerY - point.y) / 40;
 
       yield "next";
+
+      if (++i > 60) { return; } // i give up on this bug
     }
   }
 }

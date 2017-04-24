@@ -62,6 +62,9 @@ class StateClass {
   rightCamActive = false;
   leftCamActive  = true;
 
+  initialMusic: Howl;
+  realMusic: Howl;
+
   entities: Base[];
 
   activePlayerId: number;
@@ -221,6 +224,18 @@ class StateClass {
 
       gameLoop();
     });
+
+    this.initialMusic = new Howl({
+      src: ["assets/ld-starter.mp3"],
+      loop: true,
+    });
+
+    this.realMusic = new Howl({
+      src: ["assets/ld38-true-fix.mp3"],
+      loop: true,
+    });
+
+    this.initialMusic.play();
   }
 
   startCoroutine(co: IterableIterator<CoroutineResult>, modes?: Mode[]): number {

@@ -2049,7 +2049,7 @@
   <object id="129" x="3904" y="1600" width="576" height="800"/>
  </objectgroup>
  <objectgroup name="ObjLayer">
-  <object id="5" gid="1" x="3456" y="2144" width="32" height="32">
+  <object id="5" gid="1" x="1248" y="1344" width="32" height="32">
    <properties>
     <property name="PlayerStart" value="true"/>
    </properties>

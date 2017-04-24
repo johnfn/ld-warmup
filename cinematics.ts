@@ -15,7 +15,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Fire That Cannon";
+  currentOrLastEvent: CurrentActiveEvent = "Professor Fiddles";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -541,6 +541,8 @@ class Cinematics extends Base {
   *professorIsHorrified() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
+    this.state.initialMusic.fade(1, 0, 4000);
+
     yield* this.leftFade.doFadeOut(this.state);
 
     this.putPlayerOnTinyWorld(you);
@@ -559,14 +561,25 @@ class Cinematics extends Base {
     yield* this.talk(prof, "Holy freaking crap.");
     yield* this.talk(prof, "He really just got sucked into the small world, didnt he.");
     yield* this.talk(prof, "...");
+
     yield* this.bubble(prof, "sweat");
+
     yield* this.talk(prof, "And now he's probably tiny too.");
+    yield* this.talk(prof, "Well, I guess it's on me...");
+
+    this.state.realMusic.play();
+
+    yield* this.talk(prof, "To save the world.");
+
+    yield* this.talk(prof, "(And him.)");
+
     yield* this.talk(prof, "Well, there's only one thing to do. First, I better go pick up that tiny world (with X).");
     yield* this.talk(prof, "I'm not affected by the weird gravity. I've got this anti-gravity skateboard.");
     yield* this.talk(prof, "Then I'll need to go find my de-minimizer. It's the only way to get him back to normal size.");
     yield* this.talk(prof, "I tossed that thing out. I thought it was a waste of space.");
     yield* this.bubble(prof, ":|");
     yield* this.talk(prof, "Anyway, yep, gotta pick it up with X.");
+
 
     this.finishCinematic();
   }
@@ -632,6 +645,7 @@ class Cinematics extends Base {
     yield* this.talk(you, "I thought you said you couldn't hear me.");
     yield* this.talk(prof, "I can't. I'm just guessing what you're saying.");
     yield* this.talk(prof, "You're very predictable.");
+    yield* this.bubble(you, ":|");
     yield* this.talk(prof, "Anyways, it's in the center of the planet.");
     yield* this.talk(prof, "I'll direct you there by phone.");
 
@@ -855,6 +869,9 @@ class Cinematics extends Base {
       "!THOR'S HAMMER!",
       "!ODIN'S ANVIL!",
       "!PLUTO'S NOT A PLANET!",
+      "!E TO THE PI I PLUS ONE IS ZERO!",
+      "!PINEAPPLE BELONGS ON PIZZA!",
+      "!AVOCADOS ARE A FRUIT!",
     ]);
 
     yield* this.talk(you, randomExclamation, { waitFrames: 30 });
@@ -1035,6 +1052,7 @@ class Cinematics extends Base {
       yield* this.talk(you, "what if i just...");
       yield* this.talk(you, "sort of...");
       yield* this.talk(you, "walked over...");
+      yield* this.talk(you, "????");
 
     state.wall.ontop.sprite.alpha = 0;
 
@@ -1159,11 +1177,15 @@ class Cinematics extends Base {
 
     state.hud.visible = false;
 
+    this.state.realMusic.fade(1, 0.5, 5000);
+
     yield* this.leftFade.doFadeOut(this.state);
 
     yield* this.talk(prof, "See you in another 4 months!");
     yield* this.talk(prof, "Or longer!");
     yield* this.talk(prof, "But probably not!");
+
+    this.state.realMusic.fade(0.5, 0.0, 5000);
 
     yield* this.rightFade.doFadeOut(this.state);
 
@@ -1171,5 +1193,6 @@ class Cinematics extends Base {
     // state.cameraRight.isExternallyControlled = false;
 
     // TODO - remove phone -  it ruins the mood ...
+
   }
 }
