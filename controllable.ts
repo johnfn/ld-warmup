@@ -365,6 +365,10 @@ class Controllable extends Entity {
           this.activeDialogCo = this.startCoroutine(state, cinematics.ohno());
         }
 
+        if (properties.name === "madeit") {
+          cinematics.madeit = true;
+        }
+
         if (properties.dialog) {
           this.activeDialogCo = this.startCoroutine(state, cinematics.talk(this, properties.dialog));
         }

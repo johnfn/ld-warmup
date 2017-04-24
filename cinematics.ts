@@ -10,6 +10,7 @@ type CurrentActiveEvent = "None"
                         | "You Use Phone"
                         | "We Talk"
                         | "Chuck That Planet II"
+                        | "Made It"
                         ;
 
 class Cinematics extends Base {
@@ -27,6 +28,8 @@ class Cinematics extends Base {
   canSwitchToOtherGuy = false;
 
   resetToYouWakeUp = true;
+
+  madeit = false;
 
   stragglingTexts: TextEntity[] = [];
 
@@ -93,6 +96,11 @@ class Cinematics extends Base {
         this.canSwitchToOtherGuy = true;
         this.allowFlinging = true;
         this.resetToYouWakeUp = false;
+
+        const startingObject = state.tilemap.objectLayers["ObjLayer"].objects[1];
+
+        state.playerLeft.x = startingObject.x;
+        state.playerLeft.y = startingObject.y;
       }
     });
   }
@@ -160,8 +168,6 @@ class Cinematics extends Base {
         break;
 
         case "You Wake Up":
-          debugger;
-
           this.currentOrLastEvent = "You Use Phone";
           this.activeCoroutine = this.startCoroutine(state, this.youUsePhone());
         break;
@@ -175,6 +181,13 @@ class Cinematics extends Base {
 
         case "We Talk":
           this.currentOrLastEvent = "Chuck That Planet II";
+        break;
+
+        case "Chuck That Planet II":
+          if (this.madeit) {
+            this.currentOrLastEvent = "Made It";
+            this.activeCoroutine = this.startCoroutine(state, this.madeIt());
+          }
         break;
       }
 
@@ -601,6 +614,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "Don't worry about it.");
     yield* this.talk(you, "I thought you said you couldn't hear me.");
     yield* this.talk(prof, "I can't. I'm just guessing what you're saying.");
+    yield* this.talk(prof, "You're very predictable.");
     yield* this.talk(prof, "Anyways, it's in the center of the planet.");
     yield* this.talk(prof, "I'll direct you there by phone.");
 
@@ -818,10 +832,12 @@ class Cinematics extends Base {
       "!HELLO CLIFF FACE!",
       "!HEAVENS TO BETSY!",
       "!DEAR JOSEPHINE!",
+      "!HALLOWED BE THY NAME!",
       "!HOLY SMOKES!",
       "!EXCALIBUR'S MIGHT!",
       "!THOR'S HAMMER!",
       "!ODIN'S ANVIL!",
+      "!PLUTO'S NOT A PLANET!",
     ]);
 
     yield* this.talk(you, randomExclamation, { waitFrames: 30 });
@@ -881,5 +897,13 @@ class Cinematics extends Base {
     this.canSwitchToOtherGuy = true;
 
     this.finishCinematic();
+  }
+
+  *madeIt() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.talk(you, "Phew!");
+    yield* this.talk(you, "I made it!");
+    yield* this.talk(you, "Is this thing on?");
   }
 }

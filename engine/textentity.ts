@@ -56,6 +56,9 @@ class TextEntity extends Base {
 
     parent.addChild(this.textObject);
 
+    (this.textObject as any).z = Depths.Text;
+    Util.SortDepths(this.textObject.parent);
+
     this.wordWrapWidth = style.default.wordWrapWidth;
   }
 
