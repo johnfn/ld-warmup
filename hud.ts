@@ -25,6 +25,9 @@ class HUD extends Entity {
     this.dlgText.y = 40;
   }
 
+  lastActionText = "";
+  lastDlgText = "";
+
   update(state: StateClass) {
     const { cinematics } = state;
     const activePlayer = state.getActivePlayer();
@@ -71,5 +74,16 @@ class HUD extends Entity {
     } else {
       this.dlgText.text = "";
     }
+
+    if (text !== this.lastActionText) {
+      state.startCoroutine(this.actionText.flicker());
+    }
+
+    if (this.dlgText.text !== this.lastDlgText) {
+      state.startCoroutine(this.dlgText.flicker());
+    }
+
+    this.lastActionText = text;
+    this.lastDlgText    = this.dlgText.text;
   }
 }

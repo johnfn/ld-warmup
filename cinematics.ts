@@ -460,6 +460,8 @@ class Cinematics extends Base {
   *bubble(target: Controllable, type: BubbleType) {
     const b = new Bubble(this.state, target, type);
 
+    this.zForDialog = true;
+
     for (let i = 0; i < 45; i++) {
       yield "next";
 
@@ -467,6 +469,8 @@ class Cinematics extends Base {
         break;
       }
     }
+
+    this.zForDialog = false;
 
     b.destroy(this.state);
   }

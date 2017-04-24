@@ -14,6 +14,8 @@ class TextEntity extends Base {
 
   public set text(value: string) { this.textObject.text = value; }
 
+  public get text(): string { return this.textObject.text; }
+
   style: TextStyleSet;
 
   wordWrapWidth: number;
@@ -61,5 +63,17 @@ class TextEntity extends Base {
 
   update(state: StateClass) {
     super.update(state);
+  }
+
+  *flicker() {
+    for (let i = 0; i < 3; i++) {
+      this.textObject.visible = false;
+
+      yield { frames: 5 };
+
+      this.textObject.visible = true;
+
+      yield { frames: 5 };
+    }
   }
 }
