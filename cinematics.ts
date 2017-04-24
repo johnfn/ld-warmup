@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Professor Tosses a Few Times";
+  currentOrLastEvent: CurrentActiveEvent = "None";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -171,7 +171,7 @@ class Cinematics extends Base {
   *textFollowPlayer(text: TextEntity, following: Entity, cam: Camera, stayOnScreen = true) {
     while (text.exists) {
       text.x = following.x + 10;
-      text.y = following.y - 16;
+      text.y = following.y - 64;
 
       // console.log(cam.right);
 
