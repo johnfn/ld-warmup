@@ -1,4 +1,6 @@
 class Depths {
+  public static Fade = 10000;
+
   public static Text = 300;
 
   public static Particles = 200;
@@ -9,6 +11,8 @@ class Depths {
 
   public static Player = 100;
   public static Prof = 100;
+
+  public static Phone = 80;
 
   public static Walls = 51; // Layer
   public static MidGround = 50; // Layer

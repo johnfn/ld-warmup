@@ -20,8 +20,6 @@ class CameraRight extends Camera {
       }
     }
 
-    console.log(this.right)
-
     super.update(state);
   }
 }

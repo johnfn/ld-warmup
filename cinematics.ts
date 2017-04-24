@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Learn About Tiny World";
+  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -265,6 +265,8 @@ class Cinematics extends Base {
         who.jump();
       }
 
+      who.facing = Math.sign(dx);
+
       yield "next";
     }
   }
@@ -360,7 +362,7 @@ class Cinematics extends Base {
     yield* this.bubble(prof, ":D");
     yield* this.talk(you, "...");
     yield* this.talk(prof, "Oh, and try not to get too close. The world may be small, but I assure you the gravity is VERY normal.");
-    yield* this.talk(prof, "I've got my heavy boots on, so I'm not affected, but you have to watch out!");
+    yield* this.talk(prof, "I've got my anti-gravity skateboard, so I'm not affected, but yours is completely normal, so watch out!");
     yield* this.talk(prof, "It'll literally suck you in!");
     yield* this.talk(prof, "...");
     yield* this.talk(prof, "It's kind of like a metaphor.");
@@ -387,11 +389,6 @@ class Cinematics extends Base {
     while (Util.Dist(you, TinyWorld.Instance) > 40) {
       yield "next";
     }
-
-    this.putPlayerOnTinyWorld(you);
-
-    you.sprite.scale.x = 1;
-    you.sprite.scale.y = 1;
 
     this.finishCinematic();
   }
@@ -441,9 +438,14 @@ class Cinematics extends Base {
   }
 
   *professorIsHorrified() {
-    const { playerRightProf: prof } = state;
+    const { playerRightProf: prof, playerLeft: you } = state;
 
-    // yield* this.leftFade.doFadeOut(this.state);
+    yield* this.leftFade.doFadeOut(this.state);
+
+    this.putPlayerOnTinyWorld(you);
+
+    you.sprite.scale.x = 1;
+    you.sprite.scale.y = 1;
 
     Controllable.SwitchActivePlayer(state);
     state.rightCamActive = true;
@@ -459,7 +461,7 @@ class Cinematics extends Base {
     yield* this.bubble(prof, "sweat");
     yield* this.talk(prof, "And now he's probably tiny too.");
     yield* this.talk(prof, "Well, there's only one thing to do. First, I better go pick up that tiny world (with X).");
-    yield* this.talk(prof, "I'm not affected by the weird gravity. I've got these heavy boots on.");
+    yield* this.talk(prof, "I'm not affected by the weird gravity. I've got this anti-gravity skateboard.");
     yield* this.talk(prof, "Then I'll need to go find my de-minimizer. It's the only way to get him back to normal size.");
     yield* this.talk(prof, "I tossed that thing out. I thought it was a waste of space.");
     yield* this.bubble(prof, ":|");
@@ -507,6 +509,8 @@ class Cinematics extends Base {
     state.rightCamActive = true;
     state.leftCamActive  = true;
 
+    yield* this.leftFade.doFadeIn(this.state);
+
     yield* this.talk(you, "Zzzzzzzzzzzzzzzzzzz...", { waitFrames: 30 }, true);
     yield* this.talk(you, "Pass the sugar...", { waitFrames: 30 }, true);
     yield* this.talk(you, "zzzzzzzzzzzz...", { waitFrames: 30 }, true);
@@ -526,7 +530,7 @@ class Cinematics extends Base {
 
     yield* this.walkTo(you, Rect.FromPoint(middle.add(new Point({ x: -300, y: 0 })), 100), 5);
 
-    yield* this.talk(prof, "Whats the matter? Forget how to control me? Arrow keys. (idiot).", { waitFrames: 30 });
+    yield* this.talk(prof, "Whats the matter? Forget how to control me? Arrow keys. (idiot).");
 
     yield* this.bubble(you, ":|");
     yield* this.bubble(you, "sweat");
