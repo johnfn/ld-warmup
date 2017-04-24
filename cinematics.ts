@@ -940,9 +940,104 @@ class Cinematics extends Base {
   *fireCannon() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
-    yield* this.talk(you, "...");
-    yield* this.bubble(you, "!");
+    state.cameraLeft.isExternallyControlled = true;
+    state.cameraRight.isExternallyControlled = true;
 
-    yield* this.talk(you, "FIRE!");
+    if (false) {
+      yield* this.talk(you, "...");
+      yield* this.bubble(you, "!");
+
+      yield* this.talk(you, "FIRE!");
+
+      const white = new Entity(this.state, {
+        texture: "white",
+        depth: Depths.Fade,
+      });
+
+      white.x = Cannon.Instance.x + 32;
+      white.y = Cannon.Instance.y + 16;
+
+      white.sprite.anchor.x = 0;
+      white.sprite.anchor.y = 0.5;
+
+      white.sprite.width  = 0;
+      white.sprite.height = 8;
+
+      const origCenterX = this.state.cameraLeft.centerX;
+      const origCenterY = this.state.cameraLeft.centerY;
+
+      this.startCoroutine(this.state, this.talk(you, "weird... it just looks... white?"));
+
+      for (let i = 0; i < 50; i++) {
+        white.sprite.width += 4;
+
+        yield "next"
+      }
+
+      this.state.cameraLeft.shake = { duration: 100, strength: 5 };
+
+      // 200
+
+      for (let i = 0; i < 50; i++) {
+        white.sprite.width += 2;
+        white.sprite.height += 1;
+
+        yield "next"
+      }
+
+      yield* this.bubble(you, ":|");
+
+      this.state.cameraLeft.shake = { duration: 100, strength: 10 };
+
+      // 300 (58 high)
+
+      for (let i = 0; i < 50; i++) {
+        white.sprite.width += 2;
+
+        yield "next"
+      }
+
+      yield* this.bubble(you, "!");
+
+      this.state.cameraLeft.shake = { duration: 100, strength: 20 };
+
+      // 400 (58 high)
+
+      for (let i = 0; i < 100; i++) {
+        white.sprite.width += 2;
+
+        yield "next"
+      }
+
+      yield* this.talk(you, "uhh...");
+
+      this.state.cameraLeft.centerX = origCenterX;
+      this.state.cameraLeft.centerY = origCenterY;
+
+      this.state.cameraLeft.shake = { duration: 100, strength: 20 };
+
+      for (let i = 0; i < 100; i++) {
+        white.sprite.x += Math.random() * 3 - 1.5;
+
+        state.wall.ontop.sprite.alpha = (100 - i) / 100;
+
+        yield "next"
+      }
+
+      this.state.cameraLeft.centerX = origCenterX;
+      this.state.cameraLeft.centerY = origCenterY;
+
+      for (let i = 100; i > 0; i--) {
+        white.sprite.alpha = i / 100;
+
+        yield "next";
+      }
+
+      yield* this.talk(you, "weird...");
+      yield* this.talk(you, "what if i just...");
+      yield* this.talk(you, "sort of...");
+    } else {
+      state.wall.ontop.sprite.alpha = 0;
+    }
   }
 }

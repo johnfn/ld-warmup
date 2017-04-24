@@ -1,4 +1,5 @@
 PIXI.loader.add("black", "assets/black.png");
+PIXI.loader.add("white", "assets/white.png");
 
 class FadeOutIn extends Entity {
   constructor(state: StateClass, side: "left" | "right") {
