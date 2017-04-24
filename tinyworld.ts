@@ -5,7 +5,7 @@ class TinyWorld extends Entity {
   vy = 0;
   collideable = true;
 
-  static InteractionDistance = 100;
+  static InteractionDistance = 50;
   static Instance: TinyWorld;
 
   isBeingCarried = false;
