@@ -133,7 +133,7 @@ class Controllable extends Entity {
     }
 
     if (state.activePlayerId === this.id) {
-      if (keyboard.justDown.X) {
+      if (keyboard.justDown.X && !cinematics.FINAL) {
         const hadInteraction = this.checkForInteractions(state);
 
         if (hadInteraction) {

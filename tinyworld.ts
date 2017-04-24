@@ -66,7 +66,7 @@ class TinyWorld extends Entity {
       this.vx = -this.vx * 0.4;
     }
 
-    if (hit && Math.abs(this.vx) + Math.abs(this.vy) > 3) {
+    if (hit && Math.abs(this.vx) + Math.abs(this.vy) > 3 && !state.cinematics.FINAL) {
       const power = Math.abs(this.vx) + Math.abs(this.vy);
 
       // activeCam.shake = { duration: 10, strength: 10 };

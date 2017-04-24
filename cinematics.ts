@@ -1033,50 +1033,139 @@ class Cinematics extends Base {
       yield* this.talk(you, "weird...");
       yield* this.talk(you, "what if i just...");
       yield* this.talk(you, "sort of...");
-    } else {
-      state.wall.ontop.sprite.alpha = 0;
+    }
 
-      const dummy = new Entity(state, {
-        texture: "you",
-        depth: Depths.Fade,
-      });
+    state.wall.ontop.sprite.alpha = 0;
 
-      while (true) {
-        yield "next";
+    this.FINAL = true;
 
-        const ofsX = (you.x - state.cameraLeft.x - state.width);
-        const ofsY = (you.y - state.cameraLeft.y);
+    const dummy = new Entity(state, {
+      texture: "you",
+      depth: Depths.Fade,
+    });
 
-        dummy.x = ofsX + state.cameraRight.x;
-        dummy.y = ofsY + state.cameraRight.y;
+    while (true) {
+      yield "next";
 
-        dummy.sprite.scale = you.sprite.scale;
-        dummy.sprite.pivot = you.sprite.pivot;
+      const ofsX = (you.x - state.cameraLeft.x - state.width);
+      const ofsY = (you.y - state.cameraLeft.y);
 
-        if (ofsX > 0) {
-          you.x = dummy.x;
-          you.y = dummy.y;
+      dummy.x = ofsX + state.cameraRight.x;
+      dummy.y = ofsY + state.cameraRight.y;
 
-          you.careAboutSucking = false;
+      dummy.sprite.scale = you.sprite.scale;
+      dummy.sprite.pivot = you.sprite.pivot;
 
-          dummy.destroy(this.state);
+      if (ofsX > 0) {
+        you.x = dummy.x;
+        you.y = dummy.y;
 
-          state.cameraRight.target = you;
+        you.careAboutSucking = false;
 
-          // yield* this.leftFade.doFadeOut(this.state);
+        dummy.destroy(this.state);
 
-          break;
-        }
+        state.cameraRight.target = you;
+
+        // yield* this.leftFade.doFadeOut(this.state);
+
+        break;
+      }
+    }
+
+    state.cameraLeft.dontmovepls = true;
+
+    while (true) {
+      if (state.keyboard.justDown.X && Util.Dist(you, prof) <= 100) {
+        break;
       }
 
-      this.FINAL = true;
-
-      state.cameraLeft.dontmovepls = true;
-
-      // state.cameraLeft.isExternallyControlled = false;
-      // state.cameraRight.isExternallyControlled = false;
-
-      // TODO - remove phone -  it ruins the mood ...
+      yield "next";
     }
+
+    yield* this.talk(you, "What in gods name just happened.");
+    yield* this.talk(prof, "Never speak of this again.");
+    yield* this.talk(you, "...");
+    yield* this.talk(prof, "...");
+    yield* this.talk(you, "...");
+    yield* this.talk(prof, "...");
+    yield* this.talk(you, "...");
+    yield* this.talk(prof, "Man I should really throw this out. It gives me nothing but trouble.");
+    yield* this.talk(prof, "Better do it quick.");
+
+    const twdummy = new Entity(state, {
+      texture: "tinyworld",
+      depth: Depths.Fade,
+    });
+
+    TinyWorld.Instance.isBeingCarried = true;
+    TinyWorld.Instance.carrier = prof;
+
+    this.allowFlinging = false;
+
+    TinyWorld.Instance.vx = -15;
+    TinyWorld.Instance.vy = 5;
+    TinyWorld.Instance.y -= 20;
+
+    TinyWorld.Instance.carrier = null;
+    TinyWorld.Instance.isBeingCarried = false;
+
+    for (let i = 0; i < 30; i++) {
+      yield "next";
+
+      twdummy.x = (TinyWorld.Instance.x - state.cameraRight.x + state.width) + state.cameraLeft.x;
+      twdummy.y = (TinyWorld.Instance.y - state.cameraRight.y) + state.cameraLeft.y;
+    }
+
+    let i = 0;
+
+    // FORCE
+
+    if (TinyWorld.Instance.x - state.cameraRight.x > 0) {
+      yield* this.talk(prof, "Stupid thing. *kick*");
+    }
+
+    while (TinyWorld.Instance.x - state.cameraRight.x > 0) {
+      ++i;
+
+      TinyWorld.Instance.vy -= i / 4;
+      TinyWorld.Instance.vx -= i;
+
+      for (let j = 0; j < 2; j++) {
+        yield "next";
+
+        twdummy.x = (TinyWorld.Instance.x - state.cameraRight.x + state.width) + state.cameraLeft.x;
+        twdummy.y = (TinyWorld.Instance.y - state.cameraRight.y) + state.cameraLeft.y;
+      }
+    }
+
+    TinyWorld.Instance.x = twdummy.x;
+    TinyWorld.Instance.y = twdummy.y;
+
+    twdummy.visible = false;
+
+    yield* this.talk(you, "You just...");
+    yield* this.talk(you, "tossed...");
+    yield* this.talk(you, "the world...");
+
+    this.state.cameraRight.shake = { duration: 10, strength: 10 };
+
+    yield* this.talk(you, "!WHAT IN GODS NAME JUST HAPPENED");
+
+    yield* this.talk(prof, "Yeah don't worry about it. Everything's fine.");
+    yield* this.talk(prof, "Saved you from being really tiny forever. Only made a few rifts in space time. All in all, a good Ludum Dare.");
+    yield* this.talk(prof, "I'm going to go to sleep. Along with some other Ludum Dare game makers I could name.");
+
+    yield* this.leftFade.doFadeOut(this.state);
+
+    yield* this.talk(prof, "See you in another 4 months!");
+    yield* this.talk(prof, "Or longer!");
+    yield* this.talk(prof, "But probably not!");
+
+    yield* this.rightFade.doFadeOut(this.state);
+
+    // state.cameraLeft.isExternallyControlled = false;
+    // state.cameraRight.isExternallyControlled = false;
+
+    // TODO - remove phone -  it ruins the mood ...
   }
 }
