@@ -109,10 +109,10 @@ class Controllable extends Entity {
       } else if (keyboard.down.Right) {
         this.facing = 1;
       }
+    }
 
-      if (Math.sign(this.facing) !== Math.sign(this.sprite.scale.x)) {
-        this.sprite.scale.x *= -1;
-      }
+    if (Math.sign(this.facing) !== Math.sign(this.sprite.scale.x)) {
+      this.sprite.scale.x *= -1;
     }
 
     // you dont move when you're tossing the world.
