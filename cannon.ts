@@ -4,6 +4,7 @@ class Cannon extends Entity {
   collideable = true;
 
   static Instance: Cannon;
+  static fired = false;
 
   constructor(state: StateClass) {
     super(state, {

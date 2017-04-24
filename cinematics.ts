@@ -936,4 +936,13 @@ class Cinematics extends Base {
 
     this.finishCinematic();
   }
+
+  *fireCannon() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.talk(you, "...");
+    yield* this.bubble(you, "!");
+
+    yield* this.talk(you, "FIRE!");
+  }
 }

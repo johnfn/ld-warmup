@@ -202,6 +202,20 @@ class Controllable extends Entity {
       // switch
     }
 
+    if (Util.Dist(this, Cannon.Instance) < 100 && !Cannon.fired) {
+      if (this.x > Cannon.Instance.x) {
+        this.startCoroutine(state, cinematics.talk(this, "I need to be on the left side of the cannon..."));
+      } else {
+        if (this.facing == 1) {
+          this.startCoroutine(state, cinematics.fireCannon());
+
+          Cannon.fired = true;
+        } else {
+          this.startCoroutine(state, cinematics.talk(this, "I need to face the other way..."));
+        }
+      }
+    }
+
     return false;
   }
 
