@@ -18,6 +18,8 @@ class Cinematics extends Base {
   rightFade: FadeOutIn;
   state: StateClass;
 
+  isOnTinyWorld = false;
+
   constructor(state: StateClass) {
     super(state);
 
@@ -74,6 +76,8 @@ class Cinematics extends Base {
 
     player.x = pos.x;
     player.y = pos.y;
+
+    this.isOnTinyWorld = true;
   }
 
   update(state: StateClass): void {

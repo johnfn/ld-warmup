@@ -16,4 +16,5 @@ class Depths {
 
   public static Walls = 51; // Layer
   public static MidGround = 50; // Layer
+  public static OtherMidGround = 50; // Layer
 }

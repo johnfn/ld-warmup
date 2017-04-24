@@ -22,6 +22,7 @@ class StateClass {
     Walls: true,
     HouseFront: true,
     MidGround: true,
+    OtherMidGround: true,
   }, {
     // Regions
 
@@ -165,9 +166,6 @@ class StateClass {
     this.cinematics = new Cinematics(this);
 
     this.particles = new AtmosphericParticles(this);
-
-    const se = new SpritedEnemy(this);
-    se.x = 400;
 
     // new PauseScreen(this);
 

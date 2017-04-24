@@ -8,8 +8,6 @@ class BGSprite {
     this.sprite = new PIXI.Sprite(PIXI.Texture.fromCanvas(canvas));
     this.sprite.scale = new PIXI.Point(this.scale, this.scale);
 
-    state.root.addChildAt(this.sprite, 0);
-
     this.dimmer = new Entity(state, {
       width: this.sprite.width,
       height: this.sprite.height,
@@ -31,5 +29,13 @@ class BGSprite {
 
     this.sprite.x = - worldX * this.scale + width  / 2;
     this.sprite.y = - worldY * this.scale + height / 2;
+
+    if (state.cinematics.isOnTinyWorld && !this.sprite.parent) {
+      state.root.addChildAt(this.sprite, 0);
+    }
+
+    if (!state.cinematics.isOnTinyWorld && this.sprite.parent) {
+      this.sprite.parent.removeChild(this.sprite);
+    }
   }
 }
