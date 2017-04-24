@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
+  currentOrLastEvent: CurrentActiveEvent = "Professor Fiddles";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -476,7 +476,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "Phew! Just like ... ergh ... nothing!");
     yield* this.talk(prof, "I might not be able to jump while carrying this thing. It's pretty heavy!");
     yield* this.bubble(prof, "sweat");
-    yield* this.talk(prof, "Alright, so I can toss this thing around. Hold X, then choose a direction with WASD.");
+    yield* this.talk(prof, "Alright, so I can toss this thing around. Hold X, then choose a direction with the arrow keys.");
     yield* this.talk(prof, "Finally, release X and let it go flying!");
     yield* this.bubble(prof, ":|");
     yield* this.talk(prof, "I mean... TRY to be careful. It is an entire tiny world, after all.");
@@ -537,6 +537,7 @@ class Cinematics extends Base {
 
     yield* this.talk(you, "Oh man", { waitFrames: 30 }, true);
     yield* this.talk(you, "Oh this is bad", { waitFrames: 30 }, true);
+    yield* this.talk(you, "This is really really bad", { waitFrames: 30 }, true);
     yield* this.talk(you, "What do I do what do I do", { waitFrames: 30 }, true);
     yield* this.talk(you, "What did the professor say to do at a time like this", { waitFrames: 30 }, true);
 

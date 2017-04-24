@@ -113,7 +113,7 @@ class StateClass {
   }
 
   constructor(data: TiledJSON) {
-    const bgColor = 0x276bab;
+    const bgColor = 0x113355;
 
     this.rendererBig = PIXI.autoDetectRenderer(this.width, this.height, {
       antialias: false,

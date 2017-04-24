@@ -303,6 +303,8 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
       const container = new PIXI.Container();
 
+      (container as any).z = (Depths as any)[layer.name] || 0 ;
+
       this.spriteLayers[layer.name] = container;
       stage.addChild(container);
     }
