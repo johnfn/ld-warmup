@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -241,10 +241,14 @@ class Cinematics extends Base {
 
       let textToRender = text.slice(0, ++charactersVisible);
 
-      if (who === prof) {
-        textToRender = `<prof>${ textToRender }</prof>`;
-      } else if (who === you) {
-        textToRender = `<you>${ textToRender }</you>`;
+      if (text[0] === "!") {
+          textToRender = `<large>${ textToRender.slice(1) }</large>`;
+      } else {
+        if (who === prof) {
+          textToRender = `<prof>${ textToRender }</prof>`;
+        } else if (who === you) {
+          textToRender = `<you>${ textToRender }</you>`;
+        }
       }
 
       textEntity.text = textToRender;
@@ -646,6 +650,8 @@ class Cinematics extends Base {
         }
       }
 
+      you.facing = 0;
+
       this.allowFlinging = true;
 
       this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", { waitFrames: 30 }, false));
@@ -698,6 +704,8 @@ class Cinematics extends Base {
         while (!res.done) {
           yield "next";
           res = talker.next();
+          yield "next";
+          yield "next";
 
           if (this.phoneInterrupted) {
             this.phoneInterrupted = false;
@@ -730,18 +738,20 @@ class Cinematics extends Base {
     yield* this.bubble(you, "!");
 
     const randomExclamation = Util.RandElement([
-      "AAGHHHH!!!!",
-      "AAAAAAAAAAAAH!!!!",
-      "HOLY CRAP!",
-      "GHKLJFHGKJHA!",
-      "GADZOOKS!",
-      "SWEET MOTHER IN HEAVEN!",
-      "PRAISE JESUS!",
-      "BAZOOPER!",
-      "HELLO CLIFF FACE!",
-      "HEAVENS TO BETSY!",
-      "DEAR JOSEPHINE!",
-      "HOLY SMOKES!",
+      "!AAGHHHH!!!!",
+      "!HOLY CRAP!",
+      "!GHKLJFHGKJHA!",
+      "!GADZOOKS!",
+      "!SWEET MOTHER IN HEAVEN!",
+      "!PRAISE JESUS!",
+      "!BAZOOPER!",
+      "!HELLO CLIFF FACE!",
+      "!HEAVENS TO BETSY!",
+      "!DEAR JOSEPHINE!",
+      "!HOLY SMOKES!",
+      "!EXCALIBUR'S MIGHT!",
+      "!THOR'S HAMMER!",
+      "!ODIN'S ANVIL!",
     ]);
 
     yield* this.talk(you, randomExclamation, { waitFrames: 30 });

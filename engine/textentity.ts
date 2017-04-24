@@ -38,6 +38,12 @@ class TextEntity extends Base {
         fill: "#aaff88",
       },
 
+      large: {
+        fontSize: "48px",
+        fill: "#aaff88",
+        stroke: "black",
+      },
+
       prof: {
         fill: "#aaccff",
       },
