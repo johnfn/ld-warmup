@@ -37,7 +37,7 @@ class TextEntity extends Base {
       },
 
       prof: {
-        fill: "#44aaee",
+        fill: "#88bbee",
       },
     }
   } = {}) {

@@ -112,9 +112,12 @@ class StateClass {
   }
 
   constructor(data: TiledJSON) {
+    const bgColor = 0x2542b8;
+
     this.rendererBig = PIXI.autoDetectRenderer(this.width, this.height, {
       antialias: false,
       transparent: false,
+      backgroundColor: bgColor,
       resolution: 1
     });
     document.body.appendChild(this.rendererBig.view);
@@ -122,12 +125,14 @@ class StateClass {
     this.rendererBigNoWorld = PIXI.autoDetectRenderer(this.width, this.height, {
       antialias: false,
       transparent: false,
+      backgroundColor: bgColor,
       resolution: 1
     });
 
     this.rendererTiny = PIXI.autoDetectRenderer(this.width, this.height, {
       antialias: false,
       transparent: false,
+      backgroundColor: bgColor,
       resolution: 1
     });
     document.body.appendChild(this.rendererTiny.view);
