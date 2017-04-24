@@ -281,7 +281,7 @@ class Controllable extends Entity {
   }
 
   throwWorld(state: StateClass): void {
-    const { keyboard } = state;
+    const { keyboard, playerLeft, cinematics } = state;
     const speed = this.tossSpeed;
 
     if (!keyboard.down.X) {
@@ -310,6 +310,19 @@ class Controllable extends Entity {
 
       TinyWorld.Instance.carrier = null;
       TinyWorld.Instance.isBeingCarried = false;
+
+      // do a fling
+
+      if (cinematics.allowFlinging) {
+        playerLeft.vx = -vx * 3;
+        playerLeft.vy =  vy * 1.3;
+
+        state.cameraLeft.shake = { duration: 20, strength: 5 };
+
+        cinematics.interruptPhoneCall();
+
+        this.startCoroutine(state, cinematics.gotTossedLel());
+      }
 
       this.cantWalk = true;
     }

@@ -17,6 +17,7 @@ class Cinematics extends Base {
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
   state: StateClass;
+  allowFlinging = false;
 
   zForDialog = false;
 
@@ -154,13 +155,17 @@ class Cinematics extends Base {
       // worth thinking about how to do this coroutine stuff cleaner post-compo.
 
       if (this.activeCoroutine !== -1) {
-        for (const x of this.stragglingTexts) {
-          x.destroy();
-        }
-
-        this.stragglingTexts = [];
+        this.removeStragglingTexts();
       }
     }
+  }
+
+  removeStragglingTexts(): void {
+    for (const x of this.stragglingTexts) {
+      x.destroy();
+    }
+
+    this.stragglingTexts = [];
   }
 
   finishCinematic(): void {
@@ -599,8 +604,21 @@ class Cinematics extends Base {
     yield* this.talk(you, "I don't know his number...", { waitFrames: 30 }, true);
     yield* this.bubble(you, ":|");
 
+    yield* this.bubble(you, ":D");
+    yield* this.talk(you, "I'll just try random ones.", { waitFrames: 30 }, true);
+
+    yield* this.walkTo(you, Rect.FromPoint(closestPhoneYou, 100).translate({ x: 0, y: -100 }));
+
     this.finishCinematic();
   }
+
+  phoneIndex = 0;
+  phoneInterrupted = false;
+
+  // my masterpiece
+
+  // i had to rewrite it w/o yield stars because i dont have a 'stop the coroutine for gods sake'
+  // abstraction loma
 
   *youUsePhone() {
     const { playerRightProf: prof, playerLeft: you } = state;
@@ -609,20 +627,50 @@ class Cinematics extends Base {
     let closestPhoneYou  = Util.minBy(phones, p => Util.Dist(p, you))!;
     let closestPhoneProf = Util.minBy(phones, p => Util.Dist(p, prof))!;
 
-    yield* this.bubble(you, ":D");
-    yield* this.talk(you, "I'll just try random ones.", { waitFrames: 30 }, true);
-
-    yield* this.walkTo(you, Rect.FromPoint(closestPhoneYou, 100).translate({ x: 0, y: -100 }));
-
-    let i = 0;
-
     while (true) {
+      {
+        const walker = this.walkTo(you, Rect.FromPoint(closestPhoneYou, 100).translate({ x: 0, y: -100 }));
+        let res = walker.next();
+        while (!res.done) {
+          yield "next";
+          res = walker.next();
+
+          if (this.phoneInterrupted) {
+            this.phoneInterrupted = false;
+            return;
+          }
+        }
+      }
+
+      this.allowFlinging = true;
+
       this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", { waitFrames: 30 }, false));
       this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", { waitFrames: 30 }, false));
 
-      yield { frames: 90 };
+      for (let i = 0; i < 90; i++) {
+        yield "next";
 
-      yield* this.talk(you, "Hello..?", { waitFrames: 30 });
+        if (this.phoneInterrupted) {
+          this.phoneInterrupted = false;
+          this.removeStragglingTexts();
+          return;
+        }
+      }
+
+      {
+        const talker = this.talk(you, "Hello..?", { waitFrames: 30 });
+        let res = talker.next();
+        while (!res.done) {
+          yield "next";
+          res = talker.next();
+
+          if (this.phoneInterrupted) {
+            this.phoneInterrupted = false;
+            this.removeStragglingTexts();
+            return;
+          }
+        }
+      }
 
       const msg = [
         "No one there...",
@@ -635,14 +683,69 @@ class Cinematics extends Base {
         "It's a dog barking.",
         "Dial tone.",
         "Oops, I forgot to enter a number...",
-        "Yes, 911? I'd like to report a crime. Uh, it's kind of hard to explain actually you see I got sucked into a very small uh world, and now I'm stuck here, and so I would like you to send a very small police car to come and... huh, they hung up on me.",
+        "Yes, 911? I'd like to report a crime. Uh, it's kind of hard to explain actually you see I got sucked into a very small uh world, and now I'm stuck here, and so I would like you to send a very small police car to come and... uhh.. hello?",
       ];
 
-      i = (i + 1) % msg.length;
+      this.phoneIndex = (this.phoneIndex + 1) % msg.length;
 
-      yield* this.talk(you, msg[i], { waitFrames: 30 });
-      yield* this.talk(you, "Let's try again.", { waitFrames: 30 });
+      {
+        const talker = this.talk(you, msg[this.phoneIndex], { waitFrames: 30 });
+        let res = talker.next();
+        while (!res.done) {
+          yield "next";
+          res = talker.next();
+
+          if (this.phoneInterrupted) {
+            this.phoneInterrupted = false;
+            this.removeStragglingTexts();
+            return;
+          }
+        }
+      }
+
+
+      {
+        const talker = this.talk(you, "Let's try again.", { waitFrames: 30 });
+        let res = talker.next();
+        while (!res.done) {
+          yield "next";
+          res = talker.next();
+
+          if (this.phoneInterrupted) {
+            this.phoneInterrupted = false;
+            this.removeStragglingTexts();
+            return;
+          }
+        }
+      }
     }
+  }
+
+  *gotTossedLel() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.bubble(you, "!");
+
+    const randomExclamation = Util.RandElement([
+      "AAGHHHH!!!!",
+      "AAAAAAAAAAAAH!!!!",
+      "HOLY CRAP!",
+      "GHKLJFHGKJHA!"
+    ]);
+
+    yield* this.talk(you, randomExclamation, { waitFrames: 30 });
+
+    if (Math.random() > 0.95) {
+      yield* this.talk(prof, "I wonder if he minds all this tossing?", { waitFrames: 30 });
+      yield* this.talk(prof, "Ehh, probably not.", { waitFrames: 30 });
+    }
+
+    this.activeCoroutine = -1;
+    this.currentOrLastEvent = "You Wake Up";
+  }
+
+  interruptPhoneCall(): void {
+    this.phoneInterrupted = true;
   }
 
   *profYouTalk() {
