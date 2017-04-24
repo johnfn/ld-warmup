@@ -2,12 +2,23 @@ class BGSprite {
   sprite: PIXI.Sprite;
   scale = 8;
 
+  dimmer: Entity;
+
   constructor(state: StateClass, canvas: HTMLCanvasElement) {
     this.sprite = new PIXI.Sprite(PIXI.Texture.fromCanvas(canvas));
-
     this.sprite.scale = new PIXI.Point(this.scale, this.scale);
 
     state.root.addChildAt(this.sprite, 0);
+
+    this.dimmer = new Entity(state, {
+      width: this.sprite.width,
+      height: this.sprite.height,
+      texture: "black",
+      depth: Depths.Fade,
+      parent: this.sprite
+    });
+
+    this.dimmer.sprite.alpha = 0.5;
   }
 
   update(state: StateClass) {
