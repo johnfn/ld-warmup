@@ -63,6 +63,10 @@ class HUD extends Entity {
       }
     }
 
+    if (Util.Dist(activePlayer, Cannon.Instance) < 100) {
+      text = "X to fire cannon!"
+    }
+
     this.actionText.text = text;
 
     // Z icon

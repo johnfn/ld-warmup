@@ -83,7 +83,7 @@ class StateClass {
   root: PIXI.Container;
 
   getActiveCamera(): Camera {
-    if (this.rightCamActive) {
+    if (this.activePlayerId === this.playerRightProf.id) {
       return this.cameraRight;
     } else {
       return this.cameraLeft;
@@ -91,7 +91,7 @@ class StateClass {
   }
 
   getInactiveCamera(): Camera {
-    if (this.rightCamActive) {
+    if (this.activePlayerId === this.playerRightProf.id) {
       return this.cameraLeft;
     } else {
       return this.cameraRight;
@@ -99,10 +99,10 @@ class StateClass {
   }
 
   getActivePlayer(): Controllable {
-    if (this.rightCamActive) {
-      return this.playerRightProf;
-    } else {
+    if (this.activePlayerId === this.playerLeft.id) {
       return this.playerLeft;
+    } else {
+      return this.playerRightProf;
     }
   }
 
