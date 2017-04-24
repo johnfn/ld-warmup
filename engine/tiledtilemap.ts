@@ -266,6 +266,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
         const value = data[idx];
 
         if (value === 0) { continue; } // empty
+        if (value > 200000) { continue; } // tiled bug ?
 
         const x = (idx % width);
         const y = Math.floor(idx / width);
