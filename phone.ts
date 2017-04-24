@@ -1,7 +1,7 @@
 PIXI.loader.add("phone-tex", "assets/phone.png");
 
 class Phone extends Entity {
-  static readonly DistanceAcceptable = 100;
+  static readonly DistanceAcceptable = 50;
 
   collideable = true;
 

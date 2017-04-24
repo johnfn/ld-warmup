@@ -9,10 +9,11 @@ type CurrentActiveEvent = "None"
                         | "You Wake Up"
                         | "You Use Phone"
                         | "We Talk"
+                        | "Chuck That Planet II"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
+  currentOrLastEvent: CurrentActiveEvent = "Chuck That Planet II";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -22,6 +23,10 @@ class Cinematics extends Base {
   zForDialog = false;
 
   isOnTinyWorld = false;
+
+  canSwitchToOtherGuy = false;
+
+  resetToYouWakeUp = true;
 
   stragglingTexts: TextEntity[] = [];
 
@@ -72,6 +77,22 @@ class Cinematics extends Base {
         this.putPlayerOnTinyWorld(state.playerLeft);
 
         this.activeCoroutine = this.startCoroutine(state, this.youUsePhone());
+      }
+
+      if (G.Debug && this.currentOrLastEvent === "Chuck That Planet II") {
+        TinyWorld.Instance.isBeingCarried = true;
+        TinyWorld.Instance.carrier = state.playerRightProf;
+
+        Controllable.SwitchActivePlayer(state);
+
+        state.rightCamActive = true;
+        state.leftCamActive  = true;
+
+        this.putPlayerOnTinyWorld(state.playerLeft);
+
+        this.canSwitchToOtherGuy = true;
+        this.allowFlinging = true;
+        this.resetToYouWakeUp = false;
       }
     });
   }
@@ -126,7 +147,6 @@ class Cinematics extends Base {
 
         case "Professor Explains Tossing":
           this.currentOrLastEvent = "Professor Tosses a Few Times";
-
         break;
 
         case "Professor Tosses a Few Times":
@@ -140,13 +160,21 @@ class Cinematics extends Base {
         break;
 
         case "You Wake Up":
+          debugger;
+
           this.currentOrLastEvent = "You Use Phone";
           this.activeCoroutine = this.startCoroutine(state, this.youUsePhone());
         break;
 
         case "You Use Phone":
+          this.resetToYouWakeUp = false;
+
           this.currentOrLastEvent = "We Talk";
           this.activeCoroutine = this.startCoroutine(state, this.profYouTalk());
+        break;
+
+        case "We Talk":
+          this.currentOrLastEvent = "Chuck That Planet II";
         break;
       }
 
@@ -546,6 +574,40 @@ class Cinematics extends Base {
     yield* this.bubble(prof, "sweat");
   }
 
+  *ohno() {
+    const { playerRightProf: prof, playerLeft: you } = state;
+
+    yield* this.talk(prof, "Oh... oh no.");
+    yield* this.bubble(prof, ":|");
+    yield* this.talk(prof, "Can you hear me?");
+    yield* this.talk(you, "Yeah, what's up?");
+    yield* this.talk(prof, "Well, I can't hear you at all.");
+
+    yield* this.bubble(you, ":|");
+
+    yield* this.talk(prof, "But let me explain.");
+    yield* this.talk(prof, "This... this used to be the de-minimizer.");
+    yield* this.talk(prof, "Now... now it's just a bunch of doodads. (And a few doohickeys.)");
+
+    yield* this.bubble(prof, "sweat");
+    this.startCoroutine(this.state, this.bubble(you, "sweat"));
+
+    yield* this.talk(prof, "...");
+
+    yield* this.talk(prof, "Alright, there's only one thing to do. As a back up plan, I hid a very powerful metafictional laser in the middle of the planet.");
+    yield* this.talk(prof, "It's so dangerous, it may rip the very fabric of our being apart.");
+    yield* this.talk(prof, "But it's going to be our only hope.");
+    yield* this.talk(you, "Metafictional laser? What the heck does that mean?");
+    yield* this.talk(prof, "Don't worry about it.");
+    yield* this.talk(you, "I thought you said you couldn't hear me.");
+    yield* this.talk(prof, "I can't. I'm just guessing what you're saying.");
+    yield* this.talk(prof, "Anyways, it's in the center of the planet.");
+    yield* this.talk(prof, "I'll direct you there by phone.");
+
+    this.finishCinematic();
+  }
+
+
   *youWakeUp() {
     const { playerRightProf: prof, playerLeft: you, cameraLeft } = state;
 
@@ -771,8 +833,10 @@ class Cinematics extends Base {
       yield* this.talk(prof, "Ehh, probably not.", { waitFrames: 30 });
     }
 
-    this.activeCoroutine = -1;
-    this.currentOrLastEvent = "You Wake Up";
+    if (this.resetToYouWakeUp) {
+      this.activeCoroutine = -1;
+      this.currentOrLastEvent = "You Wake Up";
+    }
 
     this.lock = false;
   }
@@ -800,7 +864,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "[looks at camera dramatically]");
     yield* this.talk(you, "Could you stop doing that please.");
     yield* this.talk(prof, "How could you tell?");
-    yield* this.talk(you, "Bro, your massive face is basically the only thing I can see right now.");
+    yield* this.talk(you, "A particularly good guess.");
     yield* this.talk(prof, "Uergh.. anyway... ");
 
     yield* this.talk(you, "And like... there are a lot of earthquakes here.");
@@ -812,6 +876,9 @@ class Cinematics extends Base {
     yield* this.bubble(prof, "!");
     yield* this.talk(prof, "Here's the plan. I'll go look for the de-minimizer. If I need you to do anything, I'll call you up.");
     yield* this.talk(prof, "Fortunately, along with all my spike traps, I also threw away a ton of phones, so it should be pretty easy to talk!.");
+    yield* this.talk(prof, "So yeah. Let's keep going. And whenever you want to switch to being the other guy (whatever that means), press X at a phone!");
+
+    this.canSwitchToOtherGuy = true;
 
     this.finishCinematic();
   }

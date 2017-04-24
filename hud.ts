@@ -56,7 +56,11 @@ class HUD extends Entity {
     const closestPhone = Util.minBy(phones, p => Util.Dist(p, activePlayer))!;
 
     if (Util.Dist(activePlayer, closestPhone) < 200) {
-      text = "X to use phone!"
+      if (cinematics.canSwitchToOtherGuy) {
+        text = "X to switch!"
+      } else {
+        text = "X to use phone!"
+      }
     }
 
     this.actionText.text = text;

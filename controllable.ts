@@ -85,11 +85,6 @@ class Controllable extends Entity {
         this.vy = 0;
       }
 
-      if (keyboard.justDown.C) {
-        keyboard.clear("C");
-
-        Controllable.SwitchActivePlayer(state);
-      }
     }
 
     this.vy += G.Gravity;
@@ -190,6 +185,14 @@ class Controllable extends Entity {
     let closestPhone  = Util.minBy(phones, p => Util.Dist(p, this))!;
 
     if (Util.Dist(closestPhone, this) < Phone.DistanceAcceptable) {
+      if (cinematics.canSwitchToOtherGuy) {
+        state.keyboard.clear("X");
+
+        Controllable.SwitchActivePlayer(state);
+
+        return true;
+      }
+
       if (cinematics.currentOrLastEvent === "You Use Phone") {
         cinematics.finishCinematic();
 
@@ -356,6 +359,10 @@ class Controllable extends Entity {
 
         if (properties.name === "spikeirony") {
           this.activeDialogCo = this.startCoroutine(state, cinematics.spikeIrony());
+        }
+
+        if (properties.name === "ohno") {
+          this.activeDialogCo = this.startCoroutine(state, cinematics.ohno());
         }
 
         if (properties.dialog) {
