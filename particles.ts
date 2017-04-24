@@ -73,6 +73,10 @@ interface Particle {
   dy: number;
 
   rotation: number;
+
+  alpha: number;
+
+  scale: number;
 }
 
 interface ParticleBehavior {
@@ -87,6 +91,10 @@ interface ParticleBehavior {
 
   x: NumberOrRange;
   y: NumberOrRange;
+
+  scale: NumberOrRange;
+
+  alpha: NumberOrRange;
 
   dest?: {
     x: number;
@@ -111,6 +119,8 @@ class Particles extends Base {
     x: 0,
     y: 0,
     rotation: 1,
+    scale: [1, 4],
+    alpha: [0.1, 1.0],
     tilesheet: "atmosphere-particle",
   }) {
     super(state);
@@ -149,17 +159,21 @@ class Particles extends Base {
   }
 
   update(_state: StateClass): void {
-    if (Math.random() > 0.9) {
+    if (Math.random() > 0.5) {
       const ent = this.pool.get();
 
       if (!ent) { console.log('fail2get particle'); return; }
 
       let dx = 0, dy = 0;
 
+      // set up particles starting values
+
       while (dx * dx + dy * dy < 2) {
         dx = this.getValueFrom(this.behavior.dx);
         dy = this.getValueFrom(this.behavior.dy);
       }
+
+      debugger;
 
       this.particles.push({
         entity: ent,
@@ -167,6 +181,8 @@ class Particles extends Base {
         rotation: this.getValueFrom(this.behavior.rotation),
         dx,
         dy,
+        scale: this.getValueFrom(this.behavior.scale),
+        alpha: this.getValueFrom(this.behavior.alpha),
       });
 
       ent.x = this.getValueFrom(this.behavior.x);
@@ -191,6 +207,9 @@ class Particles extends Base {
 
       obj.entity.x += obj.dx;
       obj.entity.y += obj.dy;
+
+      obj.entity.sprite.scale = new PIXI.Point(obj.scale, obj.scale);
+      obj.entity.sprite.alpha = obj.alpha;
     }
 
     // release & remove dead particles

@@ -197,6 +197,7 @@ class Cinematics extends Base {
     const { playerRightProf: prof, playerLeft: you } = state;
     const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
+
     if (!cam) {
       if (who instanceof Controllable) {
         cam = who.camera;
@@ -800,10 +801,13 @@ class Cinematics extends Base {
     yield* this.talk(you, "Could you stop doing that please.");
     yield* this.talk(prof, "How could you tell?");
     yield* this.talk(you, "Bro, your massive face is basically the only thing I can see right now.");
+    yield* this.talk(prof, "Uergh.. anyway... ");
 
+    yield* this.talk(you, "And like... there are a lot of earthquakes here.");
+    yield* this.talk(you, "Like... a lot.");
     yield* this.bubble(prof, "sweat");
 
-    yield* this.talk(prof, "Uergh.. anyway... let's focus on the task at hand. Getting you untiny.");
+    yield* this.talk(prof, "... let's focus on the task at hand. Getting you untiny.");
     yield* this.talk(you, "Ok!");
     yield* this.bubble(prof, "!");
     yield* this.talk(prof, "Here's the plan. I'll go look for the de-minimizer. If I need you to do anything, I'll call you up.");

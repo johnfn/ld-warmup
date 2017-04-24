@@ -1,6 +1,7 @@
 PIXI.loader.add("atmosphere-particle", "assets/particle.png");
 
 class AtmosphericParticles extends Particles {
+  camera: Camera;
   behavior: ParticleBehavior = {
     lifespan: [100, 200],
 
@@ -9,22 +10,24 @@ class AtmosphericParticles extends Particles {
 
     rotation: [-0.2, 0.2],
 
+    scale: [1.0, 2.0],
+    alpha: [0.1, 1.0],
+
     x: 0,
     y: 0,
     tilesheet: "atmosphere-particle",
   };
 
-  constructor(state: StateClass) {
+  constructor(state: StateClass, associatedCamera: Camera) {
     super(state);
 
+    this.camera = associatedCamera;
     this.setBehaviorTo(this.behavior);
   }
 
   update(state: StateClass): void {
-    const { cameraLeft } = state;
-
-    this.behavior.x = [ cameraLeft.x, cameraLeft.x + cameraLeft.right ];
-    this.behavior.y = [ cameraLeft.y, cameraLeft.y + cameraLeft.height ];
+    this.behavior.x = [ this.camera.x, this.camera.x + this.camera.right ];
+    this.behavior.y = [ this.camera.y, this.camera.y + this.camera.height ];
 
     this.behavior.dest = {
       x: TinyWorld.Instance.x + 16,

@@ -52,6 +52,7 @@ class StateClass {
   cameraLeft: CameraLeft;
   cameraRight: CameraRight;
   particles: AtmosphericParticles;
+  particlesRight: AtmosphericParticles;
   hudObj: HUD;
 
   bgsprite: BGSprite;
@@ -165,7 +166,8 @@ class StateClass {
 
     this.cinematics = new Cinematics(this);
 
-    this.particles = new AtmosphericParticles(this);
+    this.particles      = new AtmosphericParticles(this, this.cameraLeft);
+    this.particlesRight = new AtmosphericParticles(this, this.cameraRight);
 
     // new PauseScreen(this);
 

@@ -17,7 +17,7 @@ class Util {
   static RandRange(range: [number, number]): number {
     const [low, high] = range;
 
-    return low + Math.floor(Math.random() * (high - low));
+    return low + (Math.random() * (high - low));
   }
 
   static minBy<T>(list: T[], fn: (T: T) => number): T | undefined {
