@@ -34,9 +34,9 @@ class Physics {
     const topLeft = new Point({ x: point.x, y: point.y });
     const pointsToTest = [
       topLeft.add(new Point({ x: 0       , y: 0 })),
-      topLeft.add(new Point({ x: wh.x - 4, y: 0 })),
-      topLeft.add(new Point({ x: 0       , y: wh.y  - 4})),
-      topLeft.add(new Point({ x: wh.x - 4, y: wh.y  - 4})),
+      topLeft.add(new Point({ x: wh.x, y: 0 })),
+      topLeft.add(new Point({ x: 0       , y: wh.y })),
+      topLeft.add(new Point({ x: wh.x, y: wh.y })),
     ];
 
     let tiles: HitTestResult = [];

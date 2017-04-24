@@ -61,7 +61,7 @@ class Controllable extends Entity {
 
     if (this.isActive(state)) {
       if (this.cantWalk) {
-        if (keyboard.justDown.Left || keyboard.justDown.Right) {
+        if (keyboard.justDown.Left || keyboard.justDown.Right || keyboard.justDown.Spacebar) {
           this.cantWalk = false;
         }
       } else {
