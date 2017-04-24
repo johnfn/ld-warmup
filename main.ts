@@ -312,8 +312,8 @@ class StateClass {
         }
       }
 
-      state.stage.x = state.cameraLeft.desiredStageX;
-      state.stage.y = state.cameraLeft.desiredStageY;
+      state.stage.x = Math.floor(state.cameraLeft.desiredStageX);
+      state.stage.y = Math.floor(state.cameraLeft.desiredStageY);
 
       this.bgsprite.sprite.visible = true;
 
@@ -333,8 +333,8 @@ class StateClass {
         }
       }
 
-      state.stage.x = state.cameraRight.desiredStageX;
-      state.stage.y = state.cameraRight.desiredStageY;
+      state.stage.x = Math.floor(state.cameraRight.desiredStageX);
+      state.stage.y = Math.floor(state.cameraRight.desiredStageY);
 
       this.bgsprite.sprite.visible = false;
 
