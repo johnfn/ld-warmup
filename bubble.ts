@@ -10,7 +10,10 @@ class Bubble extends Entity {
   type: BubbleType;
 
   constructor(state: StateClass, following: Controllable, type: BubbleType) {
-    super(state, { texture: type });
+    super(state, {
+      texture: type,
+      depth: Depths.Text,
+    });
 
     this.following = following;
     this.type      = type;
