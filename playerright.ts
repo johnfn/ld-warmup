@@ -113,7 +113,15 @@ class PlayerRight extends Controllable {
       return;
     }
 
-    let vx = (keyboard.down.Left ? -25 : 0) + (keyboard.down.Right ? 25 : 0);
+/*
+    if (keyboard.down.Left) {
+      debugger;
+    }
+    */
+
+    // scale (facing) will take care of this for us.
+
+    let vx = Math.abs((keyboard.down.Left ? -25 : 0) + (keyboard.down.Right ? 25 : 0));
     let vy = (keyboard.down.Up ? -25 : 0)   + (keyboard.down.Down ? 25 : 0);
 
     let x = 16;
