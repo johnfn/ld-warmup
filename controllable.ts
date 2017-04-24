@@ -296,6 +296,7 @@ class Controllable extends Entity {
 
       TinyWorld.Instance.vx = vx;
       TinyWorld.Instance.vy = vy;
+
       TinyWorld.Instance.carrier = null;
       TinyWorld.Instance.isBeingCarried = false;
     }

@@ -46,7 +46,7 @@ class TinyWorld extends Entity {
     const inactiveCam = state.getInactiveCamera();
 
     if (this.isBeingCarried && this.carrier) {
-      this.x = this.carrier.x;
+      this.x = this.carrier.x - 16;
       this.y = this.carrier.y - 32;
 
       return;

@@ -14,7 +14,7 @@ class BGSprite {
     const { width, height } = state;
 
     const worldX = TinyWorld.Instance.x - state.cameraRight.x;
-    const worldY = TinyWorld.Instance.y - state.cameraRight.y;
+    const worldY = TinyWorld.Instance.y + 24 - state.cameraRight.y;
 
     // effectively zoom around (worldx, worldy)
 
