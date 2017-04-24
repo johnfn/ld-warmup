@@ -225,6 +225,10 @@ class StateClass {
     delete this.coroutines[id];
   }
 
+  isActiveCo(id: number): boolean {
+    return !!this.coroutines[id];
+  }
+
   private updateCoroutines(): void {
     for (const key in this.coroutines) {
       const co = this.coroutines[key];

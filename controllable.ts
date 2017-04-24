@@ -315,6 +315,8 @@ class Controllable extends Entity {
     }
   }
 
+  activeDialogCo: number = -1;
+
   checkForRegionDialogs(state: StateClass) {
     const { cinematics } = state;
     let dialogRegions: RegionLayer;
@@ -333,8 +335,18 @@ class Controllable extends Entity {
       }
 
       if (region.contains(this) && !properties.done) {
+        if (this.activeDialogCo !== -1 && state.isActiveCo(this.activeDialogCo)) {
+          // too hard to stop lol
+
+          break;
+        }
+
         if (properties.name === "spikeirony") {
-          this.startCoroutine(state, cinematics.spikeIrony());
+          this.activeDialogCo = this.startCoroutine(state, cinematics.spikeIrony());
+        }
+
+        if (properties.dialog) {
+          this.activeDialogCo = this.startCoroutine(state, cinematics.talk(this, properties.dialog));
         }
 
         properties.done = true;

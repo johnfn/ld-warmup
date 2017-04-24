@@ -29,7 +29,6 @@ class PlayerLeft extends Controllable {
 
   update(state: StateClass) {
     this.checkForMapTransition(state);
-    this.checkForRegionDialogs(state);
     this.checkForWorldSucking();
 
     super.update(state);
@@ -52,25 +51,6 @@ class PlayerLeft extends Controllable {
       const desiredY = tinyWorld.y - (1 - this.sprite.scale.y) * (this.height / 2);
 
       this.y += (desiredY - this.y) / 10;
-    }
-  }
-
-  checkForRegionDialogs(state: StateClass) {
-    const { cinematics } = state;
-    const dialogRegions = state.tilemap.regionLayers.YourDialogRegions;
-
-    for (const { region, properties } of dialogRegions.regions) {
-      if (!properties) {
-        console.error('dialog region w/o props...')
-
-        continue;
-      }
-
-      if (region.contains(this) && !properties.done) {
-        this.startCoroutine(state, cinematics.talk(this, properties.dialog));
-
-        properties.done = true;
-      }
     }
   }
 }
