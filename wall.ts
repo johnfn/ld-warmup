@@ -13,8 +13,5 @@ class Wall extends Entity {
 
     this.x = 0;
     this.y = 0;
-
-    console.log(this.sprite.width)
-    console.log(this.sprite.height)
   }
 }

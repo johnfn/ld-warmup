@@ -5,8 +5,8 @@ class AtmosphericParticles extends Particles {
   behavior: ParticleBehavior = {
     lifespan: [100, 200],
 
-    dx: [-2, 2],
-    dy: [-2, 2],
+    dx: [-1.5, 1.5],
+    dy: [-1.5, 1.5],
 
     rotation: [-0.2, 0.2],
 
