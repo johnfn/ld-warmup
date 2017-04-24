@@ -18,6 +18,8 @@ class Cinematics extends Base {
   rightFade: FadeOutIn;
   state: StateClass;
 
+  zForDialog = false;
+
   isOnTinyWorld = false;
 
   constructor(state: StateClass) {
@@ -190,6 +192,10 @@ class Cinematics extends Base {
 
     let charactersVisible = 1;
 
+    if (!endingCondition) {
+      this.zForDialog = true;
+    }
+
     outer:
     while (true) {
       // check to see if we're done
@@ -249,6 +255,10 @@ class Cinematics extends Base {
 
     textEntity.destroy();
     this.stopCoroutine(this.state, id);
+
+    if (!endingCondition) {
+      this.zForDialog = false;
+    }
   }
 
   *walkTo(who: Controllable, where: Rect, speed = 2) {

@@ -2,6 +2,7 @@ PIXI.loader.add("nothing", "assets/transparent.png");
 
 class HUD extends Entity {
   actionText: TextEntity;
+  dlgText: TextEntity;
 
   constructor(state: StateClass) {
     super(state, {
@@ -15,12 +16,22 @@ class HUD extends Entity {
 
     this.actionText.x = state.width - 200;
     this.actionText.y = 0;
+
+    this.dlgText = new TextEntity(state, {
+      parent: this.sprite,
+    });
+
+    this.dlgText.x = state.width - 200;
+    this.dlgText.y = 40;
   }
 
   update(state: StateClass) {
+    const { cinematics } = state;
     const activePlayer = state.getActivePlayer();
     const inspectRegions = state.tilemap.regionLayers.InspectRegions.regions;
     let text = "";
+
+    // X icon
 
     for (const { region, properties: _p } of inspectRegions) {
       if (region.contains(activePlayer)) {
@@ -42,5 +53,13 @@ class HUD extends Entity {
     }
 
     this.actionText.text = text;
+
+    // Z icon
+
+    if (cinematics.zForDialog) {
+      this.dlgText.text = "Z to continue dialog";
+    } else {
+      this.dlgText.text = "";
+    }
   }
 }
