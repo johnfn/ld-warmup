@@ -940,7 +940,6 @@ class Cinematics extends Base {
     state.cameraLeft.isExternallyControlled = true;
     state.cameraRight.isExternallyControlled = true;
 
-    if (false) {
       yield* this.talk(you, "...");
       yield* this.bubble(you, "!");
 
@@ -996,7 +995,7 @@ class Cinematics extends Base {
 
       yield* this.bubble(you, "!");
 
-      this.state.cameraLeft.shake = { duration: 100, strength: 20 };
+      this.state.cameraLeft.shake = { duration: 100, strength: 10 };
 
       // 400 (58 high)
 
@@ -1011,7 +1010,7 @@ class Cinematics extends Base {
       this.state.cameraLeft.centerX = origCenterX;
       this.state.cameraLeft.centerY = origCenterY;
 
-      this.state.cameraLeft.shake = { duration: 100, strength: 20 };
+      this.state.cameraLeft.shake = { duration: 100, strength: 10 };
 
       for (let i = 0; i < 100; i++) {
         white.sprite.x += Math.random() * 3 - 1.5;
@@ -1031,9 +1030,11 @@ class Cinematics extends Base {
       }
 
       yield* this.talk(you, "weird...");
+      yield* this.talk(you, "that black thing...");
+      yield* this.talk(you, "its kinda... gone...");
       yield* this.talk(you, "what if i just...");
       yield* this.talk(you, "sort of...");
-    }
+      yield* this.talk(you, "walked over...");
 
     state.wall.ontop.sprite.alpha = 0;
 
@@ -1082,7 +1083,8 @@ class Cinematics extends Base {
       yield "next";
     }
 
-    yield* this.talk(you, "What in gods name just happened.");
+    yield* this.talk(you, "What in the world j- wait, no, that's a bad expression.");
+    yield* this.talk(you, "What did you do?!?");
     yield* this.talk(prof, "Never speak of this again.");
     yield* this.talk(you, "...");
     yield* this.talk(prof, "...");
@@ -1147,13 +1149,15 @@ class Cinematics extends Base {
     yield* this.talk(you, "tossed...");
     yield* this.talk(you, "the world...");
 
-    this.state.cameraRight.shake = { duration: 10, strength: 10 };
+    this.state.cameraRight.shake = { duration: 300, strength: 10 };
 
     yield* this.talk(you, "!WHAT IN GODS NAME JUST HAPPENED");
 
     yield* this.talk(prof, "Yeah don't worry about it. Everything's fine.");
     yield* this.talk(prof, "Saved you from being really tiny forever. Only made a few rifts in space time. All in all, a good Ludum Dare.");
     yield* this.talk(prof, "I'm going to go to sleep. Along with some other Ludum Dare game makers I could name.");
+
+    state.hud.visible = false;
 
     yield* this.leftFade.doFadeOut(this.state);
 
