@@ -8,6 +8,8 @@ class Controllable extends Entity {
   onSafeGround = false;
   canPickUpWorld = false;
   isTossingWorld = false;
+  cantWalk = false;
+
   facing = 1;
   lastSafeSpot: IPoint;
 
@@ -58,12 +60,18 @@ class Controllable extends Entity {
     let dx = 0, dy = 0;
 
     if (this.isActive(state)) {
-      if (keyboard.down.Left) {
-        dx -= 5;
-      }
+      if (this.cantWalk) {
+        if (keyboard.justDown.Left || keyboard.justDown.Right) {
+          this.cantWalk = false;
+        }
+      } else {
+        if (keyboard.down.Left) {
+          dx -= 5;
+        }
 
-      if (keyboard.down.Right) {
-        dx += 5;
+        if (keyboard.down.Right) {
+          dx += 5;
+        }
       }
 
       if (this.onGround && keyboard.down.Spacebar) {
@@ -299,6 +307,8 @@ class Controllable extends Entity {
 
       TinyWorld.Instance.carrier = null;
       TinyWorld.Instance.isBeingCarried = false;
+
+      this.cantWalk = true;
     }
   }
 
