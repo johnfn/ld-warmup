@@ -635,6 +635,8 @@ class Cinematics extends Base {
     let closestPhoneYou  = Util.minBy(phones, p => Util.Dist(p, you))!;
     let closestPhoneProf = Util.minBy(phones, p => Util.Dist(p, prof))!;
 
+    this.phoneInterrupted = false;
+
     while (true) {
       {
         const walker = this.walkTo(you, Rect.FromPoint(closestPhoneYou, 100).translate({ x: 0, y: -100 }));
@@ -732,8 +734,13 @@ class Cinematics extends Base {
     }
   }
 
+  lock = false;
+
   *gotTossedLel() {
     const { playerRightProf: prof, playerLeft: you } = state;
+
+    if (this.lock) { return; }
+    this.lock = true;
 
     yield* this.bubble(you, "!");
 
@@ -765,6 +772,8 @@ class Cinematics extends Base {
 
     this.activeCoroutine = -1;
     this.currentOrLastEvent = "You Wake Up";
+
+    this.lock = false;
   }
 
   interruptPhoneCall(): void {
