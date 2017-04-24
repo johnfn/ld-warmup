@@ -327,10 +327,6 @@ class StateClass {
     if (state.rightCamActive) {
       cameraRight.update(state);
 
-      root.alpha = state.playerRightProf.isActive(state) ? 1.0 : 0.3;
-      state.playerRightProf.sprite.alpha = 1.0;
-      state.playerLeft.sprite.alpha = state.playerRightProf.isActive(state) ? 0.3 : 1.0;
-
       // hide irrelevant entities
 
       for (const e of entities) {

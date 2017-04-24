@@ -379,12 +379,17 @@ class Cinematics extends Base {
     this.finishCinematic();
   }
 
-  *checkStopFiddling() {
+  *suckedIntoTinyWorldOhNo() {
     const { playerLeft: you } = state;
 
-    while (Util.Dist(you, TinyWorld.Instance) > 20) {
+    while (Util.Dist(you, TinyWorld.Instance) > 40) {
       yield "next";
     }
+
+    this.putPlayerOnTinyWorld(you);
+
+    you.sprite.scale.x = 1;
+    you.sprite.scale.y = 1;
 
     this.finishCinematic();
   }
@@ -395,7 +400,7 @@ class Cinematics extends Base {
     const spotOne = new Point({ x: prof.x, y: prof.y });
     const spotTwo = new Point({ x: prof.x - 400, y: prof.y });
 
-    this.startCoroutine(state, this.checkStopFiddling());
+    this.startCoroutine(state, this.suckedIntoTinyWorldOhNo());
 
     while (true) {
       yield* this.walkTo(prof, Rect.FromPoint(spotOne, 100));

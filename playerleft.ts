@@ -47,15 +47,11 @@ class PlayerLeft extends Controllable {
       this.vx = Math.sign(tinyWorld.x - this.x) * 2;
 
       this.sprite.scale.x = this.facing * Util.Dist(tinyWorld, this) / 200;
-      this.sprite.scale.y = this.facing * Util.Dist(tinyWorld, this) / 200;
+      this.sprite.scale.y = Util.Dist(tinyWorld, this) / 200;
 
       const desiredY = tinyWorld.y - (1 - this.sprite.scale.y) * (this.height / 2);
 
       this.y += (desiredY - this.y) / 10;
-    }
-
-    if (Util.Dist(this, TinyWorld.Instance) < 20) {
-      state.cinematics.putPlayerOnTinyWorld(state.playerLeft);
     }
   }
 
