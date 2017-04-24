@@ -58,6 +58,12 @@ class HUD extends Entity {
 
     if (cinematics.zForDialog) {
       this.dlgText.text = "Z to continue dialog";
+
+      if (text === "") {
+        this.dlgText.y = 0;
+      } else {
+        this.dlgText.y = 40;
+      }
     } else {
       this.dlgText.text = "";
     }
