@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "Learn About Tiny World";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -190,10 +190,12 @@ class Cinematics extends Base {
 
       if (endingCondition) {
         if (typeof endingCondition === "function" && endingCondition()) {
+          yield { frames: 30 };
+
           break outer;
         }
 
-        if (typeof endingCondition === "object" && charactersVisible >= text.length) {
+        if (typeof endingCondition === "object" && charactersVisible > text.length) {
           for (let i = 0; i < endingCondition.waitFrames; i++) {
             yield "next";
           }
@@ -225,6 +227,10 @@ class Cinematics extends Base {
 
             if (charactersVisible < text.length) {
               charactersVisible = text.length;
+
+              yield { frames: 3 };
+
+              break /* inner */;
             } else {
               break outer;
             }

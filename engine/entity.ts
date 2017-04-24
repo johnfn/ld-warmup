@@ -63,7 +63,7 @@ class Entity extends Base {
     texture: string;
 
     spritesheet?: SpritesheetIndex;
-    parent?: PIXI.Container;
+    parent?: PIXI.Container | "none";
   }) {
     super(state, props.dontRegister || false);
 
@@ -86,10 +86,12 @@ class Entity extends Base {
     this.sprite.width = width || 32;
     this.sprite.height = height || 32;
 
-    parent.addChild(this.sprite);
+    if (parent !== "none") {
+      parent.addChild(this.sprite);
+    }
 
     // basically a proxy for isTile() which would be n**2 lg n which is way 2 much.
-    if (!props.dontRegister) {
+    if (!props.dontRegister && parent !== "none") {
       this.z = props.depth || 0;
       Util.SortDepths(parent);
     }

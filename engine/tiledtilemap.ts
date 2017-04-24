@@ -149,10 +149,13 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
       size: 2000,
 
       create: () => {
-        return new Entity(state, {
+        const e = new Entity(state, {
           dontRegister: true,
           texture: "nothing",
+          parent: "none",
         });
+
+        return e;
       }
     })
 

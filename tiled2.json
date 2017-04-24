@@ -683,7 +683,7 @@
         {
          "columns":2,
          "firstgid":1,
-         "image":"tilesheet.png",
+         "image":"assets\/tilesheet.png",
          "imageheight":64,
          "imagewidth":64,
          "margin":0,
@@ -696,7 +696,7 @@
         {
          "columns":1,
          "firstgid":5,
-         "image":"..\/..\/warmup\/assets\/tinyworld.png",
+         "image":"..\/warmup\/assets\/tinyworld.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -709,7 +709,7 @@
         {
          "columns":1,
          "firstgid":6,
-         "image":"spike.png",
+         "image":"assets\/spike.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -722,7 +722,7 @@
         {
          "columns":1,
          "firstgid":7,
-         "image":"phone.png",
+         "image":"assets\/phone.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -735,7 +735,7 @@
         {
          "columns":20,
          "firstgid":8,
-         "image":"tileset.png",
+         "image":"assets\/tileset.png",
          "imageheight":640,
          "imagewidth":640,
          "margin":0,

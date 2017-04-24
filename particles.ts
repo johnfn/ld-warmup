@@ -46,6 +46,10 @@ class Pooler {
     for (const obj of this.pool) {
       obj.alive = false;
       obj.entity.sprite.visible = false;
+
+      if (obj.entity.sprite.parent) {
+        obj.entity.sprite.parent.removeChild(obj.entity.sprite);
+      }
     }
   }
 

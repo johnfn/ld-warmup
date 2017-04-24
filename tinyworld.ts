@@ -26,7 +26,10 @@ class TinyWorld extends Entity {
   lastSafeSpot: IPoint;
 
   constructor(state: StateClass) {
-    super(state, { texture: "tinyworld" });
+    super(state, {
+      texture: "tinyworld",
+      depth: Depths.TinyWorld,
+    });
 
     TinyWorld.Instance = this;
   }
