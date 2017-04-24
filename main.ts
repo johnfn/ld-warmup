@@ -204,6 +204,13 @@ class StateClass {
         tw.x = obj.x;
         tw.y = obj.y - 32;
       }
+
+      if (layerName === "Cannon") {
+        const tw = new Cannon(this)
+
+        tw.x = obj.x;
+        tw.y = obj.y - 32;
+      }
     });
 
     this.tilemap.load().then(() => {

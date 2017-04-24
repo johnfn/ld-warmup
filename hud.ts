@@ -55,7 +55,7 @@ class HUD extends Entity {
     const phones = state.entities.filter(x => x instanceof Phone) as Phone[];
     const closestPhone = Util.minBy(phones, p => Util.Dist(p, activePlayer))!;
 
-    if (Util.Dist(activePlayer, closestPhone) < 200) {
+    if (Util.Dist(activePlayer, closestPhone) < Phone.DistanceAcceptable) {
       if (cinematics.canSwitchToOtherGuy) {
         text = "X to switch!"
       } else {

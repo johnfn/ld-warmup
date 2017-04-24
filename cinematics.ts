@@ -11,10 +11,11 @@ type CurrentActiveEvent = "None"
                         | "We Talk"
                         | "Chuck That Planet II"
                         | "Made It"
+                        | "Fire That Cannon"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Chuck That Planet II";
+  currentOrLastEvent: CurrentActiveEvent = "Fire That Cannon";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -87,6 +88,25 @@ class Cinematics extends Base {
         TinyWorld.Instance.carrier = state.playerRightProf;
 
         Controllable.SwitchActivePlayer(state);
+
+        state.rightCamActive = true;
+        state.leftCamActive  = true;
+
+        this.putPlayerOnTinyWorld(state.playerLeft);
+
+        this.canSwitchToOtherGuy = true;
+        this.allowFlinging = true;
+        this.resetToYouWakeUp = false;
+
+        const startingObject = state.tilemap.objectLayers["ObjLayer"].objects[1];
+
+        state.playerLeft.x = startingObject.x;
+        state.playerLeft.y = startingObject.y;
+      }
+
+      if (G.Debug && this.currentOrLastEvent === "Fire That Cannon") {
+        TinyWorld.Instance.isBeingCarried = true;
+        TinyWorld.Instance.carrier = state.playerRightProf;
 
         state.rightCamActive = true;
         state.leftCamActive  = true;
@@ -905,5 +925,15 @@ class Cinematics extends Base {
     yield* this.talk(you, "Phew!");
     yield* this.talk(you, "I made it!");
     yield* this.talk(you, "Is this thing on?");
+    yield* this.talk(prof, "Yes!");
+    yield* this.talk(prof, "Okay, listen to me very closely.");
+    yield* this.talk(prof, "Go to the left side of the room, face to te right, and fire the cannon. ");
+    yield* this.talk(prof, "Assuming it doesn't rend the fabric of spacetime in twain...");
+    yield* this.bubble(you, "!");
+    yield* this.talk(prof, "... it should be easy for you to return to normal size!");
+    yield* this.talk(you, "...");
+    yield* this.talk(you, "Yikes... okay... I'll try!");
+
+    this.finishCinematic();
   }
 }

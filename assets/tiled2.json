@@ -233,13 +233,37 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":14720,
-                 "y":5952
+                 "x":13792,
+                 "y":5984
                 }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
          "width":0,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":500,
+         "name":"Cannon",
+         "objects":[
+                {
+                 "gid":408,
+                 "height":32,
+                 "id":145,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":13376,
+                 "y":6304
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":500,
          "x":0,
          "y":0
         }, 
@@ -1367,7 +1391,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":145,
+ "nextobjectid":147,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,
@@ -1434,6 +1458,19 @@
          "name":"main",
          "spacing":0,
          "tilecount":400,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "columns":1,
+         "firstgid":408,
+         "image":"cannon.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"cannon",
+         "spacing":0,
+         "tilecount":1,
          "tileheight":32,
          "tilewidth":32
         }],

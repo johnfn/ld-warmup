@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="500" height="500" tilewidth="32" tileheight="32" nextobjectid="145">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="500" height="500" tilewidth="32" tileheight="32" nextobjectid="147">
  <tileset firstgid="1" name="tilesheet" tilewidth="32" tileheight="32" tilecount="4" columns="2">
   <image source="tilesheet.png" width="64" height="64"/>
  </tileset>
@@ -14,6 +14,9 @@
  </tileset>
  <tileset firstgid="8" name="main" tilewidth="32" tileheight="32" tilecount="400" columns="20">
   <image source="tileset.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="408" name="cannon" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="cannon.png" width="32" height="32"/>
  </tileset>
  <layer name="Midground" width="500" height="500">
   <data encoding="csv">
@@ -2052,7 +2055,10 @@
    </properties>
   </object>
   <object id="82" x="1188.46" y="2128.85" width="1.92308" height="1.92308"/>
-  <object id="138" gid="1" x="14720" y="5952" width="32" height="32"/>
+  <object id="138" gid="1" x="13792" y="5984" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="Cannon">
+  <object id="145" gid="408" x="13376" y="6304" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="ProfessorDestRegions">
   <object id="7" x="830" y="331" width="192" height="212">
