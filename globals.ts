@@ -51,4 +51,50 @@ class Util {
 
     return highestT;
   }
+
+  static SortDepths(x: PIXI.Container): void {
+    x.children.sort((a, b) => {
+      return ((a as any).z || 0) - ((b as any).z || 0);
+    });
+  }
 }
+
+
+  (function () {
+    // PIXI.Sprite
+
+    PIXI.Sprite.drawCount = 0;
+
+    PIXI.Sprite.prototype.__renderWebGL = PIXI.Sprite.prototype._renderWebGL;
+    PIXI.Sprite.prototype._renderWebGL = function (renderer) {
+      PIXI.Sprite.drawCount++;
+      this.__renderWebGL(renderer);
+    };
+
+
+    PIXI.Sprite.prototype.__renderCanvas = PIXI.Sprite.prototype._renderCanvas;
+    PIXI.Sprite.prototype._renderCanvas = function (renderer) {
+      PIXI.Sprite.drawCount++;
+      this.__renderCanvas(renderer);
+    };
+
+
+    // PIXI.Container
+
+    PIXI.Container.drawCount = 0;
+
+    PIXI.Container.prototype.__renderWebGL = PIXI.Container.prototype._renderWebGL;
+    PIXI.Container.prototype._renderWebGL = function (renderer) {
+      PIXI.Container.drawCount++;
+      this.__renderWebGL(renderer);
+    };
+
+
+    PIXI.Container.prototype.__renderCanvas = PIXI.Container.prototype._renderCanvas;
+    PIXI.Container.prototype._renderCanvas = function (renderer) {
+      PIXI.Container.drawCount++;
+      this.__renderCanvas(renderer);
+    };
+
+
+  })();

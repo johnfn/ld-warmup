@@ -11,15 +11,16 @@ class PlayerRight extends Controllable {
   scopes: Scope[] = [];
 
   constructor(state: StateClass) {
-    super(state, { texture: "prof" });
+    super(state, {
+      texture: "prof",
+      depth: Depths.Prof,
+    });
 
     const { tilemap, cameraRight } = state;
     const startingObject = tilemap.objectLayers["ObjLayer"].objects[0];
 
     this.x = startingObject.x + 50;
     this.y = startingObject.y;
-
-    this.z = 10;
 
     this.camera = cameraRight;
 

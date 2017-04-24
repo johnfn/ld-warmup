@@ -5,15 +5,16 @@ class PlayerLeft extends Controllable {
   collideable = true;
 
   constructor(state: StateClass) {
-    super(state, { texture: "you" });
+    super(state, {
+      texture: "you",
+      depth: Depths.Player,
+    });
 
     const { tilemap, cameraLeft } = state;
     const startingObject = tilemap.objectLayers["ObjLayer"].objects[0];
 
     this.x = startingObject.x;
     this.y = startingObject.y;
-
-    this.z = 10;
 
     this.camera = cameraLeft;
   }

@@ -1,6 +1,4 @@
 class Base {
-  z = 0;
-
   activeModes: Mode[] = ["Game"]
 
   constructor(state: StateClass, dontRegister = false) {

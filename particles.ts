@@ -4,13 +4,15 @@ interface ItemInPool {
 }
 
 class Pooler {
-  readonly size = 100;
+  readonly size: number = 100;
   pool: ItemInPool[] = [];
   create: () => Entity;
 
   constructor(props: {
     create: () => Entity;
+    size?: number;
   }) {
+    this.size = props.size || 100;
     this.create = props.create;
 
     for (let i = 0; i < this.size; i++) {
@@ -38,6 +40,13 @@ class Pooler {
     }
 
     return undefined;
+  }
+
+  releaseAll(): void {
+    for (const obj of this.pool) {
+      obj.alive = false;
+      obj.entity.sprite.visible = false;
+    }
   }
 
   release(s: Entity ): void {
@@ -89,6 +98,7 @@ class Particles extends Base {
   pool: Pooler;
   particles: Particle[] = [];
   behavior: ParticleBehavior;
+  container: Entity;
 
   constructor(state: StateClass, behavior: ParticleBehavior = {
     lifespan: [100, 200],
@@ -101,12 +111,18 @@ class Particles extends Base {
   }) {
     super(state);
 
+    this.container = new Entity(state, {
+      texture: "nothing",
+      depth: Depths.Particles,
+    });
+
     this.behavior = behavior;
 
     this.pool = new Pooler({
       create: () => {
         const e = new Entity(state, {
           texture: this.behavior.tilesheet,
+          parent: this.container.sprite,
         });
 
         e.sprite.pivot = new PIXI.Point(16, 16);

@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "First Convo";
+  currentOrLastEvent: CurrentActiveEvent = "None";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -77,7 +77,7 @@ class Cinematics extends Base {
   }
 
   update(state: StateClass): void {
-    const { playerLeft: you } = state;
+    // const { playerLeft: you } = state;
 
     if (this.activeCoroutine === -1) {
       switch (this.currentOrLastEvent) {
@@ -188,18 +188,18 @@ class Cinematics extends Base {
     while (true) {
       // check to see if we're done
 
-      if (endingCondition && charactersVisible >= text.length) {
+      if (endingCondition) {
         if (typeof endingCondition === "function" && endingCondition()) {
           break outer;
         }
 
-        if (typeof endingCondition === "object") {
+        if (typeof endingCondition === "object" && charactersVisible >= text.length) {
           for (let i = 0; i < endingCondition.waitFrames; i++) {
             yield "next";
           }
-        }
 
-        break outer;
+          break outer;
+        }
       }
 
       // color & render text
@@ -214,24 +214,24 @@ class Cinematics extends Base {
 
       textEntity.text = textToRender;
 
-      for (let i = 0; i < 3; i++) {
-        if (keyboard.down.Z) {
-          if (charactersVisible < text.length) {
-            charactersVisible++;
+      if (endingCondition) {
+        charactersVisible++;
+
+        yield { frames: 3 };
+      } else {
+        for (let i = 0; i < 3; i++) {
+          if (keyboard.justDown.Z) {
+            keyboard.clear("Z");
+
+            if (charactersVisible < text.length) {
+              charactersVisible = text.length;
+            } else {
+              break outer;
+            }
           }
-        }
 
-        if (keyboard.justDown.Z) {
-          if (charactersVisible >= text.length) {
-            break outer;
-          }
+          yield "next";
         }
-
-        if (keyboard.justDown.X) {
-          charactersVisible = text.length;
-        }
-
-        yield "next";
       }
     }
 
@@ -316,10 +316,6 @@ class Cinematics extends Base {
 
       if (Util.Dist(prof, you) > 100) {
         yield* this.talk(prof, this.getRandomSlowbieMessage(), () => Util.Dist(prof, you) < 100);
-
-        while (Util.Dist(prof, you) > 100) {
-          yield "next";
-        }
       }
     }
 

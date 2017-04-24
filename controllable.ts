@@ -16,6 +16,7 @@ class Controllable extends Entity {
   constructor(state: StateClass, props: {
     width?: number;
     height?: number;
+    depth?: number;
     texture: string;
 
     spritesheet?: SpritesheetIndex;

@@ -134,14 +134,27 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
   private currentRegion: { [key: number]: Rect } = {};
 
+  private tilePool: Pooler;
+
   spriteLayers: { [key in keyof SpriteLayers]: PIXI.Container } = {} as any;
   regionLayers: { [key in keyof RegionLayers]: RegionLayer } = {} as any;
   objectLayers: { [key in keyof ObjectLayers]: ObjectLayer } = {} as any;
 
   entities: Entity[];
 
-  constructor(from: TiledJSON) {
+  constructor(state: StateClass, from: TiledJSON) {
     this.data = from;
+
+    this.tilePool = new Pooler({
+      size: 2000,
+
+      create: () => {
+        return new Entity(state, {
+          dontRegister: true,
+          texture: "nothing",
+        });
+      }
+    })
 
     this.loadMap();
   }
@@ -196,11 +209,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
   }
 
   private removeAllSprites(state: StateClass): void {
-    for (const key of Object.keys(this.spriteLayers)) {
-      const layer = this.spriteLayers[key];
-
-      layer.removeChildren();
-    }
+    this.tilePool.releaseAll();
   }
 
   private loadTilesets(): void {
@@ -297,18 +306,16 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
     if (!region) { throw new Error("tried to add tile sprites w/o current region"); }
 
+    Util.SortDepths(stage);
+
     const tw = this.data.tilewidth;
     const th = this.data.tileheight;
-
-    let num = 0;
 
     for (let i = region.x / tw; i <= region.right / tw; i++) {
       for (let j = region.y / th; j <= region.bottom / th; j++) {
         if (!this.tiles[i][j]) { continue; }
 
         for (const tile of this.tiles[i][j]) {
-          ++num;
-
           const {
             x,
             y,
@@ -320,6 +327,21 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
             }
           } = tile;
 
+          const ent = this.tilePool.get();
+
+          if (!ent) { return; }
+
+          ent.sprite.texture = ent.getCachedSpritesheetTexture(state, spritesheet, spritesheetx, spritesheety);
+          if (ent.sprite.parent) {
+            ent.sprite.parent.removeChild(ent.sprite);
+          }
+
+          this.spriteLayers[layername].addChild(ent.sprite);
+
+          ent.x = x;
+          ent.y = y;
+
+          /*
           const sprite = new Entity(state, {
             texture: spritesheet,
             dontRegister: true,
@@ -329,6 +351,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
           sprite.x = x;
           sprite.y = y;
+          */
         }
       }
     }

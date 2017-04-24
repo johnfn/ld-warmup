@@ -21,6 +21,7 @@ class StateClass {
 
     Walls: true,
     HouseFront: true,
+    MidGround: true,
   }, {
     // Regions
 
@@ -150,7 +151,7 @@ class StateClass {
     this.cameraLeft = new CameraLeft(this);
     this.cameraRight = new CameraRight(this);
 
-    this.tilemap = new TiledTilemap(data) as any;
+    this.tilemap = new TiledTilemap(this, data) as any;
     this.playerLeft = new PlayerLeft(this);
     this.playerRightProf = new PlayerRight(this);
 
@@ -272,6 +273,9 @@ class StateClass {
   update(): void {
     const { cinematics, rendererBig, rendererTiny, rendererBigNoWorld, keyboard, cameraLeft, cameraRight, entities, root, currentMode } = state;
 
+    (PIXI.Sprite as any).drawCount = 0;
+    (PIXI.Container as any).drawCount = 0;
+
     keyboard.update();
     cinematics.update(this);
     this.bgsprite.update(this); // oops
@@ -347,6 +351,10 @@ class StateClass {
       TinyWorld.Instance.visible = true;
 
       this.bgsprite.sprite.texture.update();
+
+
+      console.log((PIXI.Sprite as any).drawCount);
+      console.log((PIXI.Container as any).drawCount);
     }
   }
 }

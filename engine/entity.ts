@@ -19,6 +19,9 @@ class Entity extends Base {
   public get y(): number { return this.sprite.y; }
   public set y(v: number) { this.sprite.y = v; }
 
+  public get z(): number { return (this.sprite as any).z; }
+  public set z(v: number) { (this.sprite as any).z = v; }
+
   public get width(): number { return this.sprite.width; }
 
   public get height(): number { return this.sprite.height; }
@@ -36,7 +39,7 @@ class Entity extends Base {
 
   id: number;
 
-  private getCachedSpritesheetTexture(state: StateClass, textureName: string, x: number, y: number): PIXI.Texture {
+  getCachedSpritesheetTexture(state: StateClass, textureName: string, x: number, y: number): PIXI.Texture {
     const { tilewidth, tileheight } = state;
     const key = `${ textureName }-${ x }-${ y }`;
 
@@ -55,6 +58,7 @@ class Entity extends Base {
   constructor(state: StateClass, props: {
     width?: number;
     height?: number;
+    depth?: number;
     dontRegister?: boolean;
     texture: string;
 
@@ -83,6 +87,12 @@ class Entity extends Base {
     this.sprite.height = height || 32;
 
     parent.addChild(this.sprite);
+
+    // basically a proxy for isTile() which would be n**2 lg n which is way 2 much.
+    if (!props.dontRegister) {
+      this.z = props.depth || 0;
+      Util.SortDepths(parent);
+    }
 
     this.id = ++Entity.MaxEntityId;
   }
