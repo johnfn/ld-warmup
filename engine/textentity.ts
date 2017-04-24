@@ -52,7 +52,10 @@ class TextEntity extends Base {
   }
 
   destroy(): void {
-    this.textObject.parent.removeChild(this.textObject);
+    if (this.textObject.parent) {
+      this.textObject.parent.removeChild(this.textObject);
+    }
+
     this.exists = false;
   }
 

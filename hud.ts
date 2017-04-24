@@ -43,6 +43,10 @@ class HUD extends Entity {
       if (TinyWorld.Instance.canBePickedUp(activePlayer)) {
         text = "X to pick up world!"
       }
+
+      if (TinyWorld.Instance.isBeingCarried) {
+        text = "X + Arrow Keys to toss world!"
+      }
     }
 
     const phones = state.entities.filter(x => x instanceof Phone) as Phone[];

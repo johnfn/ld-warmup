@@ -22,6 +22,8 @@ class Cinematics extends Base {
 
   isOnTinyWorld = false;
 
+  stragglingTexts: TextEntity[] = [];
+
   constructor(state: StateClass) {
     super(state);
 
@@ -146,6 +148,18 @@ class Cinematics extends Base {
           this.activeCoroutine = this.startCoroutine(state, this.profYouTalk());
         break;
       }
+
+      // post clean up
+
+      // worth thinking about how to do this coroutine stuff cleaner post-compo.
+
+      if (this.activeCoroutine !== -1) {
+        for (const x of this.stragglingTexts) {
+          x.destroy();
+        }
+
+        this.stragglingTexts = [];
+      }
     }
   }
 
@@ -174,8 +188,8 @@ class Cinematics extends Base {
     text: string, endingCondition?: { waitFrames: number } | (() => boolean),
     stayOnScreen = true,
     cam?: Camera) {
-    const { playerRightProf: prof, playerLeft: you } = state;
 
+    const { playerRightProf: prof, playerLeft: you } = state;
     const { keyboard } = this.state;
     const textEntity = new TextEntity(this.state);
     if (!cam) {
@@ -187,6 +201,8 @@ class Cinematics extends Base {
         cam = state.cameraLeft; // random
       }
     }
+
+    this.stragglingTexts.push(textEntity);
 
     const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who, cam, stayOnScreen));
 
