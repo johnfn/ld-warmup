@@ -153,6 +153,8 @@ class Cinematics extends Base {
       text.x = following.x + 10;
       text.y = following.y - 16;
 
+      // console.log(cam.right);
+
       if (stayOnScreen && text.x + text.wordWrapWidth > cam.right) {
         text.x = cam.right - text.wordWrapWidth;
       }
@@ -173,11 +175,11 @@ class Cinematics extends Base {
     if (!cam) {
       if (who instanceof Controllable) {
         cam = who.camera;
+      } else {
+        console.log('err, no associated cam!')
+
+        cam = state.cameraLeft; // random
       }
-
-      console.log('err, no associated cam!')
-
-      cam = state.cameraLeft; // random
     }
 
     const id = this.startCoroutine(this.state, this.textFollowPlayer(textEntity, who, cam, stayOnScreen));

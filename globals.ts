@@ -60,6 +60,7 @@ class Util {
 }
 
 
+/*
   (function () {
     // PIXI.Sprite
 
@@ -98,3 +99,4 @@ class Util {
 
 
   })();
+  */

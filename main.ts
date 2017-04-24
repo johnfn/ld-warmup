@@ -348,9 +348,8 @@ class StateClass {
 
       this.bgsprite.sprite.texture.update();
 
-
-      console.log((PIXI.Sprite as any).drawCount);
-      console.log((PIXI.Container as any).drawCount);
+      // console.log((PIXI.Sprite as any).drawCount);
+      // console.log((PIXI.Container as any).drawCount);
     }
   }
 }
