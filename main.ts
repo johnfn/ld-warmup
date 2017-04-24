@@ -55,6 +55,8 @@ class StateClass {
   particlesRight: AtmosphericParticles;
   hudObj: HUD;
 
+  wall: Wall;
+
   bgsprite: BGSprite;
 
   rightCamActive = false;
@@ -95,7 +97,6 @@ class StateClass {
       return this.cameraRight;
     }
   }
-
 
   getActivePlayer(): Controllable {
     if (this.rightCamActive) {
@@ -156,6 +157,8 @@ class StateClass {
     this.tilemap = new TiledTilemap(this, data) as any;
     this.playerLeft = new PlayerLeft(this);
     this.playerRightProf = new PlayerRight(this);
+
+    this.wall = new Wall(this);
 
     this.activePlayerId = this.playerLeft.id;
 

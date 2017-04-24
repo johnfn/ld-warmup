@@ -173,8 +173,6 @@ class Particles extends Base {
         dy = this.getValueFrom(this.behavior.dy);
       }
 
-      debugger;
-
       this.particles.push({
         entity: ent,
         lifespan: this.getValueFrom(this.behavior.lifespan),

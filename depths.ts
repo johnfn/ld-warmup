@@ -1,4 +1,5 @@
 class Depths {
+  public static Wall = 20000;
   public static Fade = 10000;
 
   public static Text = 300;
