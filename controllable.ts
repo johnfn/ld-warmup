@@ -4,7 +4,9 @@ class Controllable extends Entity {
   vy = 0;
   vx = 0;
 
-  onGround = false;
+  groundForgiveness = 7;
+
+  onGround = 0;
   onSafeGround = false;
   canPickUpWorld = false;
   isTossingWorld = false;
@@ -53,6 +55,7 @@ class Controllable extends Entity {
 
   jump(): void {
     this.vy -= 7;
+    this.onGround = 0;
   }
 
   move(state: StateClass): MoveResult {
@@ -74,7 +77,7 @@ class Controllable extends Entity {
         }
       }
 
-      if (this.onGround && keyboard.down.Spacebar) {
+      if (this.onGround > 0 && keyboard.down.Spacebar) {
         this.jump();
       }
 
@@ -102,11 +105,11 @@ class Controllable extends Entity {
       this.vy = 0;
     }
 
-    this.onGround = hitDown && dy > 0;
+    this.onGround = hitDown && dy > 0 ? this.groundForgiveness : --this.onGround;
 
     this.onSafeGround = false;
 
-    if (this.onGround) {
+    if (this.onGround >= 0) {
       this.onSafeGround = moveResult.thingsHit.filter(x => isTile(x)).length > 0;
     }
 

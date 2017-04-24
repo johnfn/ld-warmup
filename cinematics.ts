@@ -262,10 +262,9 @@ class Cinematics extends Base {
       } = physics.move(this.state, who, dx, 0);
 
       if (
-        (dx > 0 && hitRight && who.onGround) ||
-        (dx < 0 && hitLeft  && who.onGround)
+        (dx > 0 && hitRight && who.onGround > 0) ||
+        (dx < 0 && hitLeft  && who.onGround > 0)
       ) {
-
         who.jump();
       }
 

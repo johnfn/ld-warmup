@@ -2,7 +2,6 @@ PIXI.loader.add("prof", "assets/prof.png");
 
 class PlayerRight extends Controllable {
   vy = 0;
-  onGround = false;
   canPickUpWorld = true;
   collideable = true;
 
