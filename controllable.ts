@@ -1,4 +1,6 @@
 class Controllable extends Entity {
+  readonly tossSpeed = 8;
+
   vy = 0;
   vx = 0;
 
@@ -10,6 +12,8 @@ class Controllable extends Entity {
   lastSafeSpot: IPoint;
 
   camera: Camera;
+
+  scopes: Scope[] = [];
 
   private lastTalkCoID: number = -1;
 
@@ -26,6 +30,13 @@ class Controllable extends Entity {
 
     state.playerIds.push(this.id);
     this.sprite.pivot = new PIXI.Point(16, 0);
+
+    for (let i = 0; i < 10; i++) {
+      const scope = new Scope(state, this.sprite);
+
+      this.scopes.push(scope);
+      scope.visible = false;
+    }
   }
 
   isActive(state: StateClass): boolean {
@@ -115,6 +126,28 @@ class Controllable extends Entity {
       this.sprite.scale.x *= -1;
     }
 
+    if (state.activePlayerId === this.id) {
+      if (keyboard.justDown.X) {
+        const hadInteraction = this.checkForInteractions(state);
+
+        if (hadInteraction) {
+          return;
+        }
+
+        if (TinyWorld.Instance.carrier === this) {
+          this.isTossingWorld = true;
+        }
+      }
+
+      this.drawScopes(state);
+
+      if (this.isTossingWorld) {
+        this.throwWorld(state);
+      }
+
+      this.checkForRegionDialogs(state);
+    }
+
     // you dont move when you're tossing the world.
 
     if (!this.isTossingWorld) {
@@ -130,6 +163,32 @@ class Controllable extends Entity {
 
       this.checkForIndiscriminateCollisions(state, thingsHit);
     }
+  }
+
+  checkForInteractions(state: StateClass): boolean {
+    const { cinematics } = state;
+
+    if (TinyWorld.Instance.canBePickedUp(this)) {
+      TinyWorld.Instance.isBeingCarried = true;
+      TinyWorld.Instance.carrier = this;
+
+      return true;
+    }
+
+    const phones = state.entities.filter(x => x instanceof Phone) as Phone[];
+    let closestPhone  = Util.minBy(phones, p => Util.Dist(p, this))!;
+
+    if (Util.Dist(closestPhone, this) < Phone.DistanceAcceptable) {
+      if (cinematics.currentOrLastEvent === "You Use Phone") {
+        cinematics.finishCinematic();
+
+        return true;
+      }
+
+      // switch
+    }
+
+    return false;
   }
 
   checkInspect(state: StateClass): void {
@@ -176,6 +235,96 @@ class Controllable extends Entity {
         x: this.x,
         y: this.y,
       };
+    }
+  }
+
+
+  drawScopes(state: StateClass): void {
+    const { keyboard } = state;
+
+    if (!this.isTossingWorld) {
+      for (const s of this.scopes) {
+        s.visible = false;
+      }
+
+      return;
+    }
+
+    // scale (facing) will take care of this for us. ( tricky )
+
+    let vx = Math.abs((keyboard.down.Left ? -25 : 0) + (keyboard.down.Right ? 25 : 0));
+    let vy = (keyboard.down.Up ? -25 : 0)   + (keyboard.down.Down ? 25 : 0);
+
+    let x = 16;
+    let y = -16; // center of tinyworld (above head!)
+
+    for (const s of this.scopes) {
+      x += vx;
+      y += vy;
+
+      s.x = x;
+      s.y = y;
+
+      s.visible = true;
+    }
+  }
+
+  throwWorld(state: StateClass): void {
+    const { keyboard } = state;
+    const speed = this.tossSpeed;
+
+    if (!keyboard.down.X) {
+      this.isTossingWorld = false;
+
+      let vx = (keyboard.down.Left ? -speed : 0) + (keyboard.down.Right ? speed : 0);
+      let vy = (keyboard.down.Up ? -speed : 0)   + (keyboard.down.Down ? speed : 0);
+
+      // no faster diagonals!
+
+      if (vx !== 0 && vy !== 0) {
+        vx /= Math.sqrt(2);
+        vy /= Math.sqrt(2);
+      }
+
+      // if they didnt input a direction, do a half hearted toss in the last
+      // direction they were facing
+
+      if (vx === 0 && vy === 0) {
+        vx = this.facing * speed / 2;
+        vy = speed / 2;
+      }
+
+      TinyWorld.Instance.vx = vx;
+      TinyWorld.Instance.vy = vy;
+      TinyWorld.Instance.carrier = null;
+      TinyWorld.Instance.isBeingCarried = false;
+    }
+  }
+
+  checkForRegionDialogs(state: StateClass) {
+    const { cinematics } = state;
+    let dialogRegions: RegionLayer;
+
+    if (state.playerRightProf as Controllable === this) {
+      dialogRegions = state.tilemap.regionLayers.ProfDialogRegions;
+    } else {
+      dialogRegions = state.tilemap.regionLayers.YourDialogRegions;
+    }
+
+    for (const { region, properties } of dialogRegions.regions) {
+      if (!properties) {
+        console.error('dialog region w/o props...')
+
+        continue;
+      }
+
+      if (region.contains(this) && !properties.done) {
+        if (properties.name === "spikeirony") {
+          this.startCoroutine(state, cinematics.spikeIrony());
+        }
+
+        properties.done = true;
+      }
     }
   }
 }

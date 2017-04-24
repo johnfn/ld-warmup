@@ -588,12 +588,6 @@ class Cinematics extends Base {
       this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", { waitFrames: 30 }, false, state.cameraRight));
       this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", { waitFrames: 30 }, false, state.cameraRight));
 
-      let closestNow: Phone = Util.minBy(phones, p => Util.Dist(p, prof))!;
-
-      if (state.keyboard.down.X && Util.Dist(closestNow, prof) < 100) {
-        this.finishCinematic();
-      }
-
       yield { frames: 90 };
     }
   }
