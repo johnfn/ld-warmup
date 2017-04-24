@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
+  currentOrLastEvent: CurrentActiveEvent = "None";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -703,7 +703,6 @@ class Cinematics extends Base {
         }
       }
 
-
       {
         const talker = this.talk(you, "Let's try again.", { waitFrames: 30 });
         let res = talker.next();
@@ -730,10 +729,20 @@ class Cinematics extends Base {
       "AAGHHHH!!!!",
       "AAAAAAAAAAAAH!!!!",
       "HOLY CRAP!",
-      "GHKLJFHGKJHA!"
+      "GHKLJFHGKJHA!",
+      "GADZOOKS!",
+      "SWEET MOTHER IN HEAVEN!",
+      "PRAISE JESUS!",
+      "BAZOOPER!",
+      "HELLO CLIFF FACE!",
+      "HEAVENS TO BETSY!",
+      "DEAR JOSEPHINE!",
+      "HOLY SMOKES!",
     ]);
 
     yield* this.talk(you, randomExclamation, { waitFrames: 30 });
+
+    yield { frames: 90 };
 
     if (Math.random() > 0.95) {
       yield* this.talk(prof, "I wonder if he minds all this tossing?", { waitFrames: 30 });
