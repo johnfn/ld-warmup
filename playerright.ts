@@ -1,4 +1,4 @@
-// Professor
+PIXI.loader.add("prof", "assets/prof.png");
 
 class PlayerRight extends Controllable {
   readonly tossSpeed = 8;
@@ -11,7 +11,7 @@ class PlayerRight extends Controllable {
   scopes: Scope[] = [];
 
   constructor(state: StateClass) {
-    super(state, { texture: "sprite" });
+    super(state, { texture: "prof" });
 
     const { tilemap, cameraRight } = state;
     const startingObject = tilemap.objectLayers["ObjLayer"].objects[0];

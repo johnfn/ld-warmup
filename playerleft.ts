@@ -1,11 +1,11 @@
-PIXI.loader.add("sprite", "assets/sprite.png");
+PIXI.loader.add("you", "assets/you.png");
 
 // You.
 class PlayerLeft extends Controllable {
   collideable = true;
 
   constructor(state: StateClass) {
-    super(state, { texture: "sprite" });
+    super(state, { texture: "you" });
 
     const { tilemap, cameraLeft } = state;
     const startingObject = tilemap.objectLayers["ObjLayer"].objects[0];
@@ -45,8 +45,8 @@ class PlayerLeft extends Controllable {
       this.vy = 0;
       this.vx = Math.sign(tinyWorld.x - this.x) * 2;
 
-      this.sprite.scale.x = Util.Dist(tinyWorld, this) / 200;
-      this.sprite.scale.y = Util.Dist(tinyWorld, this) / 200;
+      this.sprite.scale.x = this.facing * Util.Dist(tinyWorld, this) / 200;
+      this.sprite.scale.y = this.facing * Util.Dist(tinyWorld, this) / 200;
 
       const desiredY = tinyWorld.y - (1 - this.sprite.scale.y) * (this.height / 2);
 

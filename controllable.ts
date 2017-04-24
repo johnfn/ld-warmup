@@ -24,6 +24,7 @@ class Controllable extends Entity {
     super(state, props);
 
     state.playerIds.push(this.id);
+    this.sprite.pivot = new PIXI.Point(16, 0);
   }
 
   isActive(state: StateClass): boolean {
@@ -107,6 +108,8 @@ class Controllable extends Entity {
       } else if (keyboard.down.Right) {
         this.facing = 1;
       }
+
+      this.sprite.scale.x = this.facing;
     }
 
     // you dont move when you're tossing the world.
