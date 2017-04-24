@@ -1038,6 +1038,28 @@ class Cinematics extends Base {
       yield* this.talk(you, "sort of...");
     } else {
       state.wall.ontop.sprite.alpha = 0;
+
+      const dummy = new Entity(state, {
+        texture: "you",
+        depth: Depths.Fade,
+      });
+
+      while (true) {
+        yield "next";
+
+        const ofsX = (you.x - state.cameraLeft.x - state.width);
+        const ofsY = (you.y - state.cameraLeft.y);
+
+        console.log(ofsX, ofsY);
+
+        dummy.x = ofsX + state.cameraRight.x;
+        dummy.y = ofsY + state.cameraRight.y;
+
+        dummy.sprite.scale = you.sprite.scale;
+        dummy.sprite.pivot = you.sprite.pivot;
+      }
+
+      // fade out left screen
     }
   }
 }
