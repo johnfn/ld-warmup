@@ -321,6 +321,8 @@ class StateClass {
 
       this.bgsprite.sprite.visible = true;
 
+      this.hud.visible = !state.rightCamActive;
+
       rendererBig.render(root);
     }
 
@@ -341,6 +343,8 @@ class StateClass {
       state.stage.y = Math.floor(state.cameraRight.desiredStageY);
 
       this.bgsprite.sprite.visible = false;
+
+      this.hud.visible = state.rightCamActive;
 
       rendererTiny.render(root);
 
