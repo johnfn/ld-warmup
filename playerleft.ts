@@ -3,6 +3,7 @@ PIXI.loader.add("you", "assets/you.png");
 // You.
 class PlayerLeft extends Controllable {
   collideable = true;
+  careAboutSucking = true;
 
   constructor(state: StateClass) {
     super(state, {
@@ -22,6 +23,12 @@ class PlayerLeft extends Controllable {
   checkForMapTransition(state: StateClass) {
     const { tilemap } = state;
 
+    if (!this.careAboutSucking) {
+      // game is bascialy over just die
+
+      return;
+    }
+
     if (!tilemap.contains(this, this.camera)) {
       tilemap.changeSection(state, this, this.camera);
     }
@@ -29,7 +36,10 @@ class PlayerLeft extends Controllable {
 
   update(state: StateClass) {
     this.checkForMapTransition(state);
-    this.checkForWorldSucking();
+
+    if (this.careAboutSucking) {
+      this.checkForWorldSucking();
+    }
 
     super.update(state);
   }

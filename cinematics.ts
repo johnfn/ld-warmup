@@ -24,6 +24,8 @@ class Cinematics extends Base {
 
   zForDialog = false;
 
+  FINAL = false;
+
   isOnTinyWorld = false;
 
   canSwitchToOtherGuy = false;
@@ -380,13 +382,8 @@ class Cinematics extends Base {
     yield* this.talk(you, "...");
     yield* this.bubble(you, ":|");
     yield* this.talk(you, "Yes...");
-    yield* this.talk(you, "In a few past Ludum Dare games...");
-    yield* this.talk(prof, "Ludum Dare?");
-    yield* this.talk(prof, "The Great Event, foretold by prophecy, to happen once every 4 months?");
-    yield* this.talk(you, "Yeah.");
-    yield* this.talk(prof, "(Amazing... one cognizant of Ludum Dare... could he be the one spoken of by prophecy?)");
-    yield* this.talk(you, "Sorry?");
-    yield* this.talk(prof, "Just talking to myself. Continue!");
+    yield* this.talk(you, "In fact it feels like we meet about every 4 months or so...");
+    yield* this.talk(prof, "Really?");
     yield* this.bubble(you, ":|");
     yield* this.talk(you, "It never seems to go well for me.");
     yield* this.talk(you, "There was this one time... where you turned me into Godzilla... it was bad.");
@@ -1050,16 +1047,36 @@ class Cinematics extends Base {
         const ofsX = (you.x - state.cameraLeft.x - state.width);
         const ofsY = (you.y - state.cameraLeft.y);
 
-        console.log(ofsX, ofsY);
-
         dummy.x = ofsX + state.cameraRight.x;
         dummy.y = ofsY + state.cameraRight.y;
 
         dummy.sprite.scale = you.sprite.scale;
         dummy.sprite.pivot = you.sprite.pivot;
+
+        if (ofsX > 0) {
+          you.x = dummy.x;
+          you.y = dummy.y;
+
+          you.careAboutSucking = false;
+
+          dummy.destroy(this.state);
+
+          state.cameraRight.target = you;
+
+          // yield* this.leftFade.doFadeOut(this.state);
+
+          break;
+        }
       }
 
-      // fade out left screen
+      this.FINAL = true;
+
+      state.cameraLeft.dontmovepls = true;
+
+      // state.cameraLeft.isExternallyControlled = false;
+      // state.cameraRight.isExternallyControlled = false;
+
+      // TODO - remove phone -  it ruins the mood ...
     }
   }
 }

@@ -29,7 +29,7 @@ class HUD extends Entity {
   lastDlgText = "";
 
   update(state: StateClass) {
-    const { cinematics } = state;
+    const { cinematics, playerLeft, playerRightProf } = state;
     const activePlayer = state.getActivePlayer();
     const inspectRegions = state.tilemap.regionLayers.InspectRegions.regions;
     let text = "";
@@ -65,6 +65,12 @@ class HUD extends Entity {
 
     if (Util.Dist(activePlayer, Cannon.Instance) < 100) {
       text = "X to fire cannon!"
+    }
+
+    if (cinematics.FINAL) {
+      if (Util.Dist(playerLeft, playerRightProf) < 100) {
+        text = "X to talk..?"
+      }
     }
 
     this.actionText.text = text;

@@ -1,8 +1,13 @@
 class CameraLeft extends Camera {
   isExternallyControlled = false;
+  dontmovepls = false;
 
   update(state: StateClass) {
     const { playerLeft } = state;
+
+    if (this.dontmovepls) {
+      return;
+    }
 
     if (!this.isExternallyControlled) {
       const destX = playerLeft.x + playerLeft.facing * 200;
