@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Professor Fiddles";
+  currentOrLastEvent: CurrentActiveEvent = "You Use Phone";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -612,11 +612,11 @@ class Cinematics extends Base {
     yield* this.bubble(you, ":D");
     yield* this.talk(you, "I'll just try random ones.", { waitFrames: 30 }, true);
 
-    yield* this.walkTo(you, Rect.FromPoint(closestPhoneYou, 50));
+    yield* this.walkTo(you, Rect.FromPoint(closestPhoneYou, 100).translate({ x: 0, y: -100 }));
 
     while (true) {
-      this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", { waitFrames: 30 }, false, state.cameraRight));
-      this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", { waitFrames: 30 }, false, state.cameraRight));
+      this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", { waitFrames: 30 }, false));
+      this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", { waitFrames: 30 }, false));
 
       yield { frames: 90 };
     }

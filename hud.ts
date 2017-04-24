@@ -45,7 +45,7 @@ class HUD extends Entity {
       }
 
       if (TinyWorld.Instance.isBeingCarried) {
-        text = "X + Arrow Keys to toss world!"
+        text = "X + Arrows to toss!"
       }
     }
 
