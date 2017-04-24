@@ -301,8 +301,8 @@ class Controllable extends Entity {
       // direction they were facing
 
       if (vx === 0 && vy === 0) {
-        vx = this.facing * speed / 2;
-        vy = speed / 2;
+        vx = - this.facing * speed;
+        vy = speed;
       }
 
       TinyWorld.Instance.vx = vx;

@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Professor Fiddles";
+  currentOrLastEvent: CurrentActiveEvent = "Professor Tosses a Few Times";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
