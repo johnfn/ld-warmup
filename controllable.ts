@@ -132,7 +132,7 @@ class Controllable extends Entity {
 
     for (const { region, properties } of inspectRegions) {
       if (region.contains(this) && properties && !this.isCoroutineActive(this.lastTalkCoID)) {
-        let text = state.isProfActive ? properties.profinspect : properties.inspect;
+        let text = state.isProfActive() ? properties.profinspect : properties.inspect;
 
         this.lastTalkCoID = this.startCoroutine(state, cinematics.talk(this, text))
 

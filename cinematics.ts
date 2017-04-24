@@ -12,7 +12,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "First Convo";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -317,7 +317,9 @@ class Cinematics extends Base {
       if (Util.Dist(prof, you) > 100) {
         yield* this.talk(prof, this.getRandomSlowbieMessage(), () => Util.Dist(prof, you) < 100);
 
-        yield { frames: 40 };
+        while (Util.Dist(prof, you) > 100) {
+          yield "next";
+        }
       }
     }
 
