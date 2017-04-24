@@ -585,18 +585,16 @@ class Cinematics extends Base {
     yield* this.walkTo(you, Rect.FromPoint(closestPhoneYou, 50));
 
     while (true) {
-      this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", () => state.keyboard.down.X, false, state.cameraRight));
-      this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", () => state.keyboard.down.X, false, state.cameraRight));
+      this.startCoroutine(this.state, this.talk(closestPhoneProf, "Ring ring ring!", { waitFrames: 30 }, false, state.cameraRight));
+      this.startCoroutine(this.state, this.talk(you             , "Ring ring ring!", { waitFrames: 30 }, false, state.cameraRight));
 
-      for (let i = 0; i < 60; i++) {
-        yield "next";
+      let closestNow: Phone = Util.minBy(phones, p => Util.Dist(p, prof))!;
 
-        let closestNow: Phone = Util.minBy(phones, p => Util.Dist(p, prof))!;
-
-        if (state.keyboard.down.X && Util.Dist(closestNow, prof) < 100) {
-          this.finishCinematic();
-        }
+      if (state.keyboard.down.X && Util.Dist(closestNow, prof) < 100) {
+        this.finishCinematic();
       }
+
+      yield { frames: 90 };
     }
   }
 
