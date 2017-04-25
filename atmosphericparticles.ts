@@ -11,7 +11,7 @@ class AtmosphericParticles extends Particles {
     rotation: [-0.2, 0.2],
 
     scale: [1.0, 2.0],
-    alpha: [0.1, 1.0],
+    alpha: [0.1, 0.6],
 
     x: 0,
     y: 0,

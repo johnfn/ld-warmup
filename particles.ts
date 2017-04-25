@@ -111,6 +111,7 @@ class Particles extends Base {
   particles: Particle[] = [];
   behavior: ParticleBehavior;
   container: Entity;
+  on = true;
 
   constructor(state: StateClass, behavior: ParticleBehavior = {
     lifespan: [100, 200],
@@ -159,7 +160,9 @@ class Particles extends Base {
   }
 
   update(_state: StateClass): void {
-    if (Math.random() > 0.5) {
+    if (!this.on) { return; }
+
+    if (Math.random() > 0.75) {
       const ent = this.pool.get();
 
       if (!ent) { console.log('fail2get particle'); return; }

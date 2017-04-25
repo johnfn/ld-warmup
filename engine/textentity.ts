@@ -35,7 +35,7 @@ class TextEntity extends Base {
       },
 
       you: {
-        fill: "#aaff88",
+        fill: "#ddffaa",
       },
 
       large: {
@@ -45,7 +45,7 @@ class TextEntity extends Base {
       },
 
       prof: {
-        fill: "#aaccff",
+        fill: "#cceeff",
       },
     }
   } = {}) {
