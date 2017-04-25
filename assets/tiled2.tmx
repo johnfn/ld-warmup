@@ -2220,7 +2220,7 @@
   </object>
  </objectgroup>
  <objectgroup name="WorldDest1Regions">
-  <object id="54" x="650.893" y="1774.12" width="354.701" height="308.794"/>
+  <object id="54" x="650.893" y="1774.12" width="355.7" height="308.794"/>
  </objectgroup>
  <objectgroup name="TinyWorldLocationLayer">
   <object id="56" gid="1" x="14400" y="5024" width="32" height="32"/>
