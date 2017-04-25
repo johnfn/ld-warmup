@@ -15,7 +15,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Professor Fiddles";
+  currentOrLastEvent: CurrentActiveEvent = "Fire That Cannon";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -368,6 +368,10 @@ class Cinematics extends Base {
       }
 
       who.facing = Math.sign(dx);
+
+      if (this.FINAL) {
+        TinyWorld.Instance.y = who.y - 48;
+      }
 
       yield "next";
     }
@@ -872,6 +876,7 @@ class Cinematics extends Base {
       "!E TO THE PI I PLUS ONE IS ZERO!",
       "!PINEAPPLE BELONGS ON PIZZA!",
       "!AVOCADOS ARE A FRUIT!",
+      "!NO ONE COULD MAKE A GAME IN 48 HOURS",
     ]);
 
     yield* this.talk(you, randomExclamation, { waitFrames: 30 });
@@ -954,6 +959,9 @@ class Cinematics extends Base {
   *fireCannon() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
+    TinyWorld.Instance.isBeingCarried = true;
+    TinyWorld.Instance.carrier = prof;
+
     state.cameraLeft.isExternallyControlled = true;
     state.cameraRight.isExternallyControlled = true;
 
@@ -1024,10 +1032,14 @@ class Cinematics extends Base {
 
       yield* this.talk(you, "uhh...");
 
-      this.state.cameraLeft.centerX = origCenterX;
-      this.state.cameraLeft.centerY = origCenterY;
+      for (let i = 0; i < 25; i++) {
+        this.state.cameraLeft.shake = { duration: 4, strength: 10 };
 
-      this.state.cameraLeft.shake = { duration: 100, strength: 10 };
+        yield "next"; yield "next"; yield "next"; yield "next";
+
+        this.state.cameraLeft.centerX = origCenterX;
+        this.state.cameraLeft.centerY = origCenterY;
+      }
 
       for (let i = 0; i < 100; i++) {
         white.sprite.x += Math.random() * 3 - 1.5;
@@ -1036,9 +1048,6 @@ class Cinematics extends Base {
 
         yield "next"
       }
-
-      this.state.cameraLeft.centerX = origCenterX;
-      this.state.cameraLeft.centerY = origCenterY;
 
       for (let i = 100; i > 0; i--) {
         white.sprite.alpha = i / 100;
@@ -1101,30 +1110,31 @@ class Cinematics extends Base {
       yield "next";
     }
 
-    yield* this.talk(you, "What in the world j- wait, no, that's a bad expression.");
-    yield* this.talk(you, "What did you do?!?");
-    yield* this.talk(prof, "Never speak of this again.");
-    yield* this.talk(you, "...");
-    yield* this.talk(prof, "...");
-    yield* this.talk(you, "...");
-    yield* this.talk(prof, "...");
-    yield* this.talk(you, "...");
-    yield* this.talk(prof, "Man I should really throw this out. It gives me nothing but trouble.");
-    yield* this.talk(prof, "Better do it quick.");
+    yield* this.talk(you, "What in the world j- wait, no, that's a bad expression.", undefined, true, state.cameraRight);
+    yield* this.talk(you, "What did you do?!?", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "Never speak of this again.", undefined, true, state.cameraRight);
+    yield* this.talk(you, "...", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "...", undefined, true, state.cameraRight);
+    yield* this.talk(you, "...", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "...", undefined, true, state.cameraRight);
+    yield* this.talk(you, "...", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "Man I should really throw this out. It gives me nothing but trouble.", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "Better do it quick.", undefined, true, state.cameraRight);
+
+    const goodX = this.state.cameraRight.x + 100;
+
+    yield* this.walkTo(prof, Rect.FromPoint({ x: goodX, y: prof.y }, 100), 2);
 
     const twdummy = new Entity(state, {
       texture: "tinyworld",
       depth: Depths.Fade,
     });
 
-    TinyWorld.Instance.isBeingCarried = true;
-    TinyWorld.Instance.carrier = prof;
-
     this.allowFlinging = false;
 
     TinyWorld.Instance.vx = -15;
     TinyWorld.Instance.vy = 5;
-    TinyWorld.Instance.y -= 20;
+    TinyWorld.Instance.y -= 50;
 
     TinyWorld.Instance.carrier = null;
     TinyWorld.Instance.isBeingCarried = false;
@@ -1141,14 +1151,14 @@ class Cinematics extends Base {
     // FORCE
 
     if (TinyWorld.Instance.x - state.cameraRight.x > 0) {
-      yield* this.talk(prof, "Stupid thing. *kick*");
+      yield* this.talk(prof, "Stupid thing. *kick*", undefined, true, state.cameraRight);
     }
 
     while (TinyWorld.Instance.x - state.cameraRight.x > 0) {
       ++i;
 
-      TinyWorld.Instance.vy -= i / 4;
-      TinyWorld.Instance.vx -= i;
+      TinyWorld.Instance.vy -= i / 8;
+      TinyWorld.Instance.vx -= i / 4;
 
       for (let j = 0; j < 2; j++) {
         yield "next";
@@ -1163,17 +1173,18 @@ class Cinematics extends Base {
 
     twdummy.visible = false;
 
-    yield* this.talk(you, "You just...");
-    yield* this.talk(you, "tossed...");
-    yield* this.talk(you, "the world...");
+    yield* this.talk(you, "You just...", undefined, true, state.cameraRight);
+    yield* this.talk(you, "tossed...", undefined, true, state.cameraRight);
+    yield* this.talk(you, "the world...", undefined, true, state.cameraRight);
 
-    this.state.cameraRight.shake = { duration: 300, strength: 10 };
+    this.state.cameraRight.shake = { duration: 200, strength: 2 };
 
-    yield* this.talk(you, "!WHAT IN GODS NAME JUST HAPPENED");
+    yield* this.talk(you, "!WHAT IS HAPPENING?!?", undefined, true, state.cameraRight);
 
-    yield* this.talk(prof, "Yeah don't worry about it. Everything's fine.");
-    yield* this.talk(prof, "Saved you from being really tiny forever. Only made a few rifts in space time. All in all, a good Ludum Dare.");
-    yield* this.talk(prof, "I'm going to go to sleep. Along with some other Ludum Dare game makers I could name.");
+    yield* this.talk(prof, "Yeah don't worry about it. Everything's fine.", undefined, true, state.cameraRight);
+
+    yield* this.talk(prof, "Saved you from being really tiny forever. Only made a few rifts in space time. All in all, a good Ludum Dare.", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "I'm going to go to sleep. Along with some other Ludum Dare game makers I could name.", undefined, true, state.cameraRight);
 
     state.hud.visible = false;
 
@@ -1181,9 +1192,10 @@ class Cinematics extends Base {
 
     yield* this.leftFade.doFadeOut(this.state);
 
-    yield* this.talk(prof, "See you in another 4 months!");
-    yield* this.talk(prof, "Or longer!");
-    yield* this.talk(prof, "But probably not!");
+    yield* this.talk(prof, "See you in another 4 months!", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "Or longer!", undefined, true, state.cameraRight);
+    yield* this.talk(prof, "But probably not!", undefined, true, state.cameraRight);
+
 
     this.state.realMusic.fade(0.5, 0.0, 5000);
 
