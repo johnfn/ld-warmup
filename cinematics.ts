@@ -915,7 +915,7 @@ class Cinematics extends Base {
     yield* this.bubble(you, "sweat");
 
     yield* this.talk(you, "So I seem to be trapped on this... very... little.. planet thing.", { waitFrames: 30 });
-    yield* this.talk(prof, "A TINY WORLD?");
+    yield* this.talk(prof, "A SMALL WORLD?");
     yield* this.talk(prof, "[looks at camera dramatically]");
     yield* this.talk(you, "Could you stop doing that please.");
     yield* this.talk(prof, "How could you tell?");
@@ -941,8 +941,14 @@ class Cinematics extends Base {
   *madeIt() {
     const { playerRightProf: prof, playerLeft: you } = state;
 
-    yield* this.talk(you, "Phew!");
-    yield* this.talk(you, "I made it!");
+    yield* this.talk(you, "Wow!!");
+    yield* this.talk(you, "Those earthquakes!");
+    yield* this.talk(you, "They were perfectly timed...");
+    yield* this.talk(you, "...to give me a huge migraine.");
+    yield* this.talk(you, "But I guess they got me over the walls, so thats a plus.");
+
+    yield* this.bubble(you, ":|");
+
     yield* this.talk(you, "Is this thing on?");
     yield* this.talk(prof, "Yes!");
     yield* this.talk(prof, "Okay, listen to me very closely.");
