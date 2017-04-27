@@ -137,7 +137,6 @@ class Controllable extends Entity {
       this.sprite.scale.x *= -1;
     }
 
-    console.log(this.x)
     if (state.activePlayerId === this.id) {
       if (keyboard.justDown.X && !cinematics.FINAL) {
         const hadInteraction = this.checkForInteractions(state);

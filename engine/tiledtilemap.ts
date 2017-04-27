@@ -146,7 +146,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.data = from;
 
     this.tilePool = new Pooler({
-      size: 3000,
+      size: 2500,
 
       create: () => {
         const e = new Entity(state, {
@@ -318,6 +318,8 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
     for (let i = region.x / tw; i <= region.right / tw; i++) {
       for (let j = region.y / th; j <= region.bottom / th; j++) {
+        if (i >= this.data.width) { continue; }
+        if (j >= this.data.height) { continue; }
         if (!this.tiles[i][j]) { continue; }
 
         for (const tile of this.tiles[i][j]) {
@@ -345,21 +347,11 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
 
           ent.x = x;
           ent.y = y;
-
-          /*
-          const sprite = new Entity(state, {
-            texture: spritesheet,
-            dontRegister: true,
-            spritesheet: { x: spritesheetx, y: spritesheety, },
-            parent: this.spriteLayers[layername],
-          });
-
-          sprite.x = x;
-          sprite.y = y;
-          */
         }
       }
     }
+
+    console.log(ii);
   }
 
   private loadObjects(): void {

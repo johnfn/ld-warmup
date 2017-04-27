@@ -698,7 +698,7 @@ class Cinematics extends Base {
 
     yield* this.walkTo(you, Rect.FromPoint(middle.add(new Point({ x: -300, y: 0 })), 100), 5);
 
-    yield* this.talk(prof, "Whats the matter? Forget how to control me? Arrow keys. (idiot).");
+    yield* this.talk(prof, "Whats the matter? Forget how to control me? Arrow keys. (idiot).", { waitFrames: 30 });
 
     yield* this.bubble(you, ":|");
     yield* this.bubble(you, "sweat");
