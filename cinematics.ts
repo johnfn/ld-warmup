@@ -15,7 +15,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "Fire That Cannon";
+  currentOrLastEvent: CurrentActiveEvent = "None";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
