@@ -350,8 +350,6 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
         }
       }
     }
-
-    console.log(ii);
   }
 
   private loadObjects(): void {

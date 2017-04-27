@@ -106,9 +106,13 @@ class Entity extends Base {
   }
 
   destroy(state: StateClass) {
-    this.sprite.parent.removeChild(this.sprite);
+    if (this.sprite.parent) {
+      this.sprite.parent.removeChild(this.sprite);
+    }
 
-    state.entities.splice(state.entities.indexOf(this), 1);
+    if (state.entities.indexOf(this) !== -1) {
+      state.entities.splice(state.entities.indexOf(this), 1);
+    }
   }
 
   *flicker() {

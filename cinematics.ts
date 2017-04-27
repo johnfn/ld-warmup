@@ -15,7 +15,7 @@ type CurrentActiveEvent = "None"
                         ;
 
 class Cinematics extends Base {
-  currentOrLastEvent: CurrentActiveEvent = "None";
+  currentOrLastEvent: CurrentActiveEvent = "Fire That Cannon";
   activeCoroutine = -1;
   leftFade: FadeOutIn;
   rightFade: FadeOutIn;
@@ -971,7 +971,7 @@ class Cinematics extends Base {
     yield* this.bubble(you, "!");
     yield* this.talk(prof, "... it should be easy for you to return to normal size!");
     yield* this.talk(you, "...");
-    yield* this.talk(you, "Yikes... okay... I'll try!");
+    yield* this.talk(you, "(How on earth could a cannon get me back to normal size... this makes no sense...)");
 
     this.finishCinematic();
   }
@@ -1080,7 +1080,6 @@ class Cinematics extends Base {
       yield* this.talk(you, "its kinda... gone...");
       yield* this.talk(you, "what if i just...");
       yield* this.talk(you, "sort of...");
-      yield* this.talk(you, "walked over...");
       yield* this.talk(you, "????");
 
     state.wall.ontop.sprite.alpha = 0;
