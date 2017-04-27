@@ -16,6 +16,7 @@ class TinyWorld extends Entity {
 
     if (v !== null) {
       this.lastCarrier = v;
+      v.shouldHaveWorld = true;
     }
   }
 

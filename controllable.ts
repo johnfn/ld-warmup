@@ -11,6 +11,7 @@ class Controllable extends Entity {
   canPickUpWorld = false;
   isTossingWorld = false;
   cantWalk = false;
+  shouldHaveWorld = false;
 
   facing = 1;
   lastSafeSpot: IPoint;
@@ -18,6 +19,9 @@ class Controllable extends Entity {
   camera: Camera;
 
   scopes: Scope[] = [];
+
+  public get x(): number  { return this.sprite.x - 16; }
+  public set x(v: number) { this.sprite.x = v + 16; }
 
   private lastTalkCoID: number = -1;
 
@@ -32,8 +36,9 @@ class Controllable extends Entity {
   }) {
     super(state, props);
 
+    this.sprite.anchor.x = 0.5;
+
     state.playerIds.push(this.id);
-    this.sprite.pivot = new PIXI.Point(16, 0);
 
     for (let i = 0; i < 10; i++) {
       const scope = new Scope(state, this.sprite);
@@ -132,6 +137,7 @@ class Controllable extends Entity {
       this.sprite.scale.x *= -1;
     }
 
+    console.log(this.x)
     if (state.activePlayerId === this.id) {
       if (keyboard.justDown.X && !cinematics.FINAL) {
         const hadInteraction = this.checkForInteractions(state);
@@ -266,6 +272,8 @@ class Controllable extends Entity {
     }
   }
 
+  lastscopevx = 0;
+  lastscopevy = 0;
 
   drawScopes(state: StateClass): void {
     const { keyboard } = state;
@@ -286,6 +294,11 @@ class Controllable extends Entity {
     let x = 16;
     let y = -16; // center of tinyworld (above head!)
 
+    if (vx === 0 && vy === 0) {
+      vx = this.lastscopevx;
+      vy = this.lastscopevy;
+    }
+
     for (const s of this.scopes) {
       x += vx;
       y += vy;
@@ -295,6 +308,9 @@ class Controllable extends Entity {
 
       s.visible = true;
     }
+
+    this.lastscopevx = vx;
+    this.lastscopevy = vy;
   }
 
   throwWorld(state: StateClass): void {
@@ -304,8 +320,8 @@ class Controllable extends Entity {
     if (!keyboard.down.X) {
       this.isTossingWorld = false;
 
-      let vx = (keyboard.down.Left ? -speed : 0) + (keyboard.down.Right ? speed : 0);
-      let vy = (keyboard.down.Up ? -speed : 0)   + (keyboard.down.Down ? speed : 0);
+      let vx = this.sprite.scale.x * this.lastscopevx * speed / 25;
+      let vy = this.lastscopevy * speed / 25;
 
       // no faster diagonals!
 
@@ -327,6 +343,10 @@ class Controllable extends Entity {
 
       TinyWorld.Instance.carrier = null;
       TinyWorld.Instance.isBeingCarried = false;
+
+      if (TinyWorld.Instance.vy === 0) {
+        TinyWorld.Instance.y -= 8;
+      }
 
       // do a fling
 

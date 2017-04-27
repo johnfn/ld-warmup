@@ -35,6 +35,7 @@ class Cinematics extends Base {
   madeit = false;
 
   stragglingTexts: TextEntity[] = [];
+  stragglingBubbles: Bubble[] = [];
 
   constructor(state: StateClass) {
     super(state);
@@ -229,6 +230,12 @@ class Cinematics extends Base {
     }
 
     this.stragglingTexts = [];
+
+    for (const b of this.stragglingBubbles) {
+      b.destroy(this.state);
+    }
+
+    this.stragglingBubbles = [];
   }
 
   finishCinematic(): void {
@@ -426,7 +433,7 @@ class Cinematics extends Base {
       yield* this.walkTo(prof, region);
 
       if (Util.Dist(prof, you) > 100) {
-        yield* this.talk(prof, this.getRandomSlowbieMessage(), () => Util.Dist(prof, you) < 100);
+        yield* this.talk(prof, this.getRandomSlowbieMessage(), { waitFrames: 60 });
       }
     }
 
@@ -527,6 +534,8 @@ class Cinematics extends Base {
   *bubble(target: Controllable, type: BubbleType) {
     const b = new Bubble(this.state, target, type);
 
+    this.stragglingBubbles.push(b);
+
     this.zForDialog = true;
 
     for (let i = 0; i < 45; i++) {
@@ -540,6 +549,8 @@ class Cinematics extends Base {
     this.zForDialog = false;
 
     b.destroy(this.state);
+
+    this.stragglingBubbles.splice(this.stragglingBubbles.indexOf(b), 1);
   }
 
   *professorIsHorrified() {
@@ -594,7 +605,7 @@ class Cinematics extends Base {
     yield* this.talk(prof, "Phew! Just like ... ergh ... nothing!");
     yield* this.talk(prof, "I might not be able to jump while carrying this thing. It's pretty heavy!");
     yield* this.bubble(prof, "sweat");
-    yield* this.talk(prof, "Alright, so I can toss this thing around. Hold X, then choose a direction with the arrow keys.");
+    yield* this.talk(prof, "Alright, so I can toss this thing around. Hold X, then choose a direction with the arrow keys (including diagonals).");
     yield* this.talk(prof, "Finally, release X and let it go flying!");
     yield* this.bubble(prof, ":|");
     yield* this.talk(prof, "I mean... TRY to be careful. It is an entire tiny world, after all.");
@@ -611,6 +622,9 @@ class Cinematics extends Base {
 
   *spikeIrony() {
     const { playerRightProf: prof } = state;
+
+    TinyWorld.Instance.isBeingCarried = true;
+    TinyWorld.Instance.carrier = prof;
 
     yield* this.talk(prof, "Aww... crap...");
     yield* this.bubble(prof, ":|");

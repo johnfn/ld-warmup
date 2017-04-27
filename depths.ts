@@ -15,7 +15,7 @@ class Depths {
 
   public static Phone = 80;
 
-  public static Walls = 51; // Layer
+  public static Walls = 52; // Layer
   public static MidGround = 50; // Layer
-  public static OtherMidGround = 50; // Layer
+  public static OtherMidGround = 51; // Layer
 }
