@@ -146,7 +146,7 @@ class TiledTilemap<SpriteLayers, RegionLayers, ObjectLayers> {
     this.data = from;
 
     this.tilePool = new Pooler({
-      size: 2500,
+      size: 3500,
 
       create: () => {
         const e = new Entity(state, {
